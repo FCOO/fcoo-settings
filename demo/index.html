@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="da" style="font-size: 100%">
+<head>
+	<title>fcoo.dk - fcoo-settings - Demo</title>
+	<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv='x-dns-prefetch-control' content='on'>
+
+	<meta name='copyright' content='FCOO'>
+	<meta name='owner' content='FCOO'>
+
+    <link  href="bower_components.css" rel="stylesheet">	
+    <link  href="../src/fcoo-settings.css" rel="stylesheet">	
+</head>
+
+<body>
+	<script src="bower_components.js"></script>
+	<script src="../src/fcoo-settings.js"></script>
+	<script>
+
+fcoo.settings.add( {
+    id          :'test',  
+    validator   : 'NUMBER',
+    defaultValue: 0,
+    applyFunc   : function( value, id, defaultValue ){
+                      console.log('test - applyFunc2:',id, '=', value);
+                  } 
+});
+
+fcoo.settings.add( {
+    id          :'test2',  
+    validator   : 'NUMBER',
+    defaultValue: 0,
+    applyFunc   : function( value, id, defaultValue ){
+                      console.log('test2 - applyFunc2:',id, '=', value);
+                  } 
+});
+
+
+console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
+console.log('fcoo.settings.get("test2")=',fcoo.settings.get('test2'));
+
+
+    
+    </script>
+</body>
+</html>
