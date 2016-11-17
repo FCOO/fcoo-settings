@@ -88,8 +88,7 @@
         options = $.extend( {}, { callApply: true }, options );
         var setting = new ns.Setting( options );
         settings[options.id] = setting;
-        if (options.callApply)
-            setting.apply( loadedValues[setting.options.id] );                       
+        setting.apply( loadedValues[setting.options.id], !options.callApply );                       
     };
     
     /**********************************
