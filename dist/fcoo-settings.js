@@ -85,8 +85,10 @@
     defaultValue 
     **********************************/
     ns.add = function( options ){
+        $.extend( options, { callApply: true } );
         var setting = new ns.Setting( options );
         settings[options.id] = setting;
+
         setting.apply( loadedValues[setting.options.id] );                       
     };
     
@@ -101,6 +103,8 @@
         if (!setting)
           return false;
 
+        //Use saved value if 'value' isn't given
+        value = value === undefined ? this.get( id ) : value;
         setting.apply( value, reload );
         this.save( reload );
 

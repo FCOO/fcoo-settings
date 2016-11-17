@@ -23,12 +23,14 @@ In namespace `window.fcoo` a object `settings` is created with the following met
 - `applyFunc [Function( value )]`: Called when the value of setting `id` is changed. Used to change elements etc. on the page with the new setting
 - `validator` (optional): See [fcoo/url.js-extensions](https://github.com/FCOO/url.js-extensions#validatevalue-value-validator-).
 - `defaultValue [any]` (optional): Used if no value was found in `localStorage`
+- `callApply [Boolean]` (optional) default=true: If true the `applyFunc` is called when the setting is added
 - `onError [Function( value, id )` (optional): Called if a new value is invalid according to validator
 
 
 
 ### `fcoo.settings.set( id, value, reload )`
 Sets the value for settings `id`
+If `value` is `undefined` => use the saved value
 The `applyFunc` is called with the new value
 If `reload==true` the pages is reloaded with the new settings
 
