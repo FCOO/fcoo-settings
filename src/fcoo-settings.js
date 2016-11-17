@@ -101,6 +101,8 @@
         if (!setting)
           return false;
 
+        //Use saved value if 'value' isn't given
+        value = value === undefined ? this.get( id ) : value;
         setting.apply( value, reload );
         this.save( reload );
 
