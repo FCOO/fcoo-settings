@@ -85,7 +85,7 @@
     defaultValue 
     **********************************/
     ns.add = function( options ){
-        $.extend( options, { callApply: true } );
+        options = $.extend( {}, { callApply: true }, options );
         var setting = new ns.Setting( options );
         settings[options.id] = setting;
 
