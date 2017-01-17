@@ -24,6 +24,7 @@ In namespace `window.fcoo` a object `settings` is created with the following met
 - `validator` (optional): See [fcoo/url.js-extensions](https://github.com/FCOO/url.js-extensions#validatevalue-value-validator-).
 - `defaultValue [any]` (optional): Used if no value was found in `localStorage`
 - `callApply [Boolean]` (optional) default=true: If true the `applyFunc` is called when the setting is added
+- `globalEvents` (optional): Name(s) of events defined in [fcoo/fcoo-global-events](https://github.com/FCOO/fcoo-global-events) to be fired when the setting is changed.
 - `onError [Function( value, id )` (optional): Called if a new value is invalid according to validator
 
 

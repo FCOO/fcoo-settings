@@ -31,11 +31,12 @@
 
     /**********************************
     Setting( options )
-    options = {id, validator, applyFunc, defaultValue )
+    options = {id, validator, applyFunc, defaultValue, globalEvents )
     id [String]
     validator [null] | [String] | [function( value)]. If [String] => using Url.js-extensions validation
     applyFunc [function( value, id, defaultValue )] function to apply the settings for id
     defaultValue 
+    globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
     onError [function( value, id )] (optional). Called if a new value is invalid according to validator
     **********************************/
     function Setting( options ) {
@@ -66,7 +67,11 @@
                     }
                     
                     this.value = newValue;
-            
+
+                    //Fire global-events (if any)
+                    if (this.options.globalEvents && window.fcoo.events && window.fcoo.events.fire)
+                        window.fcoo.events.fire( this.options.globalEvents, id, this.value );
+
                     //Set saveValue = newValue unless it is the value from query-string
                     if ((queryValues[id] === null) || (newValue != queryValues[id]))
                         this.saveValue = newValue;
@@ -79,7 +84,7 @@
 
     /**********************************
     add( options )
-    options = {id, validator, applyFunc, defaultValue )
+    options = {id, validator, applyFunc, defaultValue, globalEvents )
     id [String]
     validator [null] | [String] | [function( value)]. If [String] = 
     defaultValue 

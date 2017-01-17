@@ -9,8 +9,6 @@
 	<meta name='copyright' content='FCOO'>
 	<meta name='owner' content='FCOO'>
 
-    <link  href="bower_components.css" rel="stylesheet">	
-    <link  href="../src/fcoo-settings.css" rel="stylesheet">	
 </head>
 
 <body>
@@ -21,7 +19,7 @@
 fcoo.settings.add( { 
     id          :'test',  
     validator   : 'NUMBER',
-    defaultValue: 0,
+    defaultValue: 0, globalEvents: 'davs med dig',
     applyFunc   : function( value, id, defaultValue ){
                       console.log('test - applyFunc2:',id, '=', value);
                   } 
