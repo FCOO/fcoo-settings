@@ -68,10 +68,6 @@
                     
                     this.value = newValue;
 
-                    //Fire global-events (if any)
-                    if (this.options.globalEvents && window.fcoo.events && window.fcoo.events.fire)
-                        window.fcoo.events.fire( this.options.globalEvents, id, this.value );
-
                     //Set saveValue = newValue unless it is the value from query-string
                     if ((queryValues[id] === null) || (newValue != queryValues[id]))
                         this.saveValue = newValue;
@@ -79,6 +75,11 @@
 
                     if (!dontCallApplyFunc)
                         this.options.applyFunc( this.value, id, this.options.defaultValue );
+
+                    //Fire global-events (if any)
+                    if (this.options.globalEvents && window.fcoo.events && window.fcoo.events.fire)
+                        window.fcoo.events.fire( this.options.globalEvents, id, this.value );
+
                 }    
     };    
 
