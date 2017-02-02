@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "jquery": "latest",
-    "url.js-extensions": "fcoo/url.js-extensions#^1.5.0",
+    "url.js-extensions": "fcoo/url.js-extensions#^2.0.0",
     "fcoo-global-events": "fcoo/fcoo-global-events#^1.0.1"
   },
   "devDependencies": {
