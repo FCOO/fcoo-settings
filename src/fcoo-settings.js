@@ -176,7 +176,7 @@
 
     saveStr (special case) the string to be saved and only when toForce==true
     **********************************/
-    ns.save = function( toForce, saveStr ){ 
+    ns.save = function( toForce, saveStr ){
         //Save all saveValue from settings
         var settingValuesToSave = this.loadFromLocalStorage();
         $.each( settings, function( id, setting ){ 

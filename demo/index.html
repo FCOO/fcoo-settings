@@ -21,7 +21,7 @@ fcoo.settings.add( {
     validator   : 'NUMBER',
     defaultValue: 0, globalEvents: 'davs med dig',
     applyFunc   : function( value, id, defaultValue ){
-                      console.log('test - applyFunc2:',id, '=', value);
+                      //console.log('test - applyFunc2:',id, '=', value);
                   } 
 });
 
@@ -30,12 +30,18 @@ fcoo.settings.add( {
     validator   : 'NUMBER',
     defaultValue: 0,
     applyFunc   : function( value, id, defaultValue ){
-                      console.log('test2 - applyFunc2:',id, '=', value);
+                      //console.log('test2 - applyFunc2:',id, '=', value);
                   } 
 });
 
 
 console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
+
+fcoo.settings.set("test", Math.floor(1000*Math.random()));
+console.log('fcoo.settings.set("test", Math.floor(1000*Math.random()));');
+
+console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
+
 console.log('fcoo.settings.get("test2")=',fcoo.settings.get('test2'));
 
 
