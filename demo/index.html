@@ -9,43 +9,123 @@
 	<meta name='copyright' content='FCOO'>
 	<meta name='owner' content='FCOO'>
 
+    <link  href="bower_components.css" rel="stylesheet">
+    <!-- <link  href="../src/fcoo-settings.css" rel="stylesheet"> -->
+    <link  href="css/fontawesome-all.css" rel="stylesheet">
+    <style>
+        html, body { width:100%; height: 100%}
+    </style>
 </head>
 
 <body>
 	<script src="bower_components.js"></script>
 	<script src="../src/fcoo-settings.js"></script>
+	<script src="../src/fcoo-settings-edit.js"></script>
 	<script>
+        window.bsIsTouch = false;
 
-fcoo.settings.add( { 
-    id          :'test',  
+        if (window.location.search.indexOf('touch') !== -1)
+            window.bsIsTouch = true;
+
+
+
+        i18next.init();
+        i18next.changeLanguage('en');
+        i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
+
+fcoo.settings.add( {
+    id          :'test',
     validator   : 'NUMBER',
-    defaultValue: 0, globalEvents: 'davs med dig',
+    defaultValue: 0,
+    globalEvents: 'davs med dig',
     applyFunc   : function( value, id, defaultValue ){
                       //console.log('test - applyFunc2:',id, '=', value);
-                  } 
+                  }
 });
 
 fcoo.settings.add( {
-    id          :'test2',  
+    id          :'test2',
     validator   : 'NUMBER',
     defaultValue: 0,
     applyFunc   : function( value, id, defaultValue ){
                       //console.log('test2 - applyFunc2:',id, '=', value);
-                  } 
+                  }
+});
+
+fcoo.settings.addModalContent(
+    fcoo.events.LANGUAGECHANGED,
+    [
+        {id:'test', placeholder:'Placeholder', label:{da:'Davs'}, type:'input'},
+        {id:'test2', type:'input'}
+    ]
+);
+
+fcoo.settings.add( {id:'test3', defaultValue: 'formSelect3'});
+fcoo.settings.addModalContent(fcoo.events.NUMBERFORMATCHANGED, {
+    id:'test3', type: 'select', selectedId: fcoo.settings.get('test3'), placeholder:"Placeholder", label:'test3',
+    items:[
+        {id:'formSelect1', icon:'fa-home', text: 'Davs'},
+        {id:'formSelect2', text:'Item 2'},
+        {id:'formSelect3', text:'Item 3 SKIDE GODT'},
+        {id:'formSelect4', text:'Item 4'},
+        {id:'formSelect5', text:'Item 5'}
+    ]
 });
 
 
-console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
+fcoo.settings.add( {id:'test4', defaultValue: 'item2'});
+fcoo.settings.addModalContent(fcoo.events.DATETIMEFORMATCHANGED, {
+    id:'test4', type: 'selectlist', vertical: false, selectedId: fcoo.settings.get('test4'), placeholder:"Placeholder", label:'test4',
+    items:[
+        {id:'item0', text:'Item #0'},
+        {id:'item1', text:'Item #1'},
+        {id:'item2', text:'Item #2'},
+    ]
+});
 
-fcoo.settings.set("test", Math.floor(1000*Math.random()));
-console.log('fcoo.settings.set("test", Math.floor(1000*Math.random()));');
+
+fcoo.settings.add( {id:'test5', defaultValue: 'item1'});
+fcoo.settings.add( {id:'test6', defaultValue: 'item1'});
+fcoo.settings.addModalContent(fcoo.events.UNITCHANGED, [
+    {
+        id:'test5',
+        label: {da:'Længde', en:'Length'},
+        type: 'radiobuttongroup',
+        items:[
+            {id:'item0', text:'Item #0'},
+            {id:'item1', text:'Item #1'},
+            {id:'item2', text:'Item #2'},
+        ]
+    },
+    {
+        id:'test6',
+        label: {da:'Areal', en:'Area'},
+        type: 'radiobuttongroup',
+        items:[
+            {id:'item0', text:'Item #0'},
+            {id:'item1', text:'Item #1'},
+            {id:'item2', text:'Item #2'},
+        ]
+    }
+]);
+
+
+console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
+var n = Math.floor(1000*Math.random());
+console.log(n);
+fcoo.settings.set("test", n);
+console.log('fcoo.settings.set("test", '+n+');');
 
 console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
 
 console.log('fcoo.settings.get("test2")=',fcoo.settings.get('test2'));
 
+        $('body').on('contextmenu', function(){
+            fcoo.settings.edit(fcoo.events.NUMBERFORMATCHANGED);
+            return false;
+        });
 
-    
+
     </script>
 </body>
 </html>
