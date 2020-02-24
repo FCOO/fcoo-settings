@@ -17,10 +17,9 @@
     </style>
 </head>
 
-<body>
+<body onunload="alert(321)">
 	<script src="bower_components.js"></script>
 	<script src="../src/fcoo-settings.js"></script>
-	<script src="../src/fcoo-settings-edit.js"></script>
 	<script>
         window.bsIsTouch = false;
 
@@ -33,26 +32,26 @@
         i18next.changeLanguage('en');
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
-fcoo.settings.add( {
+fcoo.settings.globalSetting.add( {
     id          :'test',
     validator   : 'NUMBER',
     defaultValue: 0,
     globalEvents: 'davs med dig',
     applyFunc   : function( value, id, defaultValue ){
-                      //console.log('test - applyFunc2:',id, '=', value);
+                      console.log('test - applyFunc:',id, '=', value);
                   }
 });
 
-fcoo.settings.add( {
+fcoo.settings.globalSetting.add( {
     id          :'test2',
     validator   : 'NUMBER',
     defaultValue: 0,
     applyFunc   : function( value, id, defaultValue ){
-                      //console.log('test2 - applyFunc2:',id, '=', value);
+                      console.log('test2 - applyFunc:',id, '=', value);
                   }
 });
 
-fcoo.settings.addModalContent(
+fcoo.settings.globalSetting.addModalContent(
     fcoo.events.LANGUAGECHANGED,
     [
         {id:'test', placeholder:'Placeholder', label:{da:'Davs'}, type:'input'},
@@ -60,9 +59,9 @@ fcoo.settings.addModalContent(
     ]
 );
 
-fcoo.settings.add( {id:'test3', defaultValue: 'formSelect3'});
-fcoo.settings.addModalContent(fcoo.events.NUMBERFORMATCHANGED, {
-    id:'test3', type: 'select', selectedId: fcoo.settings.get('test3'), placeholder:"Placeholder", label:'test3',
+fcoo.settings.globalSetting.add( {id:'test3', defaultValue: 'formSelect3'});
+fcoo.settings.globalSetting.addModalContent(fcoo.events.NUMBERFORMATCHANGED, {
+    id:'test3', type: 'select', selectedId: fcoo.settings.globalSetting.get('test3'), placeholder:"Placeholder", label:'test3',
     items:[
         {id:'formSelect1', icon:'fa-home', text: 'Davs'},
         {id:'formSelect2', text:'Item 2'},
@@ -73,9 +72,14 @@ fcoo.settings.addModalContent(fcoo.events.NUMBERFORMATCHANGED, {
 });
 
 
-fcoo.settings.add( {id:'test4', defaultValue: 'item2'});
-fcoo.settings.addModalContent(fcoo.events.DATETIMEFORMATCHANGED, {
-    id:'test4', type: 'selectlist', vertical: false, selectedId: fcoo.settings.get('test4'), placeholder:"Placeholder", label:'test4',
+fcoo.settings.globalSetting.add( {id:'test4', defaultValue: 'item2'});
+fcoo.settings.globalSetting.addModalContent(fcoo.events.DATETIMEFORMATCHANGED, {
+    id:'test4',
+    type: 'selectlist',
+    vertical: false,
+    selectedId: fcoo.settings.globalSetting.get('test4'),
+    placeholder:"Placeholder",
+    label:'test4',
     items:[
         {id:'item0', text:'Item #0'},
         {id:'item1', text:'Item #1'},
@@ -84,9 +88,9 @@ fcoo.settings.addModalContent(fcoo.events.DATETIMEFORMATCHANGED, {
 });
 
 
-fcoo.settings.add( {id:'test5', defaultValue: 'item1'});
-fcoo.settings.add( {id:'test6', defaultValue: 'item1'});
-fcoo.settings.addModalContent(fcoo.events.UNITCHANGED, [
+fcoo.settings.globalSetting.add( {id:'test5', defaultValue: 'item1'});
+fcoo.settings.globalSetting.add( {id:'test6', defaultValue: 'item1'});
+fcoo.settings.globalSetting.addModalContent(fcoo.events.UNITCHANGED, [
     {
         id:'test5',
         label: {da:'Længde', en:'Length'},
@@ -109,21 +113,24 @@ fcoo.settings.addModalContent(fcoo.events.UNITCHANGED, [
     }
 ]);
 
+/*
+$('body').on('click', function(){
+    console.log('fcoo.settings.globalSetting.get("test")=',fcoo.settings.globalSetting.get('test'));
+    var n = Math.floor(1000*Math.random());
+    console.log(n);
+    fcoo.settings.globalSetting.set({"test": n});
+    console.log('fcoo.settings.globalSetting.set({test: '+n+'});');
+    console.log('fcoo.settings.globalSetting.get("test")=',fcoo.settings.globalSetting.get('test'));
+    console.log('fcoo.settings.globalSetting.get("test2")=',fcoo.settings.globalSetting.get('test2'));
 
-console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
-var n = Math.floor(1000*Math.random());
-console.log(n);
-fcoo.settings.set("test", n);
-console.log('fcoo.settings.set("test", '+n+');');
+    fcoo.settings.globalSetting.save();
+});
+*/
+$('body').on('contextmenu', function(){
+    fcoo.settings.globalSetting.edit(fcoo.events.NUMBERFORMATCHANGED);
+    return false;
+});
 
-console.log('fcoo.settings.get("test")=',fcoo.settings.get('test'));
-
-console.log('fcoo.settings.get("test2")=',fcoo.settings.get('test2'));
-
-        $('body').on('contextmenu', function(){
-            fcoo.settings.edit(fcoo.events.NUMBERFORMATCHANGED);
-            return false;
-        });
 
 
     </script>

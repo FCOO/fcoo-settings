@@ -1,6 +1,6 @@
 {
   "name": "fcoo-settings",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "homepage": "https://github.com/FCOO/fcoo-settings",
   "authors": [
     "Niels Holt"
@@ -18,7 +18,9 @@
     "url.js-extensions": "fcoo/url.js-extensions#^2.0.0",
     "fcoo-global-events": "fcoo/fcoo-global-events#^1.0.1",
     "fake-localstorage": "fcoo/fake-localstorage#^0.1.0",
-    "jquery-bootstrap": "fcoo/jquery-bootstrap#^1.46.0"
+    "jquery-bootstrap": "fcoo/jquery-bootstrap#^1.46.0",
+    "localforage": "localForage/localForage#^1.7.3",
+    "urijs": "medialize/URI.js#^1.19.2"
   },
   "devDependencies": {
     "bourbon": "latest",
