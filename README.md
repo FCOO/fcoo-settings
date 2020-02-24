@@ -49,6 +49,9 @@ Save the settings to `indexedDB`
 #### `.saveAs(id, callback)`
 Save the settings to `indexedDB` with a new `id`
 
+#### `.delete([id], [callback])`
+Delete the settings with id or default-id from `indexedDB`
+
 ## Edit global settings in a modal window
 To allow the user to edit the global settings the following methods are defined to retrieve and display the modal.
 The modal contain an accordion with e card for each of the global events in [fcoo/fcoo-global-events](https://github.com/FCOO/fcoo-global-events)

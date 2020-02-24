@@ -50,7 +50,7 @@
         this.store = window.localforage.createInstance({name: this.options.storeId});
 
         //this.data = All settings. Each part of this.data is managed by a Setting in this.settings
-        this.data = this.options.data || {};
+        this.data = $.extend({}, this.options.data || {});
         this.settings = {};
 
         //Calls this.beforeeunload when the page is unloaded
@@ -130,9 +130,10 @@
             //Save all Value from settings
             var dataToSave = this.data;
             $.each( this.settings, function( id, setting ){
-                if (setting.Value)
-                    dataToSave[ setting.options.id ] = setting.Value;
+                if (setting.value)
+                    dataToSave[ setting.options.id ] = setting.value;
             });
+
 
             return this.store.setItem(id || 'DEFAULT', dataToSave).then(callback);
         },
@@ -140,6 +141,15 @@
         saveAs: function( id, callback ){
             this.save(null, id, callback);
         },
+
+        /***********************************************
+        delete( callback )
+        Delete the settings in indexedDB
+        ***********************************************/
+        delete: function(id, callback){
+            return this.store.removeItem(id || 'DEFAULT').then(callback);
+        },
+
 
         /***********************************************
         set( data )
@@ -196,7 +206,7 @@
         addModalContent(accordionId, content)
         *****************************************************/
         addModalContent: function(accordionId, content){
-            this.modalContent[accordionId] = ns.modalContent[accordionId] || [];
+            this.modalContent[accordionId] = this.modalContent[accordionId] || [];
             content = $.isArray(content) ? content : [content];
             this.modalContent[accordionId] = this.modalContent[accordionId].concat( content );
         },
@@ -220,7 +230,7 @@
                 this.modalForm = $.bsModalForm({
                     id      : this.options.storeId,
                     show    : false,
-                    header  : this.modalHeader,
+                    header  : this.options.modalHeader,
                     content : {type: 'accordion', list: list },
                     onSubmit: $.proxy(this.onSubmit, this)
                 });
@@ -340,10 +350,13 @@
             data    : localStorageData,
             autoSave: true,
 
-            modalHeader: {icon: 'fa-cog', text: {da: 'Indstillinger', en:'Settings'}},
+            modalHeader: {
+                icon: 'fa-cog',
+                text: {da: 'Indstillinger', en:'Settings'}
+            },
             accordionList: [
                 {id: window.fcoo.events.LANGUAGECHANGED,       header: {icon: 'fa-fw fa-comments',       text: {da: 'Sprog', en: 'Language'}} },
-                {id: window.fcoo.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-fw fa-calendar-alt',   text: {da: 'Tidszone, Dato og Tid', en: 'Time Zone, Date, and Time'}} },
+                {id: window.fcoo.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-fw fa-calendar-alt',   text: {da: 'Tidszone, Dato- og Tidsformat', en: 'Time Zone, Date and Time Format'}} },
                 {id: window.fcoo.events.NUMBERFORMATCHANGED,   header: {                                 text: ['12',{da: 'Talformat', en: 'Number Format'}]} },
                 {id: window.fcoo.events.LATLNGFORMATCHANGED,   header: {icon: 'fa-fw fa-map-marker-alt', text: {da: 'Positioner', en: 'Positions'}} },
                 {id: window.fcoo.events.UNITCHANGED,           header: {icon: 'fa-fw fa-ruler',          text: {da: 'Enheder', en: 'Units'}} }
@@ -358,7 +371,7 @@
     /*************************************************************************************
     Create fcoo.appSetting = setting-group for the settings of the application
     *************************************************************************************/
-    /*var globalSetting = */ns.appSetting =
+    ns.appSetting =
         new SettingGroup({
             simpleMode: true,
             autoSave  : true,
