@@ -356,10 +356,11 @@
             },
             accordionList: [
                 {id: window.fcoo.events.LANGUAGECHANGED,       header: {icon: 'fa-fw fa-comments',       text: {da: 'Sprog', en: 'Language'}} },
-                {id: window.fcoo.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-fw fa-calendar-alt',   text: {da: 'Tidszone, Dato- og Tidsformat', en: 'Time Zone, Date and Time Format'}} },
-                {id: window.fcoo.events.NUMBERFORMATCHANGED,   header: {                                 text: ['12',{da: 'Talformat', en: 'Number Format'}]} },
+                {id: window.fcoo.events.TIMEZONECHANGED,       header: {icon: 'fa-fw fa-globe',          text: {da: 'Tidszone', en: 'Time Zone'}} },
+                {id: window.fcoo.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-fw fa-calendar-alt',   text: {da: 'Dato- og Tidsformat', en: 'Date and Time Format'}} },
                 {id: window.fcoo.events.LATLNGFORMATCHANGED,   header: {icon: 'fa-fw fa-map-marker-alt', text: {da: 'Positioner', en: 'Positions'}} },
-                {id: window.fcoo.events.UNITCHANGED,           header: {icon: 'fa-fw fa-ruler',          text: {da: 'Enheder', en: 'Units'}} }
+                {id: window.fcoo.events.UNITCHANGED,           header: {icon: 'fa-fw fa-ruler',          text: {da: 'Enheder', en: 'Units'}} },
+                {id: window.fcoo.events.NUMBERFORMATCHANGED,   header: {                                 text: ['12',{da: 'Talformat', en: 'Number Format'}]} },
             ]
         });
 

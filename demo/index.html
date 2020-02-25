@@ -111,6 +111,17 @@ fcoo.globalSetting.addModalContent(fcoo.events.UNITCHANGED, [
         ]
     }
 ]);
+fcoo.globalSetting.add( {id:'test7', defaultValue: 'item1'});
+fcoo.globalSetting.addModalContent(fcoo.events.TIMEZONECHANGED, {
+    id:'test7',
+    label: {da:'Timezone', en:'Time Zone'},
+    type: 'radiobuttongroup',
+    items:[
+        {id:'item0', text:'Item #0'},
+        {id:'item1', text:'Item #1'},
+        {id:'item2', text:'Item #2'},
+    ]
+});
 
 /*
 $('body').on('click', function(){
