@@ -17,7 +17,7 @@
     </style>
 </head>
 
-<body onunload="alert(321)">
+<body>
 	<script src="bower_components.js"></script>
 	<script src="../src/fcoo-settings.js"></script>
 	<script>
@@ -87,12 +87,17 @@ fcoo.globalSetting.addModalContent(fcoo.events.DATETIMEFORMATCHANGED, {
 });
 
 
-fcoo.globalSetting.add( {id:'test5', defaultValue: 'item1'});
+fcoo.globalSetting.add( {
+    id:'test5',
+    defaultValue: 'item1',
+    applyFunc: function(value){ console.log('item5=', value);},
+    saveOnChanging: true,
+});
 fcoo.globalSetting.add( {id:'test6', defaultValue: 'item1'});
 fcoo.globalSetting.addModalContent(fcoo.events.UNITCHANGED, [
     {
         id:'test5',
-        label: {da:'Længde', en:'Length'},
+        label: {da:'test5 - Længde', en:'test5 - Speed'},
         type: 'radiobuttongroup',
         items:[
             {id:'item0', text:'Item #0'},
@@ -102,7 +107,7 @@ fcoo.globalSetting.addModalContent(fcoo.events.UNITCHANGED, [
     },
     {
         id:'test6',
-        label: {da:'Areal', en:'Area'},
+        label: {da:'test6 - Areal', en:'test6 - Area'},
         type: 'radiobuttongroup',
         items:[
             {id:'item0', text:'Item #0'},
@@ -114,7 +119,7 @@ fcoo.globalSetting.addModalContent(fcoo.events.UNITCHANGED, [
 fcoo.globalSetting.add( {id:'test7', defaultValue: 'item1'});
 fcoo.globalSetting.addModalContent(fcoo.events.TIMEZONECHANGED, {
     id:'test7',
-    label: {da:'Timezone', en:'Time Zone'},
+    label: {da:'test7 - Timezone', en:'test7 - Time Zone'},
     type: 'radiobuttongroup',
     items:[
         {id:'item0', text:'Item #0'},
@@ -137,7 +142,7 @@ $('body').on('click', function(){
 });
 */
 $('body').on('contextmenu', function(){
-    fcoo.globalSetting.edit(fcoo.events.NUMBERFORMATCHANGED);
+    fcoo.globalSetting.edit(fcoo.events.UNITCHANGED);
     return false;
 });
 

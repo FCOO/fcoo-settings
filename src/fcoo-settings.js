@@ -156,20 +156,18 @@
         data {ID:VALUE}
         ***********************************************/
         set: function( data ){
-            var _this = this;
-
             if (this.options.simpleMode)
                 $.extend(this.data, data);
             else {
+                var _this = this;
                 $.each(data, function(id, value){
                     var setting = _this.settings[id];
-                    if (!setting)
-                      return false;
-
-                    //Use saved value if 'value' isn't given
-                    value = value === undefined ? _this.get( id ) : value;
-                    setting.apply( value );
-                    _this.data[id] = value;
+                    if (setting){
+                        //Use saved value if 'value' isn't given
+                        value = value === undefined ? _this.get( id ) : value;
+                        setting.apply( value );
+                        _this.data[id] = value;
+                    }
                 });
             }
         },
@@ -195,7 +193,6 @@
                 this.save();
         },
 
-
         /*****************************************************
         ******************************************************
         Methods for editing setting in a bsModalform
@@ -218,10 +215,10 @@
         data (optional) = special version of the data to be edited
         /*****************************************************/
         edit: function( id, data ){
-            var _this = this;
             //Create the modal
             if (!this.modalForm){
-                var list = [];
+                var _this = this,
+                    list  = [];
                 $.each(this.options.accordionList, function(index, accordInfo){
                     if (_this.modalContent[accordInfo.id] && _this.modalContent[accordInfo.id].length)
                         list.push({id: accordInfo.id, header: accordInfo.header, content: _this.modalContent[accordInfo.id]});
@@ -232,7 +229,10 @@
                     show    : false,
                     header  : this.options.modalHeader,
                     content : {type: 'accordion', list: list },
-                    onSubmit: $.proxy(this.onSubmit, this)
+
+                    onChanging: $.proxy(this.onChanging, this),
+                    onCancel  : $.proxy(this.onCancel,   this),
+                    onSubmit  : $.proxy(this.onSubmit,   this)
                 });
             }
 
@@ -254,6 +254,36 @@
         },
 
         /*****************************************************
+        onChanging(data)
+        /*****************************************************/
+        onChanging: function(data){
+            var _this = this,
+                newData = {};
+            //Set data during editing
+            $.each(data, function(id, value){
+                var setting = _this.settings[id];
+                if (setting && setting.options.saveOnChanging && (_this.get(id) != value))
+                    newData[id] = value;
+            });
+            this.set(newData);
+        },
+
+        /*****************************************************
+        onCancel(data)
+        /*****************************************************/
+        onCancel: function(){
+            var _this = this,
+                resetData = {};
+
+            //Reset any setting that was changed during editing
+            $.each(this.originalData, function(id, value){
+                if (value != _this.get(id))
+                    resetData[id] = value;
+            });
+            this.set(resetData);
+        },
+
+        /*****************************************************
         onSubmit(data)
         /*****************************************************/
         onSubmit: function(data){
@@ -266,7 +296,6 @@
                     changed = true;
                 }
             });
-
             if (changed){
                 if (this.options.autoSave)
                     this.save(newData);
@@ -279,7 +308,6 @@
         }
     };
 
-
     /*******************************************************************************
     ********************************************************************************
     Setting( options )
@@ -290,6 +318,7 @@
     defaultValue
     globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
     onError [function( value, id )] (optional). Called if a new value is invalid according to validator
+    saveOnChanging [BOOLEAN]. If true the setting is saved during editing. When false the setting is only saved when edit-form submits
     ********************************************************************************
     ********************************************************************************/
     function Setting( options ) {
@@ -325,8 +354,8 @@
                 this.options.applyFunc( this.value, id, this.options.defaultValue );
 
             //Fire global-events (if any)
-            if (this.options.globalEvents && window.fcoo.events && window.fcoo.events.fire)
-                window.fcoo.events.fire( this.options.globalEvents, id, this.value );
+            if (this.options.globalEvents && ns.events && ns.events.fire)
+                ns.events.fire( this.options.globalEvents, id, this.value );
         }
     };
 
@@ -355,12 +384,12 @@
                 text: {da: 'Indstillinger', en:'Settings'}
             },
             accordionList: [
-                {id: window.fcoo.events.LANGUAGECHANGED,       header: {icon: 'fa-fw fa-comments',       text: {da: 'Sprog', en: 'Language'}} },
-                {id: window.fcoo.events.TIMEZONECHANGED,       header: {icon: 'fa-fw fa-globe',          text: {da: 'Tidszone', en: 'Time Zone'}} },
-                {id: window.fcoo.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-fw fa-calendar-alt',   text: {da: 'Dato og klokkeslæt', en: 'Date and Time'}} },
-                {id: window.fcoo.events.LATLNGFORMATCHANGED,   header: {icon: 'fa-fw fa-map-marker-alt', text: {da: 'Positioner', en: 'Positions'}} },
-                {id: window.fcoo.events.UNITCHANGED,           header: {icon: 'fa-fw fa-ruler',          text: {da: 'Enheder', en: 'Units'}} },
-                {id: window.fcoo.events.NUMBERFORMATCHANGED,   header: {                                 text: ['12',{da: 'Talformat', en: 'Number Format'}]} },
+                {id: ns.events.LANGUAGECHANGED,       header: {icon: 'fa-fw fa-comments',       text: {da: 'Sprog', en: 'Language'}} },
+                {id: ns.events.TIMEZONECHANGED,       header: {icon: 'fa-fw fa-globe',          text: {da: 'Tidszone', en: 'Time Zone'}} },
+                {id: ns.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-fw fa-calendar-alt',   text: {da: 'Dato og klokkeslæt', en: 'Date and Time'}} },
+                {id: ns.events.LATLNGFORMATCHANGED,   header: {icon: 'fa-fw fa-map-marker-alt', text: {da: 'Positioner', en: 'Positions'}} },
+                {id: ns.events.UNITCHANGED,           header: {icon: 'fa-fw fa-ruler',          text: {da: 'Enheder', en: 'Units'}} },
+                {id: ns.events.NUMBERFORMATCHANGED,   header: {                                 text: ['12',{da: 'Talformat', en: 'Number Format'}]} },
             ]
         });
 
