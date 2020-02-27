@@ -152,10 +152,16 @@
 
 
         /***********************************************
-        set( data )
+        set( data OR id, value)
         data {ID:VALUE}
         ***********************************************/
-        set: function( data ){
+        set: function( dataOrId, value ){
+            var data = {};
+            if (arguments.length == 2)
+                data[dataOrId] = value;
+            else
+                data = dataOrId;
+
             if (this.options.simpleMode)
                 $.extend(this.data, data);
             else {
