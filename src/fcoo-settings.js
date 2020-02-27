@@ -82,8 +82,8 @@
                 var setting = new ns.Setting( settingOptions );
                 _this.settings[settingOptions.id] = setting;
 
-                //If data is loaded => apply (else wait for data to be loaded)
-                if (_this.dataLoaded)
+//HER                //If data is loaded => apply (else wait for data to be loaded)
+//HER                if (_this.dataLoaded)
                     setting.apply( _this.data[setting.options.id], !options.callApply );
             });
         },
@@ -102,7 +102,7 @@
         Load data from this.store with item-id and update (apply) all Setting
         ***********************************************/
         load: function( id ){
-            this.dataLoaded = false;
+//HER            this.dataLoaded = false;
             this.loadData(id, $.proxy(this.onLoad, this));
         },
 
@@ -112,7 +112,7 @@
         onLoad: function(data){
             var _this = this;
             $.extend(this.data, data);
-            this.dataLoaded = true;
+//HER            this.dataLoaded = true;
 
             //Apply data to the Setting
             $.each( this.settings, function( id, setting ){

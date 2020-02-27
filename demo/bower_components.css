@@ -14044,6 +14044,8 @@ Only supports the html-structure
       z-index: -1;
       background: #fff;
       content: " "; }
+    .input-group .has-float-label > span:empty {
+      display: none; }
   .input-group .has-float-label > input[type="text"] + span {
     cursor: text; }
   .input-group .has-float-label .form-control-with-label::-webkit-input-placeholder, .input-group .has-float-label .form-control-with-label::-moz-placeholder, .input-group .has-float-label .form-control-with-label:-ms-input-placeholder, .input-group .has-float-label .form-control-with-label::placeholder {
