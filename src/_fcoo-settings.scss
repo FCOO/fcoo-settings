@@ -1,22 +1,6 @@
-/***********************************************
-	_fcoo-settings.scss,
-
-************************************************/
-
-//BOURBON - http://bourbon.io/ - version 5
-@import "../bower_components/bourbon/core/bourbon";
-
-//MODERNIZR-MIXIN - https://github.com/danielguillan/modernizr-mixin
-@import "../bower_components/modernizr-mixin/stylesheets/modernizr";
-
-//MATHSASS - https://github.com/terkel/mathsass
-@import "../bower_components/mathsass/dist/math";
-
-//MODERNIZR-SCSS - https://github.com/fcoo/modernizr-scss
-@import "../bower_components/modernizr-scss/dist/modernizr-scss";
-
-
 /*****************************************************************************************
+-fcoo-settings.scss,
+
 setting-modernizr( $setting-group-id: global-setting, $setting-id, $value-list: () )
 $setting-group-id: global-setting,
 $setting-id: The is of the setting
