@@ -1,6 +1,6 @@
 {
   "name": "fcoo-settings",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "homepage": "https://github.com/FCOO/fcoo-settings",
   "authors": [
     "Niels Holt"
@@ -25,7 +25,8 @@
   "devDependencies": {
     "bourbon": "latest",
     "modernizr-mixin": "latest",
-    "mathsass": "latest"
+    "mathsass": "latest",
+    "modernizr-scss": "FCOO/modernizr-scss#^2.1.2"
   },
   "license": "MIT",
   "ignore": [

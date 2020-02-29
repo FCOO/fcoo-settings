@@ -1,0 +1,41 @@
+/***********************************************
+	_fcoo-settings.scss,
+
+************************************************/
+/* stylelint-disable order/properties-alphabetical-order */
+/* stylelint-enable */
+/*****************************************************************************************
+setting-modernizr( $setting-group-id: global-setting, $setting-id, $value-list: () )
+$setting-group-id: global-setting,
+$setting-id: The is of the setting
+$value-list: List of possible values of setting-id. If empty list => setting-id har an boolean value
+
+Ex:
+@include setting-modernizr($setting-id: TEST, $value-list:(NONE ALL TEST));
+Create css to make it able to use classes "show-for-global-setting-TEST-ALL" and "hide-for-global-setting-TEST-NONE"
+*****************************************************************************************/
+.global-setting-test7-item0 .hide-for-global-setting-test7-item0 {
+  display: none !important;
+}
+
+.no-global-setting-test7-item0 .show-for-global-setting-test7-item0 {
+  display: none !important;
+}
+
+.global-setting-test7-item1 .hide-for-global-setting-test7-item1 {
+  display: none !important;
+}
+
+.no-global-setting-test7-item1 .show-for-global-setting-test7-item1 {
+  display: none !important;
+}
+
+.global-setting-test7-item2 .hide-for-global-setting-test7-item2 {
+  display: none !important;
+}
+
+.no-global-setting-test7-item2 .show-for-global-setting-test7-item2 {
+  display: none !important;
+}
+
+/*# sourceMappingURL=_fcoo-settings.css.map */

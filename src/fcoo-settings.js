@@ -80,11 +80,9 @@
             $.each(options, function(index, settingOptions){
                 settingOptions = $.extend( {}, { callApply: true }, settingOptions );
                 var setting = new ns.Setting( settingOptions );
+                setting.group = _this;
                 _this.settings[settingOptions.id] = setting;
-
-//HER                //If data is loaded => apply (else wait for data to be loaded)
-//HER                if (_this.dataLoaded)
-                    setting.apply( _this.data[setting.options.id], !options.callApply );
+                setting.apply( _this.data[setting.options.id], !options.callApply );
             });
         },
 
@@ -102,7 +100,6 @@
         Load data from this.store with item-id and update (apply) all Setting
         ***********************************************/
         load: function( id ){
-//HER            this.dataLoaded = false;
             this.loadData(id, $.proxy(this.onLoad, this));
         },
 
@@ -112,7 +109,6 @@
         onLoad: function(data){
             var _this = this;
             $.extend(this.data, data);
-//HER            this.dataLoaded = true;
 
             //Apply data to the Setting
             $.each( this.settings, function( id, setting ){
@@ -231,11 +227,11 @@
                 });
 
                 this.modalForm = $.bsModalForm({
-                    id      : this.options.storeId,
-                    show    : false,
-                    header  : this.options.modalHeader,
-                    content : {type: 'accordion', list: list },
-
+                    id        : this.options.storeId,
+                    show      : false,
+                    header    : this.options.modalHeader,
+                    flexWidth : true,
+                    content   : {type: 'accordion', list: list },
                     onChanging: $.proxy(this.onChanging, this),
                     onCancel  : $.proxy(this.onCancel,   this),
                     onSubmit  : $.proxy(this.onSubmit,   this)
@@ -314,17 +310,24 @@
         }
     };
 
+
+
+
+
     /*******************************************************************************
     ********************************************************************************
     Setting( options )
-    options = {id, validator, applyFunc, defaultValue, globalEvents )
-    id [String]
-    validator [null] | [String] | [function( value)]. If [String] => using Url.js-extensions validation
-    applyFunc [function( value, id, defaultValue )] function to apply the settings for id
-    defaultValue
-    globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
-    onError [function( value, id )] (optional). Called if a new value is invalid according to validator
-    saveOnChanging [BOOLEAN]. If true the setting is saved during editing. When false the setting is only saved when edit-form submits
+    options =
+        id [String]
+        validator [null] | [String] | [function( value)]. If [String] => using Url.js-extensions validation
+        applyFunc [function( value, id, defaultValue )] function to apply the settings for id
+        defaultValue
+        globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
+        onError [function( value, id )] (optional). Called if a new value is invalid according to validator
+        saveOnChanging [BOOLEAN]. If true the setting is saved during editing. When false the setting is only saved when edit-form submits
+        modernizr BOOLEAN` (optional) default=false: If true the modernizr-class descriped in `src\_fcoo-settings.scss` is updated
+        modernizrOnlyValues []ID: List of the only values that are modernizr'ed. If empty all values are modernizr
+
     ********************************************************************************
     ********************************************************************************/
     function Setting( options ) {
@@ -345,7 +348,8 @@
     //Extend the prototype
     ns.Setting.prototype = {
         apply:  function ( newValue, dontCallApplyFunc ){
-            var id = this.options.id;
+            var _this = this,
+                id = this.options.id;
             newValue = (newValue === undefined) ? this.options.defaultValue : newValue;
 
             if ( !window.Url.validateValue(''+newValue, this.options.validator) ){
@@ -358,6 +362,37 @@
 
             if (!dontCallApplyFunc)
                 this.options.applyFunc( this.value, id, this.options.defaultValue );
+
+            //Update modernizr-classes (if any)
+            //The modernizr-class is given from this.group.modernizrPrefix plus the id of setting plus the value (if not boolean)
+            //Eq. In global-setting a Setting with id = "setting2" has the value "value3" =>
+            //modernizr is on for "global-setting-setting2-value3" and off for all other classes with prefix "global-setting-setting2-[VALUE])
+            if (this.options.modernizr){
+                var modernizr = {}; //={ID:BOOLEAN}
+                if ($.type(this.value) == 'boolean')
+                    //Value is boolean => just set simgle modernizr-class = this.global-setting-[ID]
+                    modernizr[id] = this.value;
+                else {
+                    //Find list of possible values in modal-content
+                    var modalContent = {};
+                    $.each(this.group.modalContent, function(groupId, contentList){
+                        $.each(contentList, function(index, content){
+                            if (content.id == id){
+                                modalContent = content;
+                                return false;
+                            }
+                        });
+                    });
+                    $.each(modalContent.list || modalContent.items || [], function(index, contentPart){
+                        if (!_this.options.modernizrOnlyValues || (_this.options.modernizrOnlyValues.indexOf(contentPart.id) != -1))
+                            modernizr[id+'-'+contentPart.id] = !!(newValue == contentPart.id);
+                    });
+                }
+                //Updaet modernizr-classes
+                $.each(modernizr, function(id, on){
+                    window.modernizrToggle( _this.group.options.modernizrPrefix + id, on );
+                });
+            }
 
             //Fire global-events (if any)
             if (this.options.globalEvents && ns.events && ns.events.fire)
@@ -384,6 +419,7 @@
             storeId : 'GLOBAL',
             data    : localStorageData,
             autoSave: true,
+            modernizrPrefix: 'global-setting-',
 
             modalHeader: {
                 icon: 'fa-cog',

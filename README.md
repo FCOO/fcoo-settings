@@ -28,7 +28,10 @@ In namespace `window.fcoo` two object are created:
 - `defaultValue [any]` (optional): Used if no value was found in `localStorage`
 - `callApply [Boolean]` (optional) default=true: If true the `applyFunc` is called when the setting is added
 - `globalEvents` (optional): Name(s) of events defined in [fcoo/fcoo-global-events](https://github.com/FCOO/fcoo-global-events) to be fired when the setting is changed.
-- `onError [Function( value, id )` (optional): Called if a new value is invalid according to validator
+- `saveOnChanging [BOOLEAN]`. If true the setting is saved during editing. When false the setting is only saved when edit-form submits
+- `onError [Function( value, id )]` (optional): Called if a new value is invalid according to validator
+- `modernizr BOOLEAN` (optional) default=false: If true the modernizr-class descriped in `src\_fcoo-settings.scss` is updated
+- `modernizrOnlyValues []ID`: List of the only values that are modernizr'ed. If empty all values are modernizr
 
 #### `.set( {ID:VALUE} )`
 Sets the value for settings `ID`

@@ -10,7 +10,7 @@
 	<meta name='owner' content='FCOO'>
 
     <link  href="bower_components.css" rel="stylesheet">
-    <!-- <link  href="../src/fcoo-settings.css" rel="stylesheet"> -->
+    <link  href="demo.css" rel="stylesheet">
     <link  href="css/fontawesome-all.css" rel="stylesheet">
     <style>
         html, body { width:100%; height: 100%}
@@ -18,10 +18,12 @@
 </head>
 
 <body>
-	<script src="bower_components.js"></script>
+    <div class="show-for-global-setting-test7-item0">show for test7 - item0</div>
+    <div class="show-for-global-setting-test7-item1">show for test7 - item1</div>
+    <div class="show-for-global-setting-test7-item2">show for test7 - item2</div>
+    <script src="bower_components.js"></script>
 	<script src="../src/fcoo-settings.js"></script>
 	<script>
-
         window.bsIsTouch = false;
 
         if (window.location.search.indexOf('touch') !== -1)
@@ -116,7 +118,11 @@ fcoo.globalSetting.addModalContent(fcoo.events.UNITCHANGED, [
         ]
     }
 ]);
-fcoo.globalSetting.add( {id:'test7', defaultValue: 'item1'});
+fcoo.globalSetting.add({
+    id:'test7',
+    defaultValue: 'item1',
+    modernizr: true
+});
 fcoo.globalSetting.addModalContent(fcoo.events.TIMEZONECHANGED, {
     id:'test7',
     label: {da:'test7 - Timezone', en:'test7 - Time Zone'},
@@ -128,6 +134,12 @@ fcoo.globalSetting.addModalContent(fcoo.events.TIMEZONECHANGED, {
     ]
 });
 
+fcoo.globalSetting.add( {id:'test8', defaultValue: false});
+fcoo.globalSetting.addModalContent(fcoo.events.TIMEZONECHANGED, {
+    id:'test8',
+    label: 'test8 - BOOLEAN',
+    type: 'checkbox',
+});
 /*
 $('body').on('click', function(){
     console.log('fcoo.globalSetting.get("test")=',fcoo.globalSetting.get('test'));
@@ -142,7 +154,7 @@ $('body').on('click', function(){
 });
 */
 $('body').on('contextmenu', function(){
-    fcoo.globalSetting.edit(fcoo.events.UNITCHANGED);
+    fcoo.globalSetting.edit();
     return false;
 });
 
