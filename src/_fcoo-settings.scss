@@ -27,7 +27,7 @@ Create css to make it able to use classes "show-for-global-setting-TEST-ALL" and
     @else {
         @each $value in $value-list {
             @include show-and-hide-for-modernizr-test(
-                $modernizr-test      : #{$prefix} + '-' + #{$value},
+                $modernizr-test      : #{$prefix + '-' + $value},
                 $parent-element-type : '',
                 $incl-no-selector    : false,
                 $display-value       : '',
