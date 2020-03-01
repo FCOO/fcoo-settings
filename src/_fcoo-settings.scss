@@ -10,7 +10,7 @@ Ex:
 @include setting-modernizr($setting-id: TEST, $value-list:(NONE ALL TEST));
 Create css to make it able to use classes "show-for-global-setting-TEST-ALL" and "hide-for-global-setting-TEST-NONE"
 *****************************************************************************************/
-@mixin setting-modernizr( $setting-group-id: global-setting, $setting-id, $value-list: () ){
+@mixin setting-modernizr( $setting-group-id: global-setting, $setting-id: dummy, $value-list: () ){
     $prefix: $setting-group-id + '-' + $setting-id;
 
     @if length($value-list) == 0 {
