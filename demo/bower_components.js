@@ -60514,9 +60514,13 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             });
 
             //Add value-format content
-            $.each( vfValueArray, function( index, vfValue ){
+            $.each( vfFormatArray, function( index ){
                 $._bsCreateElement( 'span', linkArray[ index ], titleArray[ index ], textStyleArray[ index ], textClassArray[index] )
-                    .vfValueFormat( vfValue || '', vfFormatArray[index], vfOptionsArray[index] )
+                    .vfValueFormat(
+                        vfValueArray[index] || '',
+                        vfFormatArray[index],
+                        vfOptionsArray[index]
+                    )
                     .appendTo( _this );
             });
 

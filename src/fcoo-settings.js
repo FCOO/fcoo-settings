@@ -83,6 +83,7 @@
                 setting.group = _this;
                 _this.settings[settingOptions.id] = setting;
                 setting.apply( _this.data[setting.options.id], !options.callApply );
+                _this.data[setting.options.id] = setting.value;
             });
         },
 
@@ -244,7 +245,6 @@
             //Open accordion with id
             if (id)
                 this.modalForm.$bsModal.find('form > .accordion').bsOpenCard(id);
-
             this.modalForm.edit(data || this.data);
         },
 
@@ -351,7 +351,6 @@
             var _this = this,
                 id = this.options.id;
             newValue = (newValue === undefined) ? this.options.defaultValue : newValue;
-
             if ( !window.Url.validateValue(''+newValue, this.options.validator) ){
                 if (this.options.onError)
                     this.options.onError( newValue, id );
