@@ -35,11 +35,25 @@
         i18next.changeLanguage('en');
         i18next.options.fallbackLng = i18next.language == 'da' ? 'en' : 'da';
 
+
+        window.fcoo.events.on(
+            window.fcoo.events.LANGUAGECHANGED + ' ' +
+            window.fcoo.events.TIMEZONECHANGED + ' ' +
+            window.fcoo.events.DATETIMEFORMATCHANGED + ' ' +
+            window.fcoo.events.NUMBERFORMATCHANGED + ' ' +
+            window.fcoo.events.LATLNGFORMATCHANGED + ' ' +
+            window.fcoo.events.UNITCHANGED,
+            function(id, value){
+                console.log('globalevent', id, value);
+            }
+        );
+
+
 fcoo.globalSetting.add( {
     id          :'test',
     validator   : 'NUMBER',
     defaultValue: 0,
-    globalEvents: 'davs med dig',
+    globalEvents: window.fcoo.events.LANGUAGECHANGED,
     applyFunc   : function( value, id, defaultValue ){
                       console.log('test - applyFunc:',id, '=', value);
                   }
@@ -49,6 +63,7 @@ fcoo.globalSetting.add( {
     id          :'test2',
     validator   : 'NUMBER',
     defaultValue: 0,
+    globalEvents: window.fcoo.events.TIMEZONECHANGED,
     applyFunc   : function( value, id, defaultValue ){
                       console.log('test2 - applyFunc:',id, '=', value);
                   }
