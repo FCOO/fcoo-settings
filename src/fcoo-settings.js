@@ -264,8 +264,12 @@
             //Set data during editing
             $.each(data, function(id, value){
                 var setting = _this.settings[id];
-                if (setting && setting.options.saveOnChanging && (_this.get(id) != value))
-                    newData[id] = value;
+                if (setting){
+                    if (setting.options.saveOnChanging && (_this.get(id) != value))
+                        newData[id] = value;
+                    if (setting.options.onChanging)
+                        setting.options.onChanging(value);
+                }
             });
             this.set(newData);
         },
@@ -325,6 +329,7 @@
         globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
         onError [function( value, id )] (optional). Called if a new value is invalid according to validator
         saveOnChanging [BOOLEAN]. If true the setting is saved during editing. When false the setting is only saved when edit-form submits
+        onChanging [FUNCTION(value)]. Called when the value of the setting is changed during editing
         modernizr BOOLEAN` (optional) default=false: If true the modernizr-class descriped in `src\_fcoo-settings.scss` is updated
         modernizrOnlyValues []ID: List of the only values that are modernizr'ed. If empty all values are modernizr
 
