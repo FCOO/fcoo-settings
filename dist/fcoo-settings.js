@@ -85,7 +85,7 @@
                 setting.group = _this;
                 _this.settings[settingOptions.id] = setting;
                 setting.apply( _this.data[setting.options.id], !options.callApply );
-                _this.data[setting.options.id] = setting.value;
+                _this.data[setting.options.id] = setting.getValue();
             });
         },
 
@@ -130,7 +130,7 @@
             var dataToSave = this.data;
             $.each( this.settings, function( id, setting ){
                 if (setting.value)
-                    dataToSave[ setting.options.id ] = setting.value;
+                    dataToSave[ setting.options.id ] = setting.getValue();
             });
 
 
@@ -186,7 +186,7 @@
                 return this.data[id];
             else {
                 var setting = this.settings[id];
-                return setting ? setting.value : undefined;
+                return setting ? setting.getValue() : undefined;
             }
         },
 
@@ -329,6 +329,7 @@
         applyFunc [function( value, id, defaultValue )] function to apply the settings for id
         defaultValue
         globalEvents {String} = Id of global-events in fcoo.events that aare fired when the setting is changed
+        getValue [function(value, setting) return a value (optional) Used to adjust value before it is saved or used
         onError [function( value, id )] (optional). Called if a new value is invalid according to validator
         saveOnChanging [BOOLEAN]. If true the setting is saved during editing. When false the setting is only saved when edit-form submits
         onChanging [FUNCTION(value)]. Called when the value of the setting is changed during editing
@@ -367,7 +368,7 @@
             this.value = newValue;
 
             if (!dontCallApplyFunc)
-                this.options.applyFunc( this.value, id, this.options.defaultValue );
+                this.options.applyFunc( this.getValue(), id, this.options.defaultValue );
 
             //Update modernizr-classes (if any)
             //The modernizr-class is given from this.group.modernizrPrefix plus the id of setting plus the value (if not boolean)
@@ -402,7 +403,11 @@
 
             //Fire global-events (if any)
             if (this.options.globalEvents && ns.events && ns.events.fire)
-                ns.events.fire( this.options.globalEvents, id, this.value );
+                ns.events.fire( this.options.globalEvents, id, this.getValue() );
+        },
+
+        getValue: function(){
+            return this.options.getValue ? this.options.getValue(this.value, this) : this.value;
         }
     };
 
