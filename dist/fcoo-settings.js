@@ -368,7 +368,7 @@
             this.value = newValue;
 
             if (!dontCallApplyFunc)
-                this.options.applyFunc( this.getValue(), id, this.options.defaultValue );
+                this.options.applyFunc( this.value, id, this.options.defaultValue );
 
             //Update modernizr-classes (if any)
             //The modernizr-class is given from this.group.modernizrPrefix plus the id of setting plus the value (if not boolean)
