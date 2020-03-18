@@ -8,9 +8,9 @@
 
     There are two versions of settings:
     A: fcoo.globalSetting: Global settings for all FCOO applications. Eq. language, date-format etc.
-    B: fc..appSetting    : Application settings. Specific for each application
+    B: fcoo.appSetting   : Application settings. Specific for each application
 
-    Both type are ccreated as SettingGroup in
+    Both type are created as SettingGroup in
     A: fcoo.globalSetting and saved in indexedDB "GLOBAL"
     B: fcoo.appSetting and saved in indexedDB named by sub-directory of the application
 
@@ -23,10 +23,11 @@
         data (optional): The initial data to be stored
         simpleMode (BOOLEAN) if true no setting in this.settings are use to store data. New data are set directly in this.data
         autoSave: BOOLEAN - if true the data are saved whenever they are changed. If false the method save() need to be called
-
+//        dontSave: BOOLEAN - if true the data are not saved in indexedDB
         modalHeader: Header for the modal-window used to edit the data
         accordionList: []{id, header} - id and header for the different accordion used to edit the setting-group data.
                                      Content to each accordion are added using method SettingGroup.addModalContent: function(accordionId, content)
+        flexWidth: Options for formModal
         onSubmit: function(newData, originalData) - called after the data was edited. newData = all changed data, originalData = the original version of the data
 
 *****************************************************************************************/
@@ -47,7 +48,8 @@
         this.options.storeId =  this.options.storeId ||
                                 window.URI().directory().replace(/^\/+|\/+$/g, '') || //directory trimmed from "/"
                                 'GLOBAL';
-        this.store = window.localforage.createInstance({name: this.options.storeId});
+//        if (!this.options.dontSave)
+            this.store = window.localforage.createInstance({name: this.options.storeId});
 
         //this.data = All settings. Each part of this.data is managed by a Setting in this.settings
         this.data = $.extend({}, this.options.data || {});
@@ -231,7 +233,7 @@
                     id        : this.options.storeId,
                     show      : false,
                     header    : this.options.modalHeader,
-                    flexWidth : true,
+                    flexWidth : this.options.flexWidth,
                     content   : {type: 'accordion', list: list },
                     onChanging: $.proxy(this.onChanging, this),
                     onCancel  : $.proxy(this.onCancel,   this),
@@ -420,9 +422,10 @@
 
     var globalSetting = ns.globalSetting =
         new SettingGroup({
-            storeId : 'GLOBAL',
-            data    : localStorageData,
-            autoSave: true,
+            storeId        : 'GLOBAL',
+            data           : localStorageData,
+            autoSave       : true,
+            flexWidth      : true,
             modernizrPrefix: 'global-setting-',
 
             modalHeader: {

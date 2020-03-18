@@ -55463,6 +55463,12 @@ module.exports = g;
 
         var result = $('<'+ options.tagName + ' tabindex="0"/>');
 
+        //title are added to the button instead of only to the <span> with the text
+        if (options.title){
+            result.i18n(options.title, 'title');
+            options.title = null;
+        }
+
         if (options.tagName == 'a'){
             if (options.link)
                 result
@@ -56369,6 +56375,21 @@ module.exports = g;
             $.each( this.inputs, function( id, input ){
                 func( input );
             });
+        },
+
+        /*******************************************************
+        getInput(id or userId)
+        *******************************************************/
+        getInput: function(id){
+            var result = this.inputs[id];
+            if (!result)
+                this._eachInput( function( input ){
+                    if (input.options.userId == id){
+                        result = input;
+                        return false;
+                    }
+                });
+            return result;
         },
 
         /*******************************************************
@@ -60148,12 +60169,11 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         return options;
     };
 
-    //$._bsAdjustOptions: Adjust options to allow text/name/title/header etc.
+    //$._bsAdjustOptions: Adjust options to allow text/name/header etc.
     $._bsAdjustOptions = function( options, defaultOptions, forceOptions ){
         //*********************************************************************
         //adjustContentOptions: Adjust options for the content of elements
         function adjustContentAndContextOptions( options, context ){
-            options.text      = options.text || options.title;
             options.iconClass = options.iconClass || options.iconClassName;
             options.textClass = options.textClass || options.textClassName;
 
