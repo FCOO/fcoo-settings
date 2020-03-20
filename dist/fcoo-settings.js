@@ -27,8 +27,9 @@
         modalHeader: Header for the modal-window used to edit the data
         accordionList: []{id, header} - id and header for the different accordion used to edit the setting-group data.
                                      Content to each accordion are added using method SettingGroup.addModalContent: function(accordionId, content)
-        flexWidth: Options for formModal
-        onSubmit: function(newData, originalData) - called after the data was edited. newData = all changed data, originalData = the original version of the data
+        flexWidth : Options for formModal
+        onChanging: function(newData, originalData) - called when the data are changed during editing
+        onSubmit  : function(newData, originalData) - called after the data was edited. newData = all changed data, originalData = the original version of the data
 
 *****************************************************************************************/
 
@@ -273,6 +274,9 @@
                         setting.options.onChanging(value);
                 }
             });
+
+            if (this.options.onChanging)
+                this.options.onChanging(newData, this.data);
             this.set(newData);
         },
 
