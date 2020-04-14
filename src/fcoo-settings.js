@@ -49,7 +49,7 @@
         this.options.storeId =  this.options.storeId ||
                                 window.URI().directory().replace(/^\/+|\/+$/g, '') || //directory trimmed from "/"
                                 'GLOBAL';
-//        if (!this.options.dontSave)
+        if (!this.options.dontSave)
             this.store = window.localforage.createInstance({name: this.options.storeId});
 
         //this.data = All settings. Each part of this.data is managed by a Setting in this.settings
@@ -63,7 +63,8 @@
         //this.modalContent = {ID}CONTENT for modal-form to edit a part of values from this.data. More than one record in this.data can be edited in one this.modalContent
         this.modalContent = {};
 
-        this.load();
+        if (!this.options.dontSave)
+            this.load();
     }
     ns.SettingGroup = SettingGroup;
 
@@ -134,8 +135,8 @@
                     dataToSave[ setting.options.id ] = setting.getValue();
             });
 
-
-            return this.store.setItem(id || 'DEFAULT', dataToSave).then(callback);
+            if (!this.options.dontSave)
+                this.store.setItem(id || 'DEFAULT', dataToSave).then(callback);
         },
 
         saveAs: function( id, callback ){
@@ -309,7 +310,7 @@
                 }
             });
             if (changed){
-                if (this.options.autoSave)
+                if (this.options.autoSave && !this.options.dontSave)
                     this.save(newData);
                 else
                     this.set(newData);
