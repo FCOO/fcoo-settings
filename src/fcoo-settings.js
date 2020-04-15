@@ -112,12 +112,11 @@
         onLoad( data )
         ***********************************************/
         onLoad: function(data){
-            var _this = this;
             $.extend(this.data, data);
 
             //Apply data to the Setting
             $.each( this.settings, function( id, setting ){
-                setting.apply( _this.data[id] );
+                setting.apply( data[id] );
             });
         },
 
