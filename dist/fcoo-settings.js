@@ -112,6 +112,7 @@
         onLoad( data )
         ***********************************************/
         onLoad: function(data){
+            data = data || {};
             $.extend(this.data, data);
 
             //Apply data to the Setting
