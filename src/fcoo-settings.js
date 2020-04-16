@@ -48,7 +48,7 @@
         //Create localforage (indexedDB-reader) to save settings
         this.options.storeId =  this.options.storeId ||
                                 window.URI().directory().replace(/^\/+|\/+$/g, '') || //directory trimmed from "/"
-                                'GLOBAL';
+                                'APP';
         if (!this.options.dontSave)
             this.store = window.localforage.createInstance({name: this.options.storeId});
 
