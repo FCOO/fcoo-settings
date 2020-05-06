@@ -419,8 +419,9 @@
 
     /*************************************************************************************
     Create fcoo.globalSetting = setting-group for global (common) settings
-    For backward compatibility: Try to load setting-data from localStorage
+    REMOVED: For backward compatibility: Try to load setting-data from localStorage
     *************************************************************************************/
+/* REMOVED due to some error using localStorage in protected mode
     var localStorageId = 'fcoo_settings',
         localStorageDataStr = window.localStorage.getItem( localStorageId ) || '{}',
         localStorageData;
@@ -429,11 +430,11 @@
     catch (e) { localStorageData = {}; }
 
     window.localStorage.removeItem( localStorageId );
-
+*/
     var globalSetting = ns.globalSetting =
         new SettingGroup({
             storeId        : 'GLOBAL',
-            data           : localStorageData,
+//REMOVED            data           : localStorageData,
             autoSave       : true,
             flexWidth      : true,
             modernizrPrefix: 'global-setting-',
