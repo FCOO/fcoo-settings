@@ -1,42 +1,42 @@
 {
-    "name": "fcoo-settings",
-    "version": "2.9.3",
-    "homepage": "https://github.com/FCOO/fcoo-settings",
-    "authors": [
-        "Niels Holt"
-    ],
-    "description": "",
-    "main": [
-        "dist/fcoo-settings.js"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/FCOO/fcoo-settings.git"
-    },
-    "dependencies": {
-        "jquery": "latest",
-        "url.js-extensions": "fcoo/url.js-extensions#^2.0.0",
-        "fcoo-global-events": "fcoo/fcoo-global-events#^1.0.1",
-        "fake-localstorage": "fcoo/fake-localstorage#^0.1.0",
-        "jquery-bootstrap": "fcoo/jquery-bootstrap#^1.46.0",
-        "localforage": "localForage/localForage#^1.7.3",
-        "urijs": "medialize/URI.js#^1.19.2"
-    },
-    "devDependencies": {
-        "bourbon": "latest",
-        "modernizr-mixin": "latest",
-        "mathsass": "latest",
-        "modernizr-scss": "FCOO/modernizr-scss#^2.1.2"
-    },
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "moduleType": [
-        "es6"
-    ]
+  "name": "fcoo-settings",
+  "version": "2.9.4",
+  "homepage": "https://github.com/FCOO/fcoo-settings",
+  "authors": [
+    "Niels Holt"
+  ],
+  "description": "",
+  "main": [
+    "dist/fcoo-settings.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/FCOO/fcoo-settings.git"
+  },
+  "dependencies": {
+    "jquery": "latest",
+    "url.js-extensions": "fcoo/url.js-extensions#^2.0.0",
+    "fcoo-global-events": "fcoo/fcoo-global-events#^1.0.1",
+    "fake-localstorage": "fcoo/fake-localstorage#^0.1.0",
+    "jquery-bootstrap": "fcoo/jquery-bootstrap#^1.46.0",
+    "localforage": "localForage/localForage#^1.7.3",
+    "urijs": "medialize/URI.js#^1.19.2"
+  },
+  "devDependencies": {
+    "bourbon": "latest",
+    "modernizr-mixin": "latest",
+    "mathsass": "latest",
+    "modernizr-scss": "FCOO/modernizr-scss#^2.1.2"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "moduleType": [
+    "es6"
+  ]
 }

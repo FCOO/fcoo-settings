@@ -303,6 +303,9 @@
             var _this = this,
                 newData = {},
                 changed = false;
+
+            $.workingOn();
+
             $.each(data, function(id, value){
                 if (value != _this.originalData[id]){
                     newData[id] = value;
@@ -318,6 +321,9 @@
                 if (this.options.onSubmit)
                     this.options.onSubmit(newData, this.originalData);
             }
+
+            $.workingOff();
+
         }
     };
 
