@@ -62,6 +62,8 @@
         //** Edit settings in bsModalForm **
         //this.modalContent = {ID}CONTENT for modal-form to edit a part of values from this.data. More than one record in this.data can be edited in one this.modalContent
         this.modalContent = {};
+        //this.modalFooter = {ID}FOOTER for modal-form to edit a part of values from this.data. More than one record in this.data can be edited in one this.modalContent
+        this.modalFooter = {};
 
         if (!this.options.dontSave)
             this.load();
@@ -209,10 +211,16 @@
         /*****************************************************
         addModalContent(accordionId, content)
         *****************************************************/
-        addModalContent: function(accordionId, content){
+        addModalContent: function(accordionId, content, footer){
             this.modalContent[accordionId] = this.modalContent[accordionId] || [];
             content = $.isArray(content) ? content : [content];
             this.modalContent[accordionId] = this.modalContent[accordionId].concat( content );
+
+            if (footer){
+                this.modalFooter[accordionId] = this.modalFooter[accordionId] || [];
+                footer = $.isArray(footer) ? footer : [footer];
+                this.modalFooter[accordionId] = this.modalFooter[accordionId].concat( footer );
+            }
         },
 
         /*****************************************************
@@ -228,7 +236,12 @@
                     list  = [];
                 $.each(this.options.accordionList, function(index, accordInfo){
                     if (_this.modalContent[accordInfo.id] && _this.modalContent[accordInfo.id].length)
-                        list.push({id: accordInfo.id, header: accordInfo.header, content: _this.modalContent[accordInfo.id]});
+                        list.push({
+                            id: accordInfo.id,
+                            header: accordInfo.header,
+                            content: _this.modalContent[accordInfo.id],
+                            footer : _this.modalFooter[accordInfo.id]
+                        });
                 });
 
                 this.modalForm = $.bsModalForm({
