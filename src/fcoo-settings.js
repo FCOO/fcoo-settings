@@ -96,7 +96,7 @@
         ***********************************************/
         loadData: function(id, callback){
             return this.store.getItem(id || 'DEFAULT')
-                       .then(callback);
+                       .then(callback || function(){});
         },
 
         /***********************************************
@@ -135,7 +135,7 @@
             });
 
             if (!this.options.dontSave)
-                this.store.setItem(id || 'DEFAULT', dataToSave).then(callback);
+                this.store.setItem(id || 'DEFAULT', dataToSave).then(callback || function(){});
         },
 
         saveAs: function( id, callback ){
@@ -147,7 +147,7 @@
         Delete the settings in indexedDB
         ***********************************************/
         delete: function(id, callback){
-            return this.store.removeItem(id || 'DEFAULT').then(callback);
+            return this.store.removeItem(id || 'DEFAULT').then(callback || function(){});
         },
 
 
