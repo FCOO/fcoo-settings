@@ -100,10 +100,11 @@
         },
 
         /***********************************************
-        load( id )
+        load( id, afterLoad )
         Load data from this.store with item-id and update (apply) all Setting
         ***********************************************/
-        load: function( id ){
+        load: function( id, afterLoad ){
+            this.afterLoad = afterLoad;
             this.loadData(id, $.proxy(this.onLoad, this));
         },
 
@@ -118,6 +119,10 @@
             $.each( this.settings, function( id, setting ){
                 setting.apply( data[id] );
             });
+            if (this.afterLoad){
+                this.afterLoad(this);
+                this.afterLoad = null;
+            }
         },
 
         /***********************************************
