@@ -391,10 +391,6 @@
                     newValue = this.options.defaultValue;
             }
 
-            //If nothing changed => do nothing
-            if (window.JSON.stringify(this.value) === window.JSON.stringify(newValue))
-                return;
-
             this.value = newValue;
 
             if (!dontCallApplyFunc)
