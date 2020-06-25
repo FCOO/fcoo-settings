@@ -24213,28 +24213,6 @@ if (typeof define === 'function' && define.amd) {
     if (superClass) _setPrototypeOf(subClass, superClass);
   }
 
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-        arr2[i] = arr[i];
-      }
-
-      return arr2;
-    }
-  }
-
-  function _iterableToArray(iter) {
-    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-  }
-
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
-  }
-
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-  }
-
   var consoleLogger = {
     type: 'logger',
     log: function log(args) {
@@ -24247,16 +24225,11 @@ if (typeof define === 'function' && define.amd) {
       this.output('error', args);
     },
     output: function output(type, args) {
-      var _console;
-
-      /* eslint no-console: 0 */
-      if (console && console[type]) (_console = console)[type].apply(_console, _toConsumableArray(args));
+      if (console && console[type]) console[type].apply(console, args);
     }
   };
 
-  var Logger =
-  /*#__PURE__*/
-  function () {
+  var Logger = function () {
     function Logger(concreteLogger) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -24336,9 +24309,7 @@ if (typeof define === 'function' && define.amd) {
 
   var baseLogger = new Logger();
 
-  var EventEmitter =
-  /*#__PURE__*/
-  function () {
+  var EventEmitter = function () {
     function EventEmitter() {
       _classCallCheck(this, EventEmitter);
 
@@ -24398,7 +24369,6 @@ if (typeof define === 'function' && define.amd) {
     return EventEmitter;
   }();
 
-  // http://lea.verou.me/2016/12/resolve-promises-externally-with-this-one-weird-trick/
   function defer() {
     var res;
     var rej;
@@ -24412,8 +24382,6 @@ if (typeof define === 'function' && define.amd) {
   }
   function makeString(object) {
     if (object == null) return '';
-    /* eslint prefer-template: 0 */
-
     return '' + object;
   }
   function copy(a, s, t) {
@@ -24476,16 +24444,13 @@ if (typeof define === 'function' && define.amd) {
 
     if (value !== undefined) {
       return value;
-    } // Fallback to default values
-
+    }
 
     return getPath(defaultData, key);
   }
   function deepExtend(target, source, overwrite) {
-    /* eslint no-restricted-syntax: 0 */
     for (var prop in source) {
       if (prop in target) {
-        // If we reached a leaf string in target or source then replace with source or skip depending on the 'overwrite' switch
         if (typeof target[prop] === 'string' || target[prop] instanceof String || typeof source[prop] === 'string' || source[prop] instanceof String) {
           if (overwrite) target[prop] = source[prop];
         } else {
@@ -24499,11 +24464,8 @@ if (typeof define === 'function' && define.amd) {
     return target;
   }
   function regexEscape(str) {
-    /* eslint no-useless-escape: 0 */
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
   }
-  /* eslint-disable */
-
   var _entityMap = {
     '&': '&amp;',
     '<': '&lt;',
@@ -24512,8 +24474,6 @@ if (typeof define === 'function' && define.amd) {
     "'": '&#39;',
     '/': '&#x2F;'
   };
-  /* eslint-enable */
-
   function escape(data) {
     if (typeof data === 'string') {
       return data.replace(/[&<>"'\/]/g, function (s) {
@@ -24525,9 +24485,7 @@ if (typeof define === 'function' && define.amd) {
   }
   var isIE10 = typeof window !== 'undefined' && window.navigator && window.navigator.userAgent && window.navigator.userAgent.indexOf('MSIE') > -1;
 
-  var ResourceStore =
-  /*#__PURE__*/
-  function (_EventEmitter) {
+  var ResourceStore = function (_EventEmitter) {
     _inherits(ResourceStore, _EventEmitter);
 
     function ResourceStore(data) {
@@ -24543,7 +24501,7 @@ if (typeof define === 'function' && define.amd) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(ResourceStore).call(this));
 
       if (isIE10) {
-        EventEmitter.call(_assertThisInitialized(_this)); // <=IE10 fix (unable to call parent constructor)
+        EventEmitter.call(_assertThisInitialized(_this));
       }
 
       _this.data = data || {};
@@ -24615,7 +24573,6 @@ if (typeof define === 'function' && define.amd) {
           silent: false
         };
 
-        /* eslint no-restricted-syntax: 0 */
         for (var m in resources) {
           if (typeof resources[m] === 'string' || Object.prototype.toString.apply(resources[m]) === '[object Array]') this.addResource(lng, ns, m, resources[m], {
             silent: true
@@ -24669,8 +24626,7 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "getResourceBundle",
       value: function getResourceBundle(lng, ns) {
-        if (!ns) ns = this.options.defaultNS; // COMPATIBILITY: remove extend in v2.1.0
-
+        if (!ns) ns = this.options.defaultNS;
         if (this.options.compatibilityAPI === 'v1') return _objectSpread({}, {}, this.getResource(lng, ns));
         return this.getResource(lng, ns);
       }
@@ -24706,9 +24662,7 @@ if (typeof define === 'function' && define.amd) {
 
   var checkedLoadedFor = {};
 
-  var Translator =
-  /*#__PURE__*/
-  function (_EventEmitter) {
+  var Translator = function (_EventEmitter) {
     _inherits(Translator, _EventEmitter);
 
     function Translator(services) {
@@ -24721,7 +24675,7 @@ if (typeof define === 'function' && define.amd) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(Translator).call(this));
 
       if (isIE10) {
-        EventEmitter.call(_assertThisInitialized(_this)); // <=IE10 fix (unable to call parent constructor)
+        EventEmitter.call(_assertThisInitialized(_this));
       }
 
       copy(['resourceStore', 'languageUtils', 'pluralResolver', 'interpolator', 'backendConnector', 'i18nFormat', 'utils'], services, _assertThisInitialized(_this));
@@ -24775,25 +24729,19 @@ if (typeof define === 'function' && define.amd) {
         var _this2 = this;
 
         if (_typeof(options) !== 'object' && this.options.overloadTranslationOptionHandler) {
-          /* eslint prefer-rest-params: 0 */
           options = this.options.overloadTranslationOptionHandler(arguments);
         }
 
-        if (!options) options = {}; // non valid keys handling
-
-        if (keys === undefined || keys === null
-        /* || keys === ''*/
-        ) return '';
-        if (!Array.isArray(keys)) keys = [String(keys)]; // separators
-
-        var keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator; // get namespace(s)
+        if (!options) options = {};
+        if (keys === undefined || keys === null) return '';
+        if (!Array.isArray(keys)) keys = [String(keys)];
+        var keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
 
         var _this$extractFromKey = this.extractFromKey(keys[keys.length - 1], options),
             key = _this$extractFromKey.key,
             namespaces = _this$extractFromKey.namespaces;
 
-        var namespace = namespaces[namespaces.length - 1]; // return key on CIMode
-
+        var namespace = namespaces[namespaces.length - 1];
         var lng = options.lng || this.language;
         var appendNamespaceToCIMode = options.appendNamespaceToCIMode || this.options.appendNamespaceToCIMode;
 
@@ -24804,8 +24752,7 @@ if (typeof define === 'function' && define.amd) {
           }
 
           return key;
-        } // resolve from store
-
+        }
 
         var resolved = this.resolve(keys, options);
         var res = resolved && resolved.res;
@@ -24813,8 +24760,7 @@ if (typeof define === 'function' && define.amd) {
         var resExactUsedKey = resolved && resolved.exactUsedKey || key;
         var resType = Object.prototype.toString.apply(res);
         var noObject = ['[object Number]', '[object Function]', '[object RegExp]'];
-        var joinArrays = options.joinArrays !== undefined ? options.joinArrays : this.options.joinArrays; // object
-
+        var joinArrays = options.joinArrays !== undefined ? options.joinArrays : this.options.joinArrays;
         var handleAsObjectInI18nFormat = !this.i18nFormat || this.i18nFormat.handleAsObject;
         var handleAsObject = typeof res !== 'string' && typeof res !== 'boolean' && typeof res !== 'number';
 
@@ -24822,16 +24768,11 @@ if (typeof define === 'function' && define.amd) {
           if (!options.returnObjects && !this.options.returnObjects) {
             this.logger.warn('accessing an object - but returnObjects options is not enabled!');
             return this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, res, options) : "key '".concat(key, " (").concat(this.language, ")' returned an object instead of string.");
-          } // if we got a separator we loop over children - else we just return object as is
-          // as having it set to false means no hierarchy so no lookup for nested values
-
+          }
 
           if (keySeparator) {
             var resTypeIsArray = resType === '[object Array]';
-            var copy$$1 = resTypeIsArray ? [] : {}; // apply child translation on a copy
-
-            /* eslint no-restricted-syntax: 0 */
-
+            var copy$$1 = resTypeIsArray ? [] : {};
             var newKeyToUse = resTypeIsArray ? resExactUsedKey : resUsedKey;
 
             for (var m in res) {
@@ -24841,20 +24782,18 @@ if (typeof define === 'function' && define.amd) {
                   joinArrays: false,
                   ns: namespaces
                 }));
-                if (copy$$1[m] === deepKey) copy$$1[m] = res[m]; // if nothing found use orginal value as fallback
+                if (copy$$1[m] === deepKey) copy$$1[m] = res[m];
               }
             }
 
             res = copy$$1;
           }
         } else if (handleAsObjectInI18nFormat && typeof joinArrays === 'string' && resType === '[object Array]') {
-          // array special treatment
           res = res.join(joinArrays);
           if (res) res = this.extendTranslation(res, keys, options);
         } else {
-          // string, empty or null
           var usedDefault = false;
-          var usedKey = false; // fallback value
+          var usedKey = false;
 
           if (!this.isValidLookup(res) && options.defaultValue !== undefined) {
             usedDefault = true;
@@ -24870,13 +24809,20 @@ if (typeof define === 'function' && define.amd) {
           if (!this.isValidLookup(res)) {
             usedKey = true;
             res = key;
-          } // save missing
-
+          }
 
           var updateMissing = options.defaultValue && options.defaultValue !== res && this.options.updateMissing;
 
           if (usedKey || usedDefault || updateMissing) {
             this.logger.log(updateMissing ? 'updateKey' : 'missingKey', lng, namespace, key, updateMissing ? options.defaultValue : res);
+
+            if (keySeparator) {
+              var fk = this.resolve(key, _objectSpread({}, options, {
+                keySeparator: false
+              }));
+              if (fk && fk.res) this.logger.warn('Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.');
+            }
+
             var lngs = [];
             var fallbackLngs = this.languageUtils.getFallbackCodes(this.options.fallbackLng, options.lng || this.language);
 
@@ -24915,16 +24861,12 @@ if (typeof define === 'function' && define.amd) {
                 send(lngs, key);
               }
             }
-          } // extend
+          }
 
-
-          res = this.extendTranslation(res, keys, options, resolved); // append namespace if still key
-
-          if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = "".concat(namespace, ":").concat(key); // parseMissingKeyHandler
-
+          res = this.extendTranslation(res, keys, options, resolved);
+          if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = "".concat(namespace, ":").concat(key);
           if (usedKey && this.options.parseMissingKeyHandler) res = this.options.parseMissingKeyHandler(res);
-        } // return
-
+        }
 
         return res;
       }
@@ -24938,21 +24880,17 @@ if (typeof define === 'function' && define.amd) {
             resolved: resolved
           });
         } else if (!options.skipInterpolation) {
-          // i18next.parsing
           if (options.interpolation) this.interpolator.init(_objectSpread({}, options, {
             interpolation: _objectSpread({}, this.options.interpolation, options.interpolation)
-          })); // interpolate
-
+          }));
           var data = options.replace && typeof options.replace !== 'string' ? options.replace : options;
           if (this.options.interpolation.defaultVariables) data = _objectSpread({}, this.options.interpolation.defaultVariables, data);
-          res = this.interpolator.interpolate(res, data, options.lng || this.language, options); // nesting
-
+          res = this.interpolator.interpolate(res, data, options.lng || this.language, options);
           if (options.nest !== false) res = this.interpolator.nest(res, function () {
             return _this3.translate.apply(_this3, arguments);
           }, options);
           if (options.interpolation) this.interpolator.reset();
-        } // post process
-
+        }
 
         var postProcess = options.postProcess || this.options.postProcess;
         var postProcessorNames = typeof postProcess === 'string' ? [postProcess] : postProcess;
@@ -24972,14 +24910,11 @@ if (typeof define === 'function' && define.amd) {
 
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var found;
-        var usedKey; // plain key
-
-        var exactUsedKey; // key with context / plural
-
+        var usedKey;
+        var exactUsedKey;
         var usedLng;
         var usedNS;
-        if (typeof keys === 'string') keys = [keys]; // forEach possible key
-
+        if (typeof keys === 'string') keys = [keys];
         keys.forEach(function (k) {
           if (_this4.isValidLookup(found)) return;
 
@@ -24999,7 +24934,7 @@ if (typeof define === 'function' && define.amd) {
             if (!checkedLoadedFor["".concat(codes[0], "-").concat(ns)] && _this4.utils && _this4.utils.hasLoadedNamespace && !_this4.utils.hasLoadedNamespace(usedNS)) {
               checkedLoadedFor["".concat(codes[0], "-").concat(ns)] = true;
 
-              _this4.logger.warn("key \"".concat(usedKey, "\" for namespace \"").concat(usedNS, "\" for languages \"").concat(codes.join(', '), "\" won't get resolved as namespace was not yet loaded"), 'This means something IS WRONG in your application setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
+              _this4.logger.warn("key \"".concat(usedKey, "\" for languages \"").concat(codes.join(', '), "\" won't get resolved as namespace \"").concat(usedNS, "\" was not yet loaded"), 'This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
             }
 
             codes.forEach(function (code) {
@@ -25012,18 +24947,13 @@ if (typeof define === 'function' && define.amd) {
                 _this4.i18nFormat.addLookupKeys(finalKeys, key, code, ns, options);
               } else {
                 var pluralSuffix;
-                if (needsPluralHandling) pluralSuffix = _this4.pluralResolver.getSuffix(code, options.count); // fallback for plural if context not found
-
-                if (needsPluralHandling && needsContextHandling) finalKeys.push(finalKey + pluralSuffix); // get key for context if needed
-
-                if (needsContextHandling) finalKeys.push(finalKey += "".concat(_this4.options.contextSeparator).concat(options.context)); // get key for plural if needed
-
+                if (needsPluralHandling) pluralSuffix = _this4.pluralResolver.getSuffix(code, options.count);
+                if (needsPluralHandling && needsContextHandling) finalKeys.push(finalKey + pluralSuffix);
+                if (needsContextHandling) finalKeys.push(finalKey += "".concat(_this4.options.contextSeparator).concat(options.context));
                 if (needsPluralHandling) finalKeys.push(finalKey += pluralSuffix);
-              } // iterate over finalKeys starting with most specific pluralkey (-> contextkey only) -> singularkey only
-
+              }
 
               var possibleKey;
-              /* eslint no-cond-assign: 0 */
 
               while (possibleKey = finalKeys.pop()) {
                 if (!_this4.isValidLookup(found)) {
@@ -25063,14 +24993,13 @@ if (typeof define === 'function' && define.amd) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  var LanguageUtil =
-  /*#__PURE__*/
-  function () {
+  var LanguageUtil = function () {
     function LanguageUtil(options) {
       _classCallCheck(this, LanguageUtil);
 
       this.options = options;
-      this.whitelist = this.options.whitelist || false;
+      this.whitelist = this.options.supportedLngs || false;
+      this.supportedLngs = this.options.supportedLngs || false;
       this.logger = baseLogger.create('languageUtils');
     }
 
@@ -25081,6 +25010,7 @@ if (typeof define === 'function' && define.amd) {
         var p = code.split('-');
         if (p.length === 2) return null;
         p.pop();
+        if (p[p.length - 1].toLowerCase() === 'x') return null;
         return this.formatLanguageCode(p.join('-'));
       }
     }, {
@@ -25093,7 +25023,6 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "formatLanguageCode",
       value: function formatLanguageCode(code) {
-        // http://www.iana.org/assignments/language-tags/language-tags.xhtml
         if (typeof code === 'string' && code.indexOf('-') > -1) {
           var specialCases = ['hans', 'hant', 'latn', 'cyrl', 'cans', 'mong', 'arab'];
           var p = code.split('-');
@@ -25107,8 +25036,7 @@ if (typeof define === 'function' && define.amd) {
             p[1] = p[1].toUpperCase();
             if (specialCases.indexOf(p[1].toLowerCase()) > -1) p[1] = capitalize(p[1].toLowerCase());
           } else if (p.length === 3) {
-            p[0] = p[0].toLowerCase(); // if lenght 2 guess it's a country
-
+            p[0] = p[0].toLowerCase();
             if (p[1].length === 2) p[1] = p[1].toUpperCase();
             if (p[0] !== 'sgn' && p[2].length === 2) p[2] = p[2].toUpperCase();
             if (specialCases.indexOf(p[1].toLowerCase()) > -1) p[1] = capitalize(p[1].toLowerCase());
@@ -25123,11 +25051,48 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "isWhitelisted",
       value: function isWhitelisted(code) {
-        if (this.options.load === 'languageOnly' || this.options.nonExplicitWhitelist) {
+        this.logger.deprecate('languageUtils.isWhitelisted', 'function "isWhitelisted" will be renamed to "isSupportedCode" in the next major - please make sure to rename it\'s usage asap.');
+        return this.isSupportedCode(code);
+      }
+    }, {
+      key: "isSupportedCode",
+      value: function isSupportedCode(code) {
+        if (this.options.load === 'languageOnly' || this.options.nonExplicitSupportedLngs) {
           code = this.getLanguagePartFromCode(code);
         }
 
-        return !this.whitelist || !this.whitelist.length || this.whitelist.indexOf(code) > -1;
+        return !this.supportedLngs || !this.supportedLngs.length || this.supportedLngs.indexOf(code) > -1;
+      }
+    }, {
+      key: "getBestMatchFromCodes",
+      value: function getBestMatchFromCodes(codes) {
+        var _this = this;
+
+        if (!codes) return null;
+        var found;
+        codes.forEach(function (code) {
+          if (found) return;
+
+          var cleanedLng = _this.formatLanguageCode(code);
+
+          if (!_this.options.supportedLngs || _this.isSupportedCode(cleanedLng)) found = cleanedLng;
+        });
+
+        if (!found && this.options.supportedLngs) {
+          codes.forEach(function (code) {
+            if (found) return;
+
+            var lngOnly = _this.getLanguagePartFromCode(code);
+
+            if (_this.isSupportedCode(lngOnly)) return found = lngOnly;
+            found = _this.options.supportedLngs.find(function (supportedLng) {
+              if (supportedLng.indexOf(lngOnly) === 0) return supportedLng;
+            });
+          });
+        }
+
+        if (!found) found = this.getFallbackCodes(this.options.fallbackLng)[0];
+        return found;
       }
     }, {
       key: "getFallbackCodes",
@@ -25135,8 +25100,7 @@ if (typeof define === 'function' && define.amd) {
         if (!fallbacks) return [];
         if (typeof fallbacks === 'string') fallbacks = [fallbacks];
         if (Object.prototype.toString.apply(fallbacks) === '[object Array]') return fallbacks;
-        if (!code) return fallbacks["default"] || []; // asume we have an object defining fallbacks
-
+        if (!code) return fallbacks["default"] || [];
         var found = fallbacks[code];
         if (!found) found = fallbacks[this.getScriptPartFromCode(code)];
         if (!found) found = fallbacks[this.formatLanguageCode(code)];
@@ -25147,7 +25111,7 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "toResolveHierarchy",
       value: function toResolveHierarchy(code, fallbackCode) {
-        var _this = this;
+        var _this2 = this;
 
         var fallbackCodes = this.getFallbackCodes(fallbackCode || this.options.fallbackLng || [], code);
         var codes = [];
@@ -25155,10 +25119,10 @@ if (typeof define === 'function' && define.amd) {
         var addCode = function addCode(c) {
           if (!c) return;
 
-          if (_this.isWhitelisted(c)) {
+          if (_this2.isSupportedCode(c)) {
             codes.push(c);
           } else {
-            _this.logger.warn("rejecting non-whitelisted language code: ".concat(c));
+            _this2.logger.warn("rejecting language code not found in supportedLngs: ".concat(c));
           }
         };
 
@@ -25171,7 +25135,7 @@ if (typeof define === 'function' && define.amd) {
         }
 
         fallbackCodes.forEach(function (fc) {
-          if (codes.indexOf(fc) < 0) addCode(_this.formatLanguageCode(fc));
+          if (codes.indexOf(fc) < 0) addCode(_this2.formatLanguageCode(fc));
         });
         return codes;
       }
@@ -25179,8 +25143,6 @@ if (typeof define === 'function' && define.amd) {
 
     return LanguageUtil;
   }();
-
-  /* eslint-disable */
 
   var sets = [{
     lngs: ['ach', 'ak', 'am', 'arn', 'br', 'fil', 'gun', 'ln', 'mfe', 'mg', 'mi', 'oc', 'pt', 'pt-BR', 'tg', 'ti', 'tr', 'uz', 'wa'],
@@ -25289,7 +25251,7 @@ if (typeof define === 'function' && define.amd) {
       return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
     },
     5: function _(n) {
-      return Number(n === 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5);
+      return Number(n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5);
     },
     6: function _(n) {
       return Number(n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2);
@@ -25331,19 +25293,18 @@ if (typeof define === 'function' && define.amd) {
       return Number(n == 0 ? 0 : n == 1 ? 1 : 2);
     },
     19: function _(n) {
-      return Number(n == 1 ? 0 : n === 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3);
+      return Number(n == 1 ? 0 : n == 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3);
     },
     20: function _(n) {
-      return Number(n == 1 ? 0 : n === 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2);
+      return Number(n == 1 ? 0 : n == 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2);
     },
     21: function _(n) {
       return Number(n % 100 == 1 ? 1 : n % 100 == 2 ? 2 : n % 100 == 3 || n % 100 == 4 ? 3 : 0);
     },
     22: function _(n) {
-      return Number(n === 1 ? 0 : n === 2 ? 1 : (n < 0 || n > 10) && n % 10 == 0 ? 2 : 3);
+      return Number(n == 1 ? 0 : n == 2 ? 1 : (n < 0 || n > 10) && n % 10 == 0 ? 2 : 3);
     }
   };
-  /* eslint-enable */
 
   function createRules() {
     var rules = {};
@@ -25358,9 +25319,7 @@ if (typeof define === 'function' && define.amd) {
     return rules;
   }
 
-  var PluralResolver =
-  /*#__PURE__*/
-  function () {
+  var PluralResolver = function () {
     function PluralResolver(languageUtils) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -25411,9 +25370,8 @@ if (typeof define === 'function' && define.amd) {
         var rule = this.getRule(code);
 
         if (rule) {
-          // if (rule.numbers.length === 1) return ''; // only singular
           var idx = rule.noAbs ? rule.plurals(count) : rule.plurals(Math.abs(count));
-          var suffix = rule.numbers[idx]; // special treatment for lngs only having singular and plural
+          var suffix = rule.numbers[idx];
 
           if (this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
             if (suffix === 2) {
@@ -25425,21 +25383,15 @@ if (typeof define === 'function' && define.amd) {
 
           var returnSuffix = function returnSuffix() {
             return _this2.options.prepend && suffix.toString() ? _this2.options.prepend + suffix.toString() : suffix.toString();
-          }; // COMPATIBILITY JSON
-          // v1
-
+          };
 
           if (this.options.compatibilityJSON === 'v1') {
             if (suffix === 1) return '';
             if (typeof suffix === 'number') return "_plural_".concat(suffix.toString());
             return returnSuffix();
-          } else if (
-          /* v2 */
-          this.options.compatibilityJSON === 'v2') {
+          } else if (this.options.compatibilityJSON === 'v2') {
             return returnSuffix();
-          } else if (
-          /* v3 - gettext index */
-          this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
+          } else if (this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
             return returnSuffix();
           }
 
@@ -25454,21 +25406,7 @@ if (typeof define === 'function' && define.amd) {
     return PluralResolver;
   }();
 
-  function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-  }
-
-  function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance");
-  }
-
-  function _toArray(arr) {
-    return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest();
-  }
-
-  var Interpolator =
-  /*#__PURE__*/
-  function () {
+  var Interpolator = function () {
     function Interpolator() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -25483,8 +25421,6 @@ if (typeof define === 'function' && define.amd) {
 
       this.init(options);
     }
-    /* eslint no-param-reassign: 0 */
-
 
     _createClass(Interpolator, [{
       key: "init",
@@ -25506,8 +25442,7 @@ if (typeof define === 'function' && define.amd) {
         this.nestingSuffix = iOpts.nestingSuffix ? regexEscape(iOpts.nestingSuffix) : iOpts.nestingSuffixEscaped || regexEscape(')');
         this.nestingOptionsSeparator = iOpts.nestingOptionsSeparator ? iOpts.nestingOptionsSeparator : iOpts.nestingOptionsSeparator || ',';
         this.maxReplaces = iOpts.maxReplaces ? iOpts.maxReplaces : 1000;
-        this.alwaysFormat = iOpts.alwaysFormat !== undefined ? iOpts.alwaysFormat : false; // the regexp
-
+        this.alwaysFormat = iOpts.alwaysFormat !== undefined ? iOpts.alwaysFormat : false;
         this.resetRegExp();
       }
     }, {
@@ -25518,7 +25453,6 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "resetRegExp",
       value: function resetRegExp() {
-        // the regexp
         var regexpStr = "".concat(this.prefix, "(.+?)").concat(this.suffix);
         this.regexp = new RegExp(regexpStr, 'g');
         var regexpUnescapeStr = "".concat(this.prefix).concat(this.unescapePrefix, "(.+?)").concat(this.unescapeSuffix).concat(this.suffix);
@@ -25554,9 +25488,7 @@ if (typeof define === 'function' && define.amd) {
 
         this.resetRegExp();
         var missingInterpolationHandler = options && options.missingInterpolationHandler || this.options.missingInterpolationHandler;
-        replaces = 0; // unescape if has unescapePrefix/Suffix
-
-        /* eslint no-cond-assign: 0 */
+        replaces = 0;
 
         while (match = this.regexpUnescape.exec(str)) {
           value = handleFormat(match[1].trim());
@@ -25582,7 +25514,7 @@ if (typeof define === 'function' && define.amd) {
           }
         }
 
-        replaces = 0; // regular escape on demand
+        replaces = 0;
 
         while (match = this.regexp.exec(str)) {
           value = handleFormat(match[1].trim());
@@ -25623,10 +25555,8 @@ if (typeof define === 'function' && define.amd) {
 
         var clonedOptions = _objectSpread({}, options);
 
-        clonedOptions.applyPostProcessor = false; // avoid post processing on nested lookup
-
-        delete clonedOptions.defaultValue; // assert we do not get a endless loop on interpolating defaultValue again and again
-        // if value is something like "myKey": "lorem $(anotherKey, { "count": {{aValueInOptions}} })"
+        clonedOptions.applyPostProcessor = false;
+        delete clonedOptions.defaultValue;
 
         function handleHasOptions(key, inheritedOptions) {
           var sep = this.nestingOptionsSeparator;
@@ -25643,44 +25573,27 @@ if (typeof define === 'function' && define.amd) {
           } catch (e) {
             this.logger.warn("failed parsing options string in nesting for key ".concat(key), e);
             return "".concat(key).concat(sep).concat(optionsString);
-          } // assert we do not get a endless loop on interpolating defaultValue again and again
-
+          }
 
           delete clonedOptions.defaultValue;
           return key;
-        } // regular escape on demand
-
+        }
 
         while (match = this.nestingRegexp.exec(str)) {
           var formatters = [];
-          /**
-           * If there is more than one parameter (contains the format separator). E.g.:
-           *   - t(a, b)
-           *   - t(a, b, c)
-           *
-           * And those parameters are not dynamic values (parameters do not include curly braces). E.g.:
-           *   - Not t(a, { "key": "{{variable}}" })
-           *   - Not t(a, b, {"keyA": "valueA", "keyB": "valueB"})
-           */
-
           var doReduce = false;
 
           if (match[0].includes(this.formatSeparator) && !/{.*}/.test(match[1])) {
-            var _match$1$split$map = match[1].split(this.formatSeparator).map(function (elem) {
+            var r = match[1].split(this.formatSeparator).map(function (elem) {
               return elem.trim();
             });
-
-            var _match$1$split$map2 = _toArray(_match$1$split$map);
-
-            match[1] = _match$1$split$map2[0];
-            formatters = _match$1$split$map2.slice(1);
+            match[1] = r.shift();
+            formatters = r;
             doReduce = true;
           }
 
-          value = fc(handleHasOptions.call(this, match[1].trim(), clonedOptions), clonedOptions); // is only the nesting key (key1 = '$(key2)') return the value without stringify
-
-          if (value && match[0] === str && typeof value !== 'string') return value; // no string to include or empty
-
+          value = fc(handleHasOptions.call(this, match[1].trim(), clonedOptions), clonedOptions);
+          if (value && match[0] === str && typeof value !== 'string') return value;
           if (typeof value !== 'string') value = makeString(value);
 
           if (!value) {
@@ -25692,9 +25605,7 @@ if (typeof define === 'function' && define.amd) {
             value = formatters.reduce(function (v, f) {
               return _this2.format(v, f, options.lng, options);
             }, value.trim());
-          } // Nested keys should not be escaped by default #854
-          // value = this.escapeValue ? regexSafe(utils.escape(value)) : regexSafe(value);
-
+          }
 
           str = str.replace(match[0], value);
           this.regexp.lastIndex = 0;
@@ -25707,36 +25618,6 @@ if (typeof define === 'function' && define.amd) {
     return Interpolator;
   }();
 
-  function _iterableToArrayLimit(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"] != null) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
-  }
-
   function remove(arr, what) {
     var found = arr.indexOf(what);
 
@@ -25746,9 +25627,7 @@ if (typeof define === 'function' && define.amd) {
     }
   }
 
-  var Connector =
-  /*#__PURE__*/
-  function (_EventEmitter) {
+  var Connector = function (_EventEmitter) {
     _inherits(Connector, _EventEmitter);
 
     function Connector(backend, store, services) {
@@ -25761,7 +25640,7 @@ if (typeof define === 'function' && define.amd) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(Connector).call(this));
 
       if (isIE10) {
-        EventEmitter.call(_assertThisInitialized(_this)); // <=IE10 fix (unable to call parent constructor)
+        EventEmitter.call(_assertThisInitialized(_this));
       }
 
       _this.backend = backend;
@@ -25785,7 +25664,6 @@ if (typeof define === 'function' && define.amd) {
       value: function queueLoad(languages, namespaces, options, callback) {
         var _this2 = this;
 
-        // find what needs to be loaded
         var toLoad = [];
         var pending = [];
         var toLoadLanguages = [];
@@ -25796,12 +25674,11 @@ if (typeof define === 'function' && define.amd) {
             var name = "".concat(lng, "|").concat(ns);
 
             if (!options.reload && _this2.store.hasResourceBundle(lng, ns)) {
-              _this2.state[name] = 2; // loaded
+              _this2.state[name] = 2;
             } else if (_this2.state[name] < 0) ; else if (_this2.state[name] === 1) {
               if (pending.indexOf(name) < 0) pending.push(name);
             } else {
-              _this2.state[name] = 1; // pending
-
+              _this2.state[name] = 1;
               hasAllNamespaces = false;
               if (pending.indexOf(name) < 0) pending.push(name);
               if (toLoad.indexOf(name) < 0) toLoad.push(name);
@@ -25830,29 +25707,23 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "loaded",
       value: function loaded(name, err, data) {
-        var _name$split = name.split('|'),
-            _name$split2 = _slicedToArray(_name$split, 2),
-            lng = _name$split2[0],
-            ns = _name$split2[1];
-
+        var s = name.split('|');
+        var lng = s[0];
+        var ns = s[1];
         if (err) this.emit('failedLoading', lng, ns, err);
 
         if (data) {
           this.store.addResourceBundle(lng, ns, data);
-        } // set loaded
+        }
 
-
-        this.state[name] = err ? -1 : 2; // consolidated loading done in this run - only emit once for a loaded namespace
-
-        var loaded = {}; // callback if ready
-
+        this.state[name] = err ? -1 : 2;
+        var loaded = {};
         this.queue.forEach(function (q) {
           pushPath(q.loaded, [lng], ns);
           remove(q.pending, name);
           if (err) q.errors.push(err);
 
           if (q.pending.length === 0 && !q.done) {
-            // only do once per loaded -> this.emit('loaded', q.loaded);
             Object.keys(q.loaded).forEach(function (l) {
               if (!loaded[l]) loaded[l] = [];
 
@@ -25862,8 +25733,6 @@ if (typeof define === 'function' && define.amd) {
                 });
               }
             });
-            /* eslint no-param-reassign: 0 */
-
             q.done = true;
 
             if (q.errors.length) {
@@ -25872,10 +25741,8 @@ if (typeof define === 'function' && define.amd) {
               q.callback();
             }
           }
-        }); // emit consolidated loaded event
-
-        this.emit('loaded', loaded); // remove done load requests
-
+        });
+        this.emit('loaded', loaded);
         this.queue = this.queue.filter(function (q) {
           return !q.done;
         });
@@ -25888,12 +25755,9 @@ if (typeof define === 'function' && define.amd) {
         var tried = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
         var wait = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 350;
         var callback = arguments.length > 5 ? arguments[5] : undefined;
-        if (!lng.length) return callback(null, {}); // noting to load
-
+        if (!lng.length) return callback(null, {});
         return this.backend[fcName](lng, ns, function (err, data) {
-          if (err && data
-          /* = retryFlag */
-          && tried < 5) {
+          if (err && data && tried < 5) {
             setTimeout(function () {
               _this3.read.call(_this3, lng, ns, fcName, tried + 1, wait * 2, callback);
             }, wait);
@@ -25903,8 +25767,6 @@ if (typeof define === 'function' && define.amd) {
           callback(err, data);
         });
       }
-      /* eslint consistent-return: 0 */
-
     }, {
       key: "prepareLoading",
       value: function prepareLoading(languages, namespaces) {
@@ -25923,9 +25785,8 @@ if (typeof define === 'function' && define.amd) {
         var toLoad = this.queueLoad(languages, namespaces, options, callback);
 
         if (!toLoad.toLoad.length) {
-          if (!toLoad.pending.length) callback(); // nothing to load and no pendings...callback now
-
-          return null; // pendings will trigger callback
+          if (!toLoad.pending.length) callback();
+          return null;
         }
 
         toLoad.toLoad.forEach(function (name) {
@@ -25950,12 +25811,9 @@ if (typeof define === 'function' && define.amd) {
         var _this5 = this;
 
         var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-        var _name$split3 = name.split('|'),
-            _name$split4 = _slicedToArray(_name$split3, 2),
-            lng = _name$split4[0],
-            ns = _name$split4[1];
-
+        var s = name.split('|');
+        var lng = s[0];
+        var ns = s[1];
         this.read(lng, ns, 'read', undefined, undefined, function (err, data) {
           if (err) _this5.logger.warn("".concat(prefix, "loading namespace ").concat(ns, " for language ").concat(lng, " failed"), err);
           if (!err && data) _this5.logger.log("".concat(prefix, "loaded namespace ").concat(ns, " for language ").concat(lng), data);
@@ -25969,21 +25827,17 @@ if (typeof define === 'function' && define.amd) {
         var options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
 
         if (this.services.utils && this.services.utils.hasLoadedNamespace && !this.services.utils.hasLoadedNamespace(namespace)) {
-          this.logger.warn("did not save key \"".concat(key, "\" for namespace \"").concat(namespace, "\" as the namespace was not yet loaded"), 'This means something IS WRONG in your application setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
+          this.logger.warn("did not save key \"".concat(key, "\" as the namespace \"").concat(namespace, "\" was not yet loaded"), 'This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
           return;
-        } // ignore non valid keys
-
+        }
 
         if (key === undefined || key === null || key === '') return;
 
         if (this.backend && this.backend.create) {
-          this.backend.create(languages, namespace, key, fallbackValue, null
-          /* unused callback */
-          , _objectSpread({}, options, {
+          this.backend.create(languages, namespace, key, fallbackValue, null, _objectSpread({}, options, {
             isUpdate: isUpdate
           }));
-        } // write to store to avoid resending
-
+        }
 
         if (!languages || !languages[0]) return;
         this.store.addResource(languages[0], namespace, key, fallbackValue);
@@ -26001,48 +25855,32 @@ if (typeof define === 'function' && define.amd) {
       defaultNS: ['translation'],
       fallbackLng: ['dev'],
       fallbackNS: false,
-      // string or array of namespaces
       whitelist: false,
-      // array with whitelisted languages
       nonExplicitWhitelist: false,
+      supportedLngs: false,
+      nonExplicitSupportedLngs: false,
       load: 'all',
-      // | currentOnly | languageOnly
       preload: false,
-      // array with preload languages
       simplifyPluralSuffix: true,
       keySeparator: '.',
       nsSeparator: ':',
       pluralSeparator: '_',
       contextSeparator: '_',
       partialBundledLanguages: false,
-      // allow bundling certain languages that are not remotely fetched
       saveMissing: false,
-      // enable to send missing values
       updateMissing: false,
-      // enable to update default values if different from translated value (only useful on initial development, or when keeping code as source of truth)
       saveMissingTo: 'fallback',
-      // 'current' || 'all'
       saveMissingPlurals: true,
-      // will save all forms not only singular key
       missingKeyHandler: false,
-      // function(lng, ns, key, fallbackValue) -> override if prefer on handling
       missingInterpolationHandler: false,
-      // function(str, match)
       postProcess: false,
-      // string or array of postProcessor names
       postProcessPassResolved: false,
-      // pass resolved object into 'options.i18nResolved' for postprocessor
       returnNull: true,
-      // allows null value as valid translation
       returnEmptyString: true,
-      // allows empty string value as valid translation
       returnObjects: false,
       joinArrays: false,
-      // or string to join array
       returnedObjectHandler: false,
-      // function(key, value, options) triggered if key returns object but returnObjects is set to false
       parseMissingKeyHandler: false,
-      // function(key) parsed a key that was not found in t() before returning
       appendNamespaceToMissingKey: false,
       appendNamespaceToCIMode: false,
       overloadTranslationOptionHandler: function handle(args) {
@@ -26068,31 +25906,33 @@ if (typeof define === 'function' && define.amd) {
         prefix: '{{',
         suffix: '}}',
         formatSeparator: ',',
-        // prefixEscaped: '{{',
-        // suffixEscaped: '}}',
-        // unescapeSuffix: '',
         unescapePrefix: '-',
         nestingPrefix: '$t(',
         nestingSuffix: ')',
         nestingOptionsSeparator: ',',
-        // nestingPrefixEscaped: '$t(',
-        // nestingSuffixEscaped: ')',
-        // defaultVariables: undefined // object that can have values to interpolate on - extends passed in interpolation data
-        maxReplaces: 1000 // max replaces to prevent endless loop
-
+        maxReplaces: 1000
       }
     };
   }
-  /* eslint no-param-reassign: 0 */
-
   function transformOptions(options) {
-    // create namespace object if namespace is passed in as string
     if (typeof options.ns === 'string') options.ns = [options.ns];
     if (typeof options.fallbackLng === 'string') options.fallbackLng = [options.fallbackLng];
-    if (typeof options.fallbackNS === 'string') options.fallbackNS = [options.fallbackNS]; // extend whitelist with cimode
+    if (typeof options.fallbackNS === 'string') options.fallbackNS = [options.fallbackNS];
 
-    if (options.whitelist && options.whitelist.indexOf('cimode') < 0) {
-      options.whitelist = options.whitelist.concat(['cimode']);
+    if (options.whitelist) {
+      if (options.whitelist && options.whitelist.indexOf('cimode') < 0) {
+        options.whitelist = options.whitelist.concat(['cimode']);
+      }
+
+      options.supportedLngs = options.whitelist;
+    }
+
+    if (options.nonExplicitWhitelist) {
+      options.nonExplicitSupportedLngs = options.nonExplicitWhitelist;
+    }
+
+    if (options.supportedLngs && options.supportedLngs.indexOf('cimode') < 0) {
+      options.supportedLngs = options.supportedLngs.concat(['cimode']);
     }
 
     return options;
@@ -26100,9 +25940,7 @@ if (typeof define === 'function' && define.amd) {
 
   function noop() {}
 
-  var I18n =
-  /*#__PURE__*/
-  function (_EventEmitter) {
+  var I18n = function (_EventEmitter) {
     _inherits(I18n, _EventEmitter);
 
     function I18n() {
@@ -26116,7 +25954,7 @@ if (typeof define === 'function' && define.amd) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(I18n).call(this));
 
       if (isIE10) {
-        EventEmitter.call(_assertThisInitialized(_this)); // <=IE10 fix (unable to call parent constructor)
+        EventEmitter.call(_assertThisInitialized(_this));
       }
 
       _this.options = transformOptions(options);
@@ -26127,7 +25965,6 @@ if (typeof define === 'function' && define.amd) {
       };
 
       if (callback && !_this.isInitialized && !options.isClone) {
-        // https://github.com/i18next/i18next/issues/879
         if (!_this.options.initImmediate) {
           _this.init(options, callback);
 
@@ -26155,6 +25992,14 @@ if (typeof define === 'function' && define.amd) {
           options = {};
         }
 
+        if (options.whitelist && !options.supportedLngs) {
+          this.logger.deprecate('whitelist', 'option "whitelist" will be renamed to "supportedLngs" in the next major - please make sure to rename this option asap.');
+        }
+
+        if (options.nonExplicitWhitelist && !options.nonExplicitSupportedLngs) {
+          this.logger.deprecate('whitelist', 'options "nonExplicitWhitelist" will be renamed to "nonExplicitSupportedLngs" in the next major - please make sure to rename this option asap.');
+        }
+
         this.options = _objectSpread({}, get(), this.options, transformOptions(options));
         this.format = this.options.interpolation.format;
         if (!callback) callback = noop;
@@ -26163,8 +26008,7 @@ if (typeof define === 'function' && define.amd) {
           if (!ClassOrObject) return null;
           if (typeof ClassOrObject === 'function') return new ClassOrObject();
           return ClassOrObject;
-        } // init services
-
+        }
 
         if (!this.options.isClone) {
           if (this.modules.logger) {
@@ -26188,8 +26032,7 @@ if (typeof define === 'function' && define.amd) {
           s.utils = {
             hasLoadedNamespace: this.hasLoadedNamespace.bind(this)
           };
-          s.backendConnector = new Connector(createClassOnDemand(this.modules.backend), s.resourceStore, s, this.options); // pipe events from backendConnector
-
+          s.backendConnector = new Connector(createClassOnDemand(this.modules.backend), s.resourceStore, s, this.options);
           s.backendConnector.on('*', function (event) {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
               args[_key - 1] = arguments[_key];
@@ -26208,8 +26051,7 @@ if (typeof define === 'function' && define.amd) {
             if (s.i18nFormat.init) s.i18nFormat.init(this);
           }
 
-          this.translator = new Translator(this.services, this.options); // pipe events from translator
-
+          this.translator = new Translator(this.services, this.options);
           this.translator.on('*', function (event) {
             for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
               args[_key2 - 1] = arguments[_key2];
@@ -26224,8 +26066,7 @@ if (typeof define === 'function' && define.amd) {
 
         if (!this.modules.languageDetector && !this.options.lng) {
           this.logger.warn('init: no languageDetector is used and no lng is defined');
-        } // append api
-
+        }
 
         var storeApi = ['getResource', 'addResource', 'addResources', 'addResourceBundle', 'removeResourceBundle', 'hasResourceBundle', 'getResourceBundle', 'getDataByLanguage'];
         storeApi.forEach(function (fcName) {
@@ -26245,8 +26086,7 @@ if (typeof define === 'function' && define.amd) {
 
             _this2.emit('initialized', _this2.options);
 
-            deferred.resolve(t); // not rejecting on err (as err is only a loading translation failed warning)
-
+            deferred.resolve(t);
             callback(err, t);
           });
         };
@@ -26259,8 +26099,6 @@ if (typeof define === 'function' && define.amd) {
 
         return deferred;
       }
-      /* eslint consistent-return: 0 */
-
     }, {
       key: "loadResources",
       value: function loadResources(language) {
@@ -26272,8 +26110,7 @@ if (typeof define === 'function' && define.amd) {
         if (typeof language === 'function') usedCallback = language;
 
         if (!this.options.resources || this.options.partialBundledLanguages) {
-          if (usedLng && usedLng.toLowerCase() === 'cimode') return usedCallback(); // avoid loading resources for cimode
-
+          if (usedLng && usedLng.toLowerCase() === 'cimode') return usedCallback();
           var toLoad = [];
 
           var append = function append(lng) {
@@ -26287,7 +26124,6 @@ if (typeof define === 'function' && define.amd) {
           };
 
           if (!usedLng) {
-            // at least load fallbacks in this case
             var fallbacks = this.services.languageUtils.getFallbackCodes(this.options.fallbackLng);
             fallbacks.forEach(function (l) {
               return append(l);
@@ -26315,8 +26151,7 @@ if (typeof define === 'function' && define.amd) {
         if (!ns) ns = this.options.ns;
         if (!callback) callback = noop;
         this.services.backendConnector.reload(lngs, ns, function (err) {
-          deferred.resolve(); // not rejecting on err (as err is only a loading translation failed warning)
-
+          deferred.resolve();
           callback(err);
         });
         return deferred;
@@ -26386,7 +26221,9 @@ if (typeof define === 'function' && define.amd) {
           });
         };
 
-        var setLng = function setLng(l) {
+        var setLng = function setLng(lngs) {
+          var l = typeof lngs === 'string' ? lngs : _this4.services.languageUtils.getBestMatchFromCodes(lngs);
+
           if (l) {
             if (!_this4.language) {
               _this4.language = l;
@@ -26469,6 +26306,8 @@ if (typeof define === 'function' && define.amd) {
       value: function hasLoadedNamespace(ns) {
         var _this6 = this;
 
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         if (!this.isInitialized) {
           this.logger.warn('hasLoadedNamespace: i18next was not initialized', this.languages);
           return false;
@@ -26481,21 +26320,22 @@ if (typeof define === 'function' && define.amd) {
 
         var lng = this.languages[0];
         var fallbackLng = this.options ? this.options.fallbackLng : false;
-        var lastLng = this.languages[this.languages.length - 1]; // we're in cimode so this shall pass
-
+        var lastLng = this.languages[this.languages.length - 1];
         if (lng.toLowerCase() === 'cimode') return true;
 
         var loadNotPending = function loadNotPending(l, n) {
           var loadState = _this6.services.backendConnector.state["".concat(l, "|").concat(n)];
 
           return loadState === -1 || loadState === 2;
-        }; // loaded -> SUCCESS
+        };
 
+        if (options.precheck) {
+          var preResult = options.precheck(this, loadNotPending);
+          if (preResult !== undefined) return preResult;
+        }
 
-        if (this.hasResourceBundle(lng, ns)) return true; // were not loading at all -> SEMI SUCCESS
-
-        if (!this.services.backendConnector.backend) return true; // failed loading ns - but at least fallback is not pending -> SEMI SUCCESS
-
+        if (this.hasResourceBundle(lng, ns)) return true;
+        if (!this.services.backendConnector.backend) return true;
         if (loadNotPending(lng, ns) && (!fallbackLng || loadNotPending(lastLng, ns))) return true;
         return false;
       }
@@ -26529,7 +26369,7 @@ if (typeof define === 'function' && define.amd) {
         var preloaded = this.options.preload || [];
         var newLngs = lngs.filter(function (lng) {
           return preloaded.indexOf(lng) < 0;
-        }); // Exit early if all given languages are already preloaded
+        });
 
         if (!newLngs.length) {
           if (callback) callback();
@@ -26548,11 +26388,9 @@ if (typeof define === 'function' && define.amd) {
       value: function dir(lng) {
         if (!lng) lng = this.languages && this.languages.length > 0 ? this.languages[0] : this.language;
         if (!lng) return 'rtl';
-        var rtlLngs = ['ar', 'shu', 'sqr', 'ssh', 'xaa', 'yhd', 'yud', 'aao', 'abh', 'abv', 'acm', 'acq', 'acw', 'acx', 'acy', 'adf', 'ads', 'aeb', 'aec', 'afb', 'ajp', 'apc', 'apd', 'arb', 'arq', 'ars', 'ary', 'arz', 'auz', 'avl', 'ayh', 'ayl', 'ayn', 'ayp', 'bbz', 'pga', 'he', 'iw', 'ps', 'pbt', 'pbu', 'pst', 'prp', 'prd', 'ur', 'ydd', 'yds', 'yih', 'ji', 'yi', 'hbo', 'men', 'xmn', 'fa', 'jpr', 'peo', 'pes', 'prs', 'dv', 'sam'];
+        var rtlLngs = ['ar', 'shu', 'sqr', 'ssh', 'xaa', 'yhd', 'yud', 'aao', 'abh', 'abv', 'acm', 'acq', 'acw', 'acx', 'acy', 'adf', 'ads', 'aeb', 'aec', 'afb', 'ajp', 'apc', 'apd', 'arb', 'arq', 'ars', 'ary', 'arz', 'auz', 'avl', 'ayh', 'ayl', 'ayn', 'ayp', 'bbz', 'pga', 'he', 'iw', 'ps', 'pbt', 'pbu', 'pst', 'prp', 'prd', 'ug', 'ur', 'ydd', 'yds', 'yih', 'ji', 'yi', 'hbo', 'men', 'xmn', 'fa', 'jpr', 'peo', 'pes', 'prs', 'dv', 'sam'];
         return rtlLngs.indexOf(this.services.languageUtils.getLanguagePartFromCode(lng)) >= 0 ? 'rtl' : 'ltr';
       }
-      /* eslint class-methods-use-this: 0 */
-
     }, {
       key: "createInstance",
       value: function createInstance() {
@@ -26590,8 +26428,7 @@ if (typeof define === 'function' && define.amd) {
           clone.emit.apply(clone, [event].concat(args));
         });
         clone.init(mergedOptions, callback);
-        clone.translator.options = clone.options; // sync options
-
+        clone.translator.options = clone.options;
         clone.translator.backendConnector.services.utils = {
           hasLoadedNamespace: clone.hasLoadedNamespace.bind(clone)
         };
@@ -42945,7 +42782,7 @@ return index;
 
 ;
 //! moment.js
-//! version : 2.26.0
+//! version : 2.27.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -48564,7 +48401,7 @@ return index;
 
     //! moment.js
 
-    hooks.version = '2.26.0';
+    hooks.version = '2.27.0';
 
     setHookCallback(createLocal);
 
@@ -57266,7 +57103,7 @@ module.exports = g;
                 case 'text'             : result = ' ';                    break;
                 case 'hidden'           : result = $elem.val();            break;
             }
-            return result ===null ? this.getResetValue() : result;
+            return result === null ? this.getResetValue() : result;
         },
 
         /*******************************************************
@@ -57364,7 +57201,7 @@ module.exports = g;
         //this.input = simple object with all input-elements. Also convert element-id to unique id for input-element
         this.inputs = {};
 
-        var types = ['input', 'select', 'selectlist', 'radiobuttongroup', 'checkbox', 'radio', 'table', 'slider', 'timeslider', 'hidden'];
+        var types = ['input', 'select', 'selectlist', 'radiobuttongroup', 'checkbox', 'radio', 'table', 'slider', 'timeslider', 'hidden', 'inputgroup'];
 
         function setId( dummy, obj ){
             if ($.isPlainObject(obj) && (obj.type !== undefined) && (types.indexOf(obj.type) >= 0) && obj.id){
@@ -57739,6 +57576,8 @@ module.exports = g;
 
         new     : ['far fa-window-maximize fa-inside-circle2', 'far fa-circle'],
 
+        help    : 'far fa-question-circle',
+
         close   : ['fas fa-circle back', 'far fa-times-circle middle', 'far fa-circle front']
     };
 
@@ -57791,7 +57630,7 @@ module.exports = g;
                         .appendTo( this );
 
             //Add icons
-            $.each( ['back', 'forward', 'pin', 'unpin', 'extend', 'diminish', 'new', 'close'], function( index, id ){
+            $.each( ['back', 'forward', 'pin', 'unpin', 'extend', 'diminish', 'new', 'help', 'close'], function( index, id ){
                 var iconOptions = options.icons[id],
                     classAndTitle = mandatoryHeaderIconClassAndTitle[id] || {};
 
@@ -58586,7 +58425,7 @@ jquery-bootstrap-modal-promise.js
         options
             getModalOptions(data): Convert data to options for owners modal (optional)
         **********************************************/
-        addBsModalOwner( owner, options ){
+        addBsModalOwner: function( owner, options ){
             this.ownerList = this.ownerList || [];
             this.ownerList.push({owner: owner, options: options});
 
@@ -59206,6 +59045,7 @@ jquery-bootstrap-modal-promise.js
                 extend  : { className: iconExtendClassName,     onClick: multiSize ? modalExtend   : null, altEvents:'swipeup'   },
                 diminish: { className: iconDiminishClassName,   onClick: multiSize ? modalDiminish : null, altEvents:'swipedown' },
                 new     : { className: '',                      onClick: options.onNew ? $.proxy(options.onNew, this) : null },
+                help    : { className: '',                      onClick: options.onHelp ? $.proxy(options.onHelp, this) : null },
             }
         }, options );
 
@@ -59576,7 +59416,6 @@ jquery-bootstrap-modal-promise.js
 
         if (options.show)
             $result.show();
-
         return $result;
     };
 
@@ -59742,6 +59581,7 @@ jquery-bootstrap-modal-promise.js
                 open : 'animated ' + animateOpen,
                 close: 'animated ' + animateClose
             };
+
 
         //Save buttons and remove if from options to prevent default buttons
         var buttons = options.buttons;
@@ -59909,8 +59749,7 @@ jquery-bootstrap-modal-promise.js
                 window._bsNotyModal = this.prevBsNotyModal;
             });
 
-    }
-
+        }
 
         if (show)
             result.show();
@@ -62073,6 +61912,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 
             function buildInputGroup( options, $parent ){
                 return $parent
+                           .attr('id', options.id)
                            .addClass('flex-column')
                            ._bsAppendContent(options.content);
             }
@@ -62151,13 +61991,14 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 
                     if (options.lineBefore)
                         $('<hr/>')
+                            .addClass('before')
                             .toggleClass('above-label', !!options.label)
                             .appendTo( $parent );
 
                     if (noValidation || options.noValidation)
                         $parent.addClass('no-validation');
                 }
-
+                var $originalParent = $parent;
                 if (insideInputGroup || options.prepend || options.before || options.append || options.after){
                     //Create element inside input-group
                     var $inputGroup = $divXXGroup('input-group', options);
@@ -62194,6 +62035,11 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                         ._bsAppendContent( append, options.contentContext  )
                         .appendTo( $parent );
 
+                if (options.lineAfter)
+                    $('<hr/>')
+                        .addClass('after')
+                        .appendTo( $originalParent );
+
 
                 return this;
             }
@@ -62209,7 +62055,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 ;
 /*!
     localForage -- Offline Storage, Improved
-    Version 1.7.3
+    Version 1.7.4
     https://localforage.github.io/localForage
     (c) 2013-2017 Mozilla, Apache License 2.0
 */
@@ -62585,7 +62431,7 @@ function isIndexedDBValid() {
     try {
         // Initialize IndexedDB; fall back to vendor-prefixed versions
         // if needed.
-        if (!idb) {
+        if (!idb || !idb.open) {
             return false;
         }
         // We mimic PouchDB here;
@@ -62596,8 +62442,12 @@ function isIndexedDBValid() {
 
         var hasFetch = typeof fetch === 'function' && fetch.toString().indexOf('[native code') !== -1;
 
-        // Safari <10.1 does not meet our requirements for IDB support (#5572)
-        // since Safari 10.1 shipped with fetch, we can use that to detect it
+        // Safari <10.1 does not meet our requirements for IDB support
+        // (see: https://github.com/pouchdb/pouchdb/issues/5572).
+        // Safari 10.1 shipped with fetch, we can use that to detect it.
+        // Note: this creates issues with `window.fetch` polyfills and
+        // overrides; see:
+        // https://github.com/localForage/localForage/issues/856
         return (!isSafari || hasFetch) && typeof indexedDB !== 'undefined' &&
         // some outdated implementations of IDB that appear on Samsung
         // and HTC Android devices <4.4 are missing IDBKeyRange
@@ -63183,7 +63033,7 @@ function iterate(iterator, callback) {
                             }
                             var result = iterator(value, cursor.key, iterationNumber++);
 
-                            // when the iterator callback retuns any
+                            // when the iterator callback returns any
                             // (non-`undefined`) value, then we stop
                             // the iteration immediately
                             if (result !== void 0) {
@@ -63405,7 +63255,7 @@ function key(n, callback) {
                 try {
                     var store = transaction.objectStore(self._dbInfo.storeName);
                     var advanced = false;
-                    var req = store.openCursor();
+                    var req = store.openKeyCursor();
 
                     req.onsuccess = function () {
                         var cursor = req.result;
@@ -63459,7 +63309,7 @@ function keys(callback) {
 
                 try {
                     var store = transaction.objectStore(self._dbInfo.storeName);
-                    var req = store.openCursor();
+                    var req = store.openKeyCursor();
                     var keys = [];
 
                     req.onsuccess = function () {

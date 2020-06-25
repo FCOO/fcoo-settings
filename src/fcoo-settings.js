@@ -226,12 +226,12 @@
         },
 
         /*****************************************************
-        edit(id)
+        edit(id, data, preEdit)
         Create and display the modal window with setting
         If id is given the corresponding accordion is open
         data (optional) = special version of the data to be edited
         /*****************************************************/
-        edit: function( id, data ){
+        edit: function( id, data, preEdit ){
             //Create the modal
             if (!this.modalForm){
                 var _this = this,
@@ -264,14 +264,18 @@
             //Open accordion with id
             if (id)
                 this.modalForm.$bsModal.find('form > .accordion').bsOpenCard(id);
+
+            if (preEdit)
+                preEdit(this, data || this.data);
+
             this.modalForm.edit(data || this.data);
         },
 
         /*****************************************************
         editData(data)
         /*****************************************************/
-        editData: function(data){
-            this.edit(null, data);
+        editData: function(data, preEdit){
+            this.edit(null, data, preEdit);
         },
 
         /*****************************************************
