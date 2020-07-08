@@ -246,16 +246,22 @@
                         });
                 });
 
-                this.modalForm = $.bsModalForm({
-                    id        : this.options.storeId,
-                    show      : false,
-                    header    : this.options.modalHeader,
-                    flexWidth : this.options.flexWidth,
-                    content   : {type: 'accordion', list: list },
-                    onChanging: $.proxy(this.onChanging, this),
-                    onCancel  : $.proxy(this.onCancel,   this),
-                    onSubmit  : $.proxy(this.onSubmit,   this)
-                });
+                this.modalForm = $.bsModalForm(
+                    $.extend(
+                        this.options.modalOptions || {},
+                        {
+                            id        : this.options.storeId,
+                            show      : false,
+                            header    : this.options.modalHeader,
+                            flexWidth : this.options.flexWidth,
+
+                            content   : {type: 'accordion', list: list },
+                            onChanging: $.proxy(this.onChanging, this),
+                            onCancel  : $.proxy(this.onCancel,   this),
+                            onSubmit  : $.proxy(this.onSubmit,   this)
+                        }
+                    )
+                );
             }
 
             //Get data and save data
