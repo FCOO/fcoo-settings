@@ -49,8 +49,12 @@
         this.options.storeId =  this.options.storeId ||
                                 window.URI().directory().replace(/^\/+|\/+$/g, '') || //directory trimmed from "/"
                                 'APP';
-        if (!this.options.dontSave)
+        if (this.options.dontSave)
+            this.firstLoadComplete = true;
+        else {
             this.store = window.localforage.createInstance({name: this.options.storeId});
+            this.firstLoadComplete = false;
+        }
 
         //this.data = All settings. Each part of this.data is managed by a Setting in this.settings
         this.data = $.extend({}, this.options.data || {});
@@ -123,6 +127,7 @@
                 this.afterLoad(this);
                 this.afterLoad = null;
             }
+            this.firstLoadComplete = true;
         },
 
         /***********************************************
@@ -130,6 +135,10 @@
         Save the settings in indexedDB
         ***********************************************/
         save: function( data, id, callback ){
+            //Prevent saving before loading is finish
+            if (!this.firstLoadComplete)
+                return;
+
             this.set( data );
 
             //Save all Value from settings
