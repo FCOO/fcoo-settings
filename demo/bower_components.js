@@ -10599,14 +10599,14 @@ return jQuery;
 
 ;
 /*!
-  * Bootstrap v4.5.0 (https://getbootstrap.com/)
+  * Bootstrap v4.5.2 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
-  (global = global || self, factory(global.bootstrap = {}, global.jQuery));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.bootstrap = {}, global.jQuery));
 }(this, (function (exports, $) { 'use strict';
 
   $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
@@ -10627,53 +10627,22 @@ return jQuery;
     return Constructor;
   }
 
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
+  function _extends() {
+    _extends = Object.assign || function (target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
 
-    return obj;
-  }
-
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-
-    if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      if (enumerableOnly) symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-      keys.push.apply(keys, symbols);
-    }
-
-    return keys;
-  }
-
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-
-      if (i % 2) {
-        ownKeys(Object(source), true).forEach(function (key) {
-          _defineProperty(target, key, source[key]);
-        });
-      } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-      } else {
-        ownKeys(Object(source)).forEach(function (key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
       }
-    }
 
-    return target;
+      return target;
+    };
+
+    return _extends.apply(this, arguments);
   }
 
   function _inheritsLoose(subClass, superClass) {
@@ -10684,8 +10653,8 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.5.0): util.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * Bootstrap (v4.5.2): util.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
@@ -10865,7 +10834,7 @@ return jQuery;
    */
 
   var NAME = 'alert';
-  var VERSION = '4.5.0';
+  var VERSION = '4.5.2';
   var DATA_KEY = 'bs.alert';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -11021,7 +10990,7 @@ return jQuery;
    */
 
   var NAME$1 = 'button';
-  var VERSION$1 = '4.5.0';
+  var VERSION$1 = '4.5.2';
   var DATA_KEY$1 = 'bs.button';
   var EVENT_KEY$1 = "." + DATA_KEY$1;
   var DATA_API_KEY$1 = '.data-api';
@@ -11156,11 +11125,9 @@ return jQuery;
         return;
       }
 
-      if (initialButton.tagName === 'LABEL' && inputBtn && inputBtn.type === 'checkbox') {
-        event.preventDefault(); // work around event sent to label and input
+      if (initialButton.tagName !== 'LABEL' || inputBtn && inputBtn.type !== 'checkbox') {
+        Button._jQueryInterface.call($(button), 'toggle');
       }
-
-      Button._jQueryInterface.call($(button), 'toggle');
     }
   }).on(EVENT_FOCUS_BLUR_DATA_API, SELECTOR_DATA_TOGGLE_CARROT, function (event) {
     var button = $(event.target).closest(SELECTOR_BUTTON)[0];
@@ -11216,7 +11183,7 @@ return jQuery;
    */
 
   var NAME$2 = 'carousel';
-  var VERSION$2 = '4.5.0';
+  var VERSION$2 = '4.5.2';
   var DATA_KEY$2 = 'bs.carousel';
   var EVENT_KEY$2 = "." + DATA_KEY$2;
   var DATA_API_KEY$2 = '.data-api';
@@ -11403,7 +11370,7 @@ return jQuery;
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2(_objectSpread2({}, Default), config);
+      config = _extends({}, Default, config);
       Util.typeCheckConfig(NAME$2, config, DefaultType);
       return config;
     };
@@ -11693,10 +11660,10 @@ return jQuery;
       return this.each(function () {
         var data = $(this).data(DATA_KEY$2);
 
-        var _config = _objectSpread2(_objectSpread2({}, Default), $(this).data());
+        var _config = _extends({}, Default, $(this).data());
 
         if (typeof config === 'object') {
-          _config = _objectSpread2(_objectSpread2({}, _config), config);
+          _config = _extends({}, _config, config);
         }
 
         var action = typeof config === 'string' ? config : _config.slide;
@@ -11734,7 +11701,7 @@ return jQuery;
         return;
       }
 
-      var config = _objectSpread2(_objectSpread2({}, $(target).data()), $(this).data());
+      var config = _extends({}, $(target).data(), $(this).data());
 
       var slideIndex = this.getAttribute('data-slide-to');
 
@@ -11803,7 +11770,7 @@ return jQuery;
    */
 
   var NAME$3 = 'collapse';
-  var VERSION$3 = '4.5.0';
+  var VERSION$3 = '4.5.2';
   var DATA_KEY$3 = 'bs.collapse';
   var EVENT_KEY$3 = "." + DATA_KEY$3;
   var DATA_API_KEY$3 = '.data-api';
@@ -12018,7 +11985,7 @@ return jQuery;
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2(_objectSpread2({}, Default$1), config);
+      config = _extends({}, Default$1, config);
       config.toggle = Boolean(config.toggle); // Coerce string values
 
       Util.typeCheckConfig(NAME$3, config, DefaultType$1);
@@ -12072,7 +12039,7 @@ return jQuery;
         var $this = $(this);
         var data = $this.data(DATA_KEY$3);
 
-        var _config = _objectSpread2(_objectSpread2(_objectSpread2({}, Default$1), $this.data()), typeof config === 'object' && config ? config : {});
+        var _config = _extends({}, Default$1, $this.data(), typeof config === 'object' && config ? config : {});
 
         if (!data && _config.toggle && typeof config === 'string' && /show|hide/.test(config)) {
           _config.toggle = false;
@@ -12147,7 +12114,7 @@ return jQuery;
 
   /**!
    * @fileOverview Kickass library to create and place poppers near their reference elements.
-   * @version 1.16.0
+   * @version 1.16.1
    * @license
    * Copyright (c) 2016 Federico Zivolo and contributors
    *
@@ -12493,7 +12460,7 @@ return jQuery;
     var sideA = axis === 'x' ? 'Left' : 'Top';
     var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
 
-    return parseFloat(styles['border' + sideA + 'Width'], 10) + parseFloat(styles['border' + sideB + 'Width'], 10);
+    return parseFloat(styles['border' + sideA + 'Width']) + parseFloat(styles['border' + sideB + 'Width']);
   }
 
   function getSize(axis, body, html, computedStyle) {
@@ -12554,7 +12521,7 @@ return jQuery;
     return obj;
   };
 
-  var _extends = Object.assign || function (target) {
+  var _extends$1 = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
 
@@ -12576,7 +12543,7 @@ return jQuery;
    * @returns {Object} ClientRect like output
    */
   function getClientRect(offsets) {
-    return _extends({}, offsets, {
+    return _extends$1({}, offsets, {
       right: offsets.left + offsets.width,
       bottom: offsets.top + offsets.height
     });
@@ -12648,8 +12615,8 @@ return jQuery;
     var scrollParent = getScrollParent(children);
 
     var styles = getStyleComputedProperty(parent);
-    var borderTopWidth = parseFloat(styles.borderTopWidth, 10);
-    var borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
+    var borderTopWidth = parseFloat(styles.borderTopWidth);
+    var borderLeftWidth = parseFloat(styles.borderLeftWidth);
 
     // In cases where the parent is fixed, we must ignore negative scroll in offset calc
     if (fixedPosition && isHTML) {
@@ -12670,8 +12637,8 @@ return jQuery;
     // differently when margins are applied to it. The margins are included in
     // the box of the documentElement, in the other cases not.
     if (!isIE10 && isHTML) {
-      var marginTop = parseFloat(styles.marginTop, 10);
-      var marginLeft = parseFloat(styles.marginLeft, 10);
+      var marginTop = parseFloat(styles.marginTop);
+      var marginLeft = parseFloat(styles.marginLeft);
 
       offsets.top -= borderTopWidth - marginTop;
       offsets.bottom -= borderTopWidth - marginTop;
@@ -12864,7 +12831,7 @@ return jQuery;
     };
 
     var sortedAreas = Object.keys(rects).map(function (key) {
-      return _extends({
+      return _extends$1({
         key: key
       }, rects[key], {
         area: getArea(rects[key])
@@ -13506,9 +13473,9 @@ return jQuery;
     };
 
     // Update `data` attributes, styles and arrowStyles
-    data.attributes = _extends({}, attributes, data.attributes);
-    data.styles = _extends({}, styles, data.styles);
-    data.arrowStyles = _extends({}, data.offsets.arrow, data.arrowStyles);
+    data.attributes = _extends$1({}, attributes, data.attributes);
+    data.styles = _extends$1({}, styles, data.styles);
+    data.arrowStyles = _extends$1({}, data.offsets.arrow, data.arrowStyles);
 
     return data;
   }
@@ -13610,8 +13577,8 @@ return jQuery;
     // Compute the sideValue using the updated popper offsets
     // take popper margin in account because we don't have this info available
     var css = getStyleComputedProperty(data.instance.popper);
-    var popperMarginSide = parseFloat(css['margin' + sideCapitalized], 10);
-    var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width'], 10);
+    var popperMarginSide = parseFloat(css['margin' + sideCapitalized]);
+    var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width']);
     var sideValue = center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
 
     // prevent arrowElement from being placed not contiguously to its popper
@@ -13788,7 +13755,7 @@ return jQuery;
 
         // this object contains `position`, we want to preserve it along with
         // any additional property we may add in the future
-        data.offsets.popper = _extends({}, data.offsets.popper, getPopperOffsets(data.instance.popper, data.offsets.reference, data.placement));
+        data.offsets.popper = _extends$1({}, data.offsets.popper, getPopperOffsets(data.instance.popper, data.offsets.reference, data.placement));
 
         data = runModifiers(data.instance.modifiers, data, 'flip');
       }
@@ -14062,7 +14029,7 @@ return jQuery;
 
     order.forEach(function (placement) {
       var side = ['left', 'top'].indexOf(placement) !== -1 ? 'primary' : 'secondary';
-      popper = _extends({}, popper, check[side](placement));
+      popper = _extends$1({}, popper, check[side](placement));
     });
 
     data.offsets.popper = popper;
@@ -14097,7 +14064,7 @@ return jQuery;
         end: defineProperty({}, side, reference[side] + reference[measurement] - popper[measurement])
       };
 
-      data.offsets.popper = _extends({}, popper, shiftOffsets[shiftvariation]);
+      data.offsets.popper = _extends$1({}, popper, shiftOffsets[shiftvariation]);
     }
 
     return data;
@@ -14629,7 +14596,7 @@ return jQuery;
       this.update = debounce(this.update.bind(this));
 
       // with {} we create a new object with the options inside it
-      this.options = _extends({}, Popper.Defaults, options);
+      this.options = _extends$1({}, Popper.Defaults, options);
 
       // init state
       this.state = {
@@ -14644,13 +14611,13 @@ return jQuery;
 
       // Deep merge modifiers options
       this.options.modifiers = {};
-      Object.keys(_extends({}, Popper.Defaults.modifiers, options.modifiers)).forEach(function (name) {
-        _this.options.modifiers[name] = _extends({}, Popper.Defaults.modifiers[name] || {}, options.modifiers ? options.modifiers[name] : {});
+      Object.keys(_extends$1({}, Popper.Defaults.modifiers, options.modifiers)).forEach(function (name) {
+        _this.options.modifiers[name] = _extends$1({}, Popper.Defaults.modifiers[name] || {}, options.modifiers ? options.modifiers[name] : {});
       });
 
       // Refactoring modifiers' list (Object => Array)
       this.modifiers = Object.keys(this.options.modifiers).map(function (name) {
-        return _extends({
+        return _extends$1({
           name: name
         }, _this.options.modifiers[name]);
       })
@@ -14766,7 +14733,7 @@ return jQuery;
    */
 
   var NAME$4 = 'dropdown';
-  var VERSION$4 = '4.5.0';
+  var VERSION$4 = '4.5.2';
   var DATA_KEY$4 = 'bs.dropdown';
   var EVENT_KEY$4 = "." + DATA_KEY$4;
   var DATA_API_KEY$4 = '.data-api';
@@ -14993,7 +14960,7 @@ return jQuery;
     };
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2(_objectSpread2(_objectSpread2({}, this.constructor.Default), $(this._element).data()), config);
+      config = _extends({}, this.constructor.Default, $(this._element).data(), config);
       Util.typeCheckConfig(NAME$4, config, this.constructor.DefaultType);
       return config;
     };
@@ -15038,7 +15005,7 @@ return jQuery;
 
       if (typeof this._config.offset === 'function') {
         offset.fn = function (data) {
-          data.offsets = _objectSpread2(_objectSpread2({}, data.offsets), _this2._config.offset(data.offsets, _this2._element) || {});
+          data.offsets = _extends({}, data.offsets, _this2._config.offset(data.offsets, _this2._element) || {});
           return data;
         };
       } else {
@@ -15068,7 +15035,7 @@ return jQuery;
         };
       }
 
-      return _objectSpread2(_objectSpread2({}, popperConfig), this._config.popperConfig);
+      return _extends({}, popperConfig, this._config.popperConfig);
     } // Static
     ;
 
@@ -15280,7 +15247,7 @@ return jQuery;
    */
 
   var NAME$5 = 'modal';
-  var VERSION$5 = '4.5.0';
+  var VERSION$5 = '4.5.2';
   var DATA_KEY$5 = 'bs.modal';
   var EVENT_KEY$5 = "." + DATA_KEY$5;
   var DATA_API_KEY$5 = '.data-api';
@@ -15472,7 +15439,7 @@ return jQuery;
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2(_objectSpread2({}, Default$3), config);
+      config = _extends({}, Default$3, config);
       Util.typeCheckConfig(NAME$5, config, DefaultType$3);
       return config;
     };
@@ -15488,11 +15455,24 @@ return jQuery;
           return;
         }
 
+        var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
+
+        if (!isModalOverflowing) {
+          this._element.style.overflowY = 'hidden';
+        }
+
         this._element.classList.add(CLASS_NAME_STATIC);
 
-        var modalTransitionDuration = Util.getTransitionDurationFromElement(this._element);
+        var modalTransitionDuration = Util.getTransitionDurationFromElement(this._dialog);
+        $(this._element).off(Util.TRANSITION_END);
         $(this._element).one(Util.TRANSITION_END, function () {
           _this3._element.classList.remove(CLASS_NAME_STATIC);
+
+          if (!isModalOverflowing) {
+            $(_this3._element).one(Util.TRANSITION_END, function () {
+              _this3._element.style.overflowY = '';
+            }).emulateTransitionEnd(_this3._element, modalTransitionDuration);
+          }
         }).emulateTransitionEnd(modalTransitionDuration);
 
         this._element.focus();
@@ -15517,6 +15497,8 @@ return jQuery;
       this._element.removeAttribute('aria-hidden');
 
       this._element.setAttribute('aria-modal', true);
+
+      this._element.setAttribute('role', 'dialog');
 
       if ($(this._dialog).hasClass(CLASS_NAME_SCROLLABLE) && modalBody) {
         modalBody.scrollTop = 0;
@@ -15604,6 +15586,8 @@ return jQuery;
       this._element.setAttribute('aria-hidden', true);
 
       this._element.removeAttribute('aria-modal');
+
+      this._element.removeAttribute('role');
 
       this._isTransitioning = false;
 
@@ -15786,7 +15770,7 @@ return jQuery;
       return this.each(function () {
         var data = $(this).data(DATA_KEY$5);
 
-        var _config = _objectSpread2(_objectSpread2(_objectSpread2({}, Default$3), $(this).data()), typeof config === 'object' && config ? config : {});
+        var _config = _extends({}, Default$3, $(this).data(), typeof config === 'object' && config ? config : {});
 
         if (!data) {
           data = new Modal(this, _config);
@@ -15836,7 +15820,7 @@ return jQuery;
       target = document.querySelector(selector);
     }
 
-    var config = $(target).data(DATA_KEY$5) ? 'toggle' : _objectSpread2(_objectSpread2({}, $(target).data()), $(this).data());
+    var config = $(target).data(DATA_KEY$5) ? 'toggle' : _extends({}, $(target).data(), $(this).data());
 
     if (this.tagName === 'A' || this.tagName === 'AREA') {
       event.preventDefault();
@@ -15873,8 +15857,8 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.5.0): tools/sanitizer.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * Bootstrap (v4.5.2): tools/sanitizer.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   var uriAttrs = ['background', 'cite', 'href', 'itemtype', 'longdesc', 'poster', 'src', 'xlink:href'];
@@ -15999,7 +15983,7 @@ return jQuery;
    */
 
   var NAME$6 = 'tooltip';
-  var VERSION$6 = '4.5.0';
+  var VERSION$6 = '4.5.2';
   var DATA_KEY$6 = 'bs.tooltip';
   var EVENT_KEY$6 = "." + DATA_KEY$6;
   var JQUERY_NO_CONFLICT$6 = $.fn[NAME$6];
@@ -16387,7 +16371,7 @@ return jQuery;
           return _this3._handlePopperPlacementChange(data);
         }
       };
-      return _objectSpread2(_objectSpread2({}, defaultBsConfig), this.config.popperConfig);
+      return _extends({}, defaultBsConfig, this.config.popperConfig);
     };
 
     _proto._getOffset = function _getOffset() {
@@ -16397,7 +16381,7 @@ return jQuery;
 
       if (typeof this.config.offset === 'function') {
         offset.fn = function (data) {
-          data.offsets = _objectSpread2(_objectSpread2({}, data.offsets), _this4.config.offset(data.offsets, _this4.element) || {});
+          data.offsets = _extends({}, data.offsets, _this4.config.offset(data.offsets, _this4.element) || {});
           return data;
         };
       } else {
@@ -16452,7 +16436,7 @@ return jQuery;
       $(this.element).closest('.modal').on('hide.bs.modal', this._hideModalHandler);
 
       if (this.config.selector) {
-        this.config = _objectSpread2(_objectSpread2({}, this.config), {}, {
+        this.config = _extends({}, this.config, {
           trigger: 'manual',
           selector: ''
         });
@@ -16552,7 +16536,7 @@ return jQuery;
           delete dataAttributes[dataAttr];
         }
       });
-      config = _objectSpread2(_objectSpread2(_objectSpread2({}, this.constructor.Default), dataAttributes), typeof config === 'object' && config ? config : {});
+      config = _extends({}, this.constructor.Default, dataAttributes, typeof config === 'object' && config ? config : {});
 
       if (typeof config.delay === 'number') {
         config.delay = {
@@ -16711,21 +16695,21 @@ return jQuery;
    */
 
   var NAME$7 = 'popover';
-  var VERSION$7 = '4.5.0';
+  var VERSION$7 = '4.5.2';
   var DATA_KEY$7 = 'bs.popover';
   var EVENT_KEY$7 = "." + DATA_KEY$7;
   var JQUERY_NO_CONFLICT$7 = $.fn[NAME$7];
   var CLASS_PREFIX$1 = 'bs-popover';
   var BSCLS_PREFIX_REGEX$1 = new RegExp("(^|\\s)" + CLASS_PREFIX$1 + "\\S+", 'g');
 
-  var Default$5 = _objectSpread2(_objectSpread2({}, Tooltip.Default), {}, {
+  var Default$5 = _extends({}, Tooltip.Default, {
     placement: 'right',
     trigger: 'click',
     content: '',
     template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div></div>'
   });
 
-  var DefaultType$5 = _objectSpread2(_objectSpread2({}, Tooltip.DefaultType), {}, {
+  var DefaultType$5 = _extends({}, Tooltip.DefaultType, {
     content: '(string|element|function)'
   });
 
@@ -16891,7 +16875,7 @@ return jQuery;
    */
 
   var NAME$8 = 'scrollspy';
-  var VERSION$8 = '4.5.0';
+  var VERSION$8 = '4.5.2';
   var DATA_KEY$8 = 'bs.scrollspy';
   var EVENT_KEY$8 = "." + DATA_KEY$8;
   var DATA_API_KEY$6 = '.data-api';
@@ -17005,7 +16989,7 @@ return jQuery;
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2(_objectSpread2({}, Default$6), typeof config === 'object' && config ? config : {});
+      config = _extends({}, Default$6, typeof config === 'object' && config ? config : {});
 
       if (typeof config.target !== 'string' && Util.isElement(config.target)) {
         var id = $(config.target).attr('id');
@@ -17183,7 +17167,7 @@ return jQuery;
    */
 
   var NAME$9 = 'tab';
-  var VERSION$9 = '4.5.0';
+  var VERSION$9 = '4.5.2';
   var DATA_KEY$9 = 'bs.tab';
   var EVENT_KEY$9 = "." + DATA_KEY$9;
   var DATA_API_KEY$7 = '.data-api';
@@ -17409,7 +17393,7 @@ return jQuery;
    */
 
   var NAME$a = 'toast';
-  var VERSION$a = '4.5.0';
+  var VERSION$a = '4.5.2';
   var DATA_KEY$a = 'bs.toast';
   var EVENT_KEY$a = "." + DATA_KEY$a;
   var JQUERY_NO_CONFLICT$a = $.fn[NAME$a];
@@ -17462,6 +17446,8 @@ return jQuery;
         return;
       }
 
+      this._clearTimeout();
+
       if (this._config.animation) {
         this._element.classList.add(CLASS_NAME_FADE$5);
       }
@@ -17510,8 +17496,7 @@ return jQuery;
     };
 
     _proto.dispose = function dispose() {
-      clearTimeout(this._timeout);
-      this._timeout = null;
+      this._clearTimeout();
 
       if (this._element.classList.contains(CLASS_NAME_SHOW$7)) {
         this._element.classList.remove(CLASS_NAME_SHOW$7);
@@ -17525,7 +17510,7 @@ return jQuery;
     ;
 
     _proto._getConfig = function _getConfig(config) {
-      config = _objectSpread2(_objectSpread2(_objectSpread2({}, Default$7), $(this._element).data()), typeof config === 'object' && config ? config : {});
+      config = _extends({}, Default$7, $(this._element).data(), typeof config === 'object' && config ? config : {});
       Util.typeCheckConfig(NAME$a, config, this.constructor.DefaultType);
       return config;
     };
@@ -17555,6 +17540,11 @@ return jQuery;
       } else {
         complete();
       }
+    };
+
+    _proto._clearTimeout = function _clearTimeout() {
+      clearTimeout(this._timeout);
+      this._timeout = null;
     } // Static
     ;
 
@@ -17632,102 +17622,6 @@ return jQuery;
 })));
 //# sourceMappingURL=bootstrap.bundle.js.map
 
-;
-/****************************************************************************
-	fake-localstorage.js,
-
-	(c) 2017, FCOO
-
-	https://github.com/FCOO/fake-localstorage
-	https://github.com/FCOO
-
-****************************************************************************/
-
-(function (window/*, document, undefined*/) {
-	"use strict";
-
-    /*********************************************************************
-    Determinate if localStorage is supported and available
-    If the browser is in 'Private' mode not all browser supports localStorage
-    In localStorage isn't supported a fake version is installed
-    At the moment no warning is given when localStorage isn't supported since
-    some browser in private-mode allows the use of window.localStorage but
-    don't save it when the session ends
-    *********************************************************************/
-    window.fake_localstorage_installed = false;
-
-    // Test taken from https://gist.github.com/engelfrost/fd707819658f72b42f55 and https://dev.to/zigabrencic/web-browser-local-storage-16jh
-
-    // Safari will throw a fit if we try to use localStorage.setItem in private browsing mode.
-    try {
-        localStorage.setItem('localStorageTest', 1);
-        localStorage.removeItem('localStorageTest');
-    }
-    catch (e) {
-        window.fake_localstorage_installed = true;
-    }
-
-    if (window.fake_localstorage_installed){
-        /*********************************************************************
-        Create a fake localStorage for any browser that does not support it.
-
-        Taken from https://gist.github.com/engelfrost/fd707819658f72b42f55:
-            Fake localStorage implementation.
-            Mimics localStorage, including events.
-            It will work just like localStorage, except for the persistant storage part.
-        *********************************************************************/
-        var fakeLocalStorage = {};
-        var storage;
-
-        // If Storage exists we modify it to write to our fakeLocalStorage object instead.
-        // If Storage does not exist we create an empty object.
-        if (window.Storage && window.localStorage) {
-            storage = window.Storage.prototype;
-        } else {
-            // We don't bother implementing a fake Storage object
-            window.localStorage = {};
-            storage = window.localStorage;
-        }
-
-        // For older IE
-        if (!window.location.origin) {
-            window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
-        }
-
-        var dispatchStorageEvent = function(key, newValue) {
-            var oldValue = (key == null) ? null : storage.getItem(key); // `==` to match both null and undefined
-            var url = location.href.substr(location.origin.length);
-            var storageEvent = document.createEvent('StorageEvent'); // For IE, http://stackoverflow.com/a/25514935/1214183
-
-            storageEvent.initStorageEvent('storage', false, false, key, oldValue, newValue, url, null);
-            window.dispatchEvent(storageEvent);
-        };
-
-        storage.key = function(i) {
-            var key = Object.keys(fakeLocalStorage)[i];
-            return typeof key === 'string' ? key : null;
-        };
-
-        storage.getItem = function(key) {
-            return typeof fakeLocalStorage[key] === 'string' ? fakeLocalStorage[key] : null;
-        };
-
-        storage.setItem = function(key, value) {
-            dispatchStorageEvent(key, value);
-            fakeLocalStorage[key] = String(value);
-        };
-
-        storage.removeItem = function(key) {
-            dispatchStorageEvent(key, null);
-            delete fakeLocalStorage[key];
-        };
-
-        storage.clear = function() {
-            dispatchStorageEvent(null, null);
-            fakeLocalStorage = {};
-        };
-    }
-}(this));
 ;
 /****************************************************************************
     global-events, a plugin to administrate any events
@@ -18067,7 +17961,7 @@ return jQuery;
 }(jQuery, this, document));
 ;
 /*!
- * Bootstrap-select v1.13.17 (https://developer.snapappointments.com/bootstrap-select)
+ * Bootstrap-select v1.13.18 (https://developer.snapappointments.com/bootstrap-select)
  *
  * Copyright 2012-2020 SnapAppointments, LLC
  * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
@@ -18943,7 +18837,7 @@ return jQuery;
     this.init();
   };
 
-  Selectpicker.VERSION = '1.13.17';
+  Selectpicker.VERSION = '1.13.18';
 
   // part of this is duplicated in i18n/defaults-en_US.js. Make sure to update both.
   Selectpicker.DEFAULTS = {
@@ -19005,17 +18899,19 @@ return jQuery;
 
     init: function () {
       var that = this,
-          id = this.$element.attr('id');
+          id = this.$element.attr('id'),
+          element = this.$element[0],
+          form = element.form;
 
       selectId++;
       this.selectId = 'bs-select-' + selectId;
 
-      this.$element[0].classList.add('bs-select-hidden');
+      element.classList.add('bs-select-hidden');
 
       this.multiple = this.$element.prop('multiple');
       this.autofocus = this.$element.prop('autofocus');
 
-      if (this.$element[0].classList.contains('show-tick')) {
+      if (element.classList.contains('show-tick')) {
         this.options.showTick = true;
       }
 
@@ -19025,12 +18921,18 @@ return jQuery;
         .after(this.$newElement)
         .prependTo(this.$newElement);
 
+      // ensure select is associated with form element if it got unlinked after moving it inside newElement
+      if (form && element.form === null) {
+        if (!form.id) form.id = 'form-' + this.selectId;
+        element.setAttribute('form', form.id);
+      }
+
       this.$button = this.$newElement.children('button');
       this.$menu = this.$newElement.children(Selector.MENU);
       this.$menuInner = this.$menu.children('.inner');
       this.$searchbox = this.$menu.find('input');
 
-      this.$element[0].classList.remove('bs-select-hidden');
+      element.classList.remove('bs-select-hidden');
 
       if (this.options.dropdownAlignRight === true) this.$menu[0].classList.add(classNames.MENURIGHT);
 
@@ -19085,7 +18987,7 @@ return jQuery;
         }
       });
 
-      if (that.$element[0].hasAttribute('required')) {
+      if (element.hasAttribute('required')) {
         this.$element.on('invalid' + EVENT_KEY, function () {
           that.$button[0].classList.add('bs-invalid');
 
@@ -19213,6 +19115,7 @@ return jQuery;
     setPositionData: function () {
       this.selectpicker.view.canHighlight = [];
       this.selectpicker.view.size = 0;
+      this.selectpicker.view.firstHighlightIndex = false;
 
       for (var i = 0; i < this.selectpicker.current.data.length; i++) {
         var li = this.selectpicker.current.data[i],
@@ -19235,6 +19138,7 @@ return jQuery;
         if (canHighlight) {
           this.selectpicker.view.size++;
           li.posinset = this.selectpicker.view.size;
+          if (this.selectpicker.view.firstHighlightIndex === false) this.selectpicker.view.firstHighlightIndex = i;
         }
 
         li.position = (i === 0 ? 0 : this.selectpicker.current.data[i - 1].position) + li.height;
@@ -19518,7 +19422,9 @@ return jQuery;
             titleNotAppended = !this.selectpicker.view.titleOption.parentNode,
             selectedIndex = element.selectedIndex,
             selectedOption = element.options[selectedIndex],
-            navigation = window.performance && window.performance.getEntriesByType('navigation');
+            navigation = window.performance && window.performance.getEntriesByType('navigation'),
+            // Safari doesn't support getEntriesByType('navigation') - fall back to performance.navigation
+            isNotBackForward = (navigation && navigation.length) ? navigation[0].type !== 'back_forward' : window.performance.navigation.type !== 2;
 
         if (titleNotAppended) {
           // Use native JS to prepend option (faster)
@@ -19538,7 +19444,7 @@ return jQuery;
         // Set selected *after* appending to select,
         // otherwise the option doesn't get selected in IE
         // set using selectedIndex, as setting the selected attr to true here doesn't work in IE11
-        if (selectTitleOption && navigation.length && navigation[0].type !== 'back_forward') {
+        if (selectTitleOption && isNotBackForward) {
           element.selectedIndex = 0;
         } else if (document.readyState !== 'complete') {
           // if navigation type is back_forward, there's a chance the select will have its value set by BFCache
@@ -20550,7 +20456,7 @@ return jQuery;
             option.selected = !state;
 
             that.setSelected(clickedIndex, !state);
-            $this.trigger('blur');
+            that.focusedParent.focus();
 
             if (maxOptions !== false || maxOptionsGrp !== false) {
               var maxReached = maxOptions < getSelectedOptions(element).length,
@@ -20707,7 +20613,7 @@ return jQuery;
           changedArguments = null;
         })
         .on('focus' + EVENT_KEY, function () {
-          if (!that.options.mobile) that.$button.trigger('focus');
+          if (!that.options.mobile) that.$button[0].focus();
         });
     },
 
@@ -20717,6 +20623,7 @@ return jQuery;
       this.$button.on('click.bs.dropdown.data-api', function () {
         if (!!that.$searchbox.val()) {
           that.$searchbox.val('');
+          that.selectpicker.search.previousValue = undefined;
         }
       });
 
@@ -20725,7 +20632,7 @@ return jQuery;
       });
 
       this.$searchbox.on('input propertychange', function () {
-        var searchValue = that.$searchbox.val();
+        var searchValue = that.$searchbox[0].value;
 
         that.selectpicker.search.elements = [];
         that.selectpicker.search.data = [];
@@ -20781,10 +20688,12 @@ return jQuery;
           that.selectpicker.search.elements = searchMatch;
           that.createView(true);
           showNoResults.call(that, searchMatch, searchValue);
-        } else {
+        } else if (that.selectpicker.search.previousValue) { // for IE11 (#2402)
           that.$menuInner.scrollTop(0);
           that.createView(false);
         }
+
+        that.selectpicker.search.previousValue =  searchValue;
       });
     },
 
@@ -20942,7 +20851,7 @@ return jQuery;
           }
         } else if (e.which === keyCodes.ARROW_DOWN || downOnTab) { // down
           index++;
-          if (index + position0 >= that.selectpicker.view.canHighlight.length) index = 0;
+          if (index + position0 >= that.selectpicker.view.canHighlight.length) index = that.selectpicker.view.firstHighlightIndex;
 
           if (!that.selectpicker.view.canHighlight[index + position0]) {
             index = index + 1 + that.selectpicker.view.canHighlight.slice(index + position0 + 1).indexOf(true);
@@ -20967,10 +20876,10 @@ return jQuery;
           }
         } else if (e.which === keyCodes.ARROW_DOWN || downOnTab) { // down
           // scroll to top and highlight first option
-          if (index === 0) {
+          if (index === that.selectpicker.view.firstHighlightIndex) {
             that.$menuInner[0].scrollTop = 0;
 
-            liActiveIndex = 0;
+            liActiveIndex = that.selectpicker.view.firstHighlightIndex;
           } else {
             activeLi = that.selectpicker.current.data[liActiveIndex];
             offset = activeLi.position - that.sizeInfo.menuInnerHeight;
@@ -21139,6 +21048,10 @@ return jQuery;
         this.$bsContainer.remove();
       } else {
         this.$menu.remove();
+      }
+
+      if (this.selectpicker.view.titleOption && this.selectpicker.view.titleOption.parentNode) {
+        this.selectpicker.view.titleOption.parentNode.removeChild(this.selectpicker.view.titleOption);
       }
 
       this.$element
@@ -24094,16 +24007,16 @@ if (typeof define === 'function' && define.amd) {
   (global = global || self, global.i18next = factory());
 }(this, function () { 'use strict';
 
-  function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
   function _typeof(obj) {
-    if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function _typeof(obj) {
-        return _typeof2(obj);
+        return typeof obj;
       };
     } else {
       _typeof = function _typeof(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
       };
     }
 
@@ -24127,7 +24040,7 @@ if (typeof define === 'function' && define.amd) {
 
   function _objectSpread(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
+      var source = arguments[i] != null ? Object(arguments[i]) : {};
       var ownKeys = Object.keys(source);
 
       if (typeof Object.getOwnPropertySymbols === 'function') {
@@ -24450,14 +24363,16 @@ if (typeof define === 'function' && define.amd) {
   }
   function deepExtend(target, source, overwrite) {
     for (var prop in source) {
-      if (prop in target) {
-        if (typeof target[prop] === 'string' || target[prop] instanceof String || typeof source[prop] === 'string' || source[prop] instanceof String) {
-          if (overwrite) target[prop] = source[prop];
+      if (prop !== '__proto__') {
+        if (prop in target) {
+          if (typeof target[prop] === 'string' || target[prop] instanceof String || typeof source[prop] === 'string' || source[prop] instanceof String) {
+            if (overwrite) target[prop] = source[prop];
+          } else {
+            deepExtend(target[prop], source[prop], overwrite);
+          }
         } else {
-          deepExtend(target[prop], source[prop], overwrite);
+          target[prop] = source[prop];
         }
-      } else {
-        target[prop] = source[prop];
       }
     }
 
@@ -24706,12 +24621,21 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "extractFromKey",
       value: function extractFromKey(key, options) {
-        var nsSeparator = options.nsSeparator || this.options.nsSeparator;
+        var nsSeparator = options.nsSeparator !== undefined ? options.nsSeparator : this.options.nsSeparator;
         if (nsSeparator === undefined) nsSeparator = ':';
         var keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
         var namespaces = options.ns || this.options.defaultNS;
 
         if (nsSeparator && key.indexOf(nsSeparator) > -1) {
+          var m = key.match(this.interpolator.nestingRegexp);
+
+          if (m && m.length > 0) {
+            return {
+              key: key,
+              namespaces: namespaces
+            };
+          }
+
           var parts = key.split(nsSeparator);
           if (nsSeparator !== keySeparator || nsSeparator === keySeparator && this.options.ns.indexOf(parts[0]) > -1) namespaces = parts.shift();
           key = parts.join(keySeparator);
@@ -24725,7 +24649,7 @@ if (typeof define === 'function' && define.amd) {
       }
     }, {
       key: "translate",
-      value: function translate(keys, options) {
+      value: function translate(keys, options, lastKey) {
         var _this2 = this;
 
         if (_typeof(options) !== 'object' && this.options.overloadTranslationOptionHandler) {
@@ -24790,7 +24714,7 @@ if (typeof define === 'function' && define.amd) {
           }
         } else if (handleAsObjectInI18nFormat && typeof joinArrays === 'string' && resType === '[object Array]') {
           res = res.join(joinArrays);
-          if (res) res = this.extendTranslation(res, keys, options);
+          if (res) res = this.extendTranslation(res, keys, options, lastKey);
         } else {
           var usedDefault = false;
           var usedKey = false;
@@ -24863,7 +24787,7 @@ if (typeof define === 'function' && define.amd) {
             }
           }
 
-          res = this.extendTranslation(res, keys, options, resolved);
+          res = this.extendTranslation(res, keys, options, resolved, lastKey);
           if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = "".concat(namespace, ":").concat(key);
           if (usedKey && this.options.parseMissingKeyHandler) res = this.options.parseMissingKeyHandler(res);
         }
@@ -24872,7 +24796,7 @@ if (typeof define === 'function' && define.amd) {
       }
     }, {
       key: "extendTranslation",
-      value: function extendTranslation(res, key, options, resolved) {
+      value: function extendTranslation(res, key, options, resolved, lastKey) {
         var _this3 = this;
 
         if (this.i18nFormat && this.i18nFormat.parse) {
@@ -24883,11 +24807,36 @@ if (typeof define === 'function' && define.amd) {
           if (options.interpolation) this.interpolator.init(_objectSpread({}, options, {
             interpolation: _objectSpread({}, this.options.interpolation, options.interpolation)
           }));
+          var skipOnVariables = options.interpolation && options.interpolation.skipOnVariables || this.options.interpolation.skipOnVariables;
+          var nestBef;
+
+          if (skipOnVariables) {
+            var nb = res.match(this.interpolator.nestingRegexp);
+            nestBef = nb && nb.length;
+          }
+
           var data = options.replace && typeof options.replace !== 'string' ? options.replace : options;
           if (this.options.interpolation.defaultVariables) data = _objectSpread({}, this.options.interpolation.defaultVariables, data);
           res = this.interpolator.interpolate(res, data, options.lng || this.language, options);
+
+          if (skipOnVariables) {
+            var na = res.match(this.interpolator.nestingRegexp);
+            var nestAft = na && na.length;
+            if (nestBef < nestAft) options.nest = false;
+          }
+
           if (options.nest !== false) res = this.interpolator.nest(res, function () {
-            return _this3.translate.apply(_this3, arguments);
+            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
+
+            if (lastKey && lastKey[0] === args[0]) {
+              _this3.logger.warn("It seems you are nesting recursively key: ".concat(args[0], " in key: ").concat(key[0]));
+
+              return null;
+            }
+
+            return _this3.translate.apply(_this3, args.concat([key]));
           }, options);
           if (options.interpolation) this.interpolator.reset();
         }
@@ -25153,7 +25102,7 @@ if (typeof define === 'function' && define.amd) {
     nr: [1, 2],
     fc: 2
   }, {
-    lngs: ['ay', 'bo', 'cgg', 'fa', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky', 'lo', 'ms', 'sah', 'su', 'th', 'tt', 'ug', 'vi', 'wo', 'zh'],
+    lngs: ['ay', 'bo', 'cgg', 'fa', 'ht', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky', 'lo', 'ms', 'sah', 'su', 'th', 'tt', 'ug', 'vi', 'wo', 'zh'],
     nr: [1],
     fc: 3
   }, {
@@ -25233,7 +25182,7 @@ if (typeof define === 'function' && define.amd) {
     nr: [5, 1, 2, 3],
     fc: 21
   }, {
-    lngs: ['he'],
+    lngs: ['he', 'iw'],
     nr: [1, 2, 20, 21],
     fc: 22
   }];
@@ -25287,7 +25236,7 @@ if (typeof define === 'function' && define.amd) {
       return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n !== 0 ? 1 : 2);
     },
     17: function _(n) {
-      return Number(n == 1 || n % 10 == 1 ? 0 : 1);
+      return Number(n == 1 || n % 10 == 1 && n % 100 != 11 ? 0 : 1);
     },
     18: function _(n) {
       return Number(n == 0 ? 0 : n == 1 ? 1 : 2);
@@ -25488,60 +25437,49 @@ if (typeof define === 'function' && define.amd) {
 
         this.resetRegExp();
         var missingInterpolationHandler = options && options.missingInterpolationHandler || this.options.missingInterpolationHandler;
-        replaces = 0;
+        var skipOnVariables = options && options.interpolation && options.interpolation.skipOnVariables || this.options.interpolation.skipOnVariables;
+        var todos = [{
+          regex: this.regexpUnescape,
+          safeValue: function safeValue(val) {
+            return regexSafe(val);
+          }
+        }, {
+          regex: this.regexp,
+          safeValue: function safeValue(val) {
+            return _this.escapeValue ? regexSafe(_this.escape(val)) : regexSafe(val);
+          }
+        }];
+        todos.forEach(function (todo) {
+          replaces = 0;
 
-        while (match = this.regexpUnescape.exec(str)) {
-          value = handleFormat(match[1].trim());
+          while (match = todo.regex.exec(str)) {
+            value = handleFormat(match[1].trim());
 
-          if (value === undefined) {
-            if (typeof missingInterpolationHandler === 'function') {
-              var temp = missingInterpolationHandler(str, match, options);
-              value = typeof temp === 'string' ? temp : '';
-            } else {
-              this.logger.warn("missed to pass in variable ".concat(match[1], " for interpolating ").concat(str));
-              value = '';
+            if (value === undefined) {
+              if (typeof missingInterpolationHandler === 'function') {
+                var temp = missingInterpolationHandler(str, match, options);
+                value = typeof temp === 'string' ? temp : '';
+              } else if (skipOnVariables) {
+                value = match[0];
+                continue;
+              } else {
+                _this.logger.warn("missed to pass in variable ".concat(match[1], " for interpolating ").concat(str));
+
+                value = '';
+              }
+            } else if (typeof value !== 'string' && !_this.useRawValueToEscape) {
+              value = makeString(value);
             }
-          } else if (typeof value !== 'string' && !this.useRawValueToEscape) {
-            value = makeString(value);
-          }
 
-          str = str.replace(match[0], regexSafe(value));
-          this.regexpUnescape.lastIndex = 0;
-          replaces++;
+            str = str.replace(match[0], todo.safeValue(value));
+            todo.regex.lastIndex = 0;
+            replaces++;
 
-          if (replaces >= this.maxReplaces) {
-            break;
-          }
-        }
-
-        replaces = 0;
-
-        while (match = this.regexp.exec(str)) {
-          value = handleFormat(match[1].trim());
-
-          if (value === undefined) {
-            if (typeof missingInterpolationHandler === 'function') {
-              var _temp = missingInterpolationHandler(str, match, options);
-
-              value = typeof _temp === 'string' ? _temp : '';
-            } else {
-              this.logger.warn("missed to pass in variable ".concat(match[1], " for interpolating ").concat(str));
-              value = '';
+            if (replaces >= _this.maxReplaces) {
+              break;
             }
-          } else if (typeof value !== 'string' && !this.useRawValueToEscape) {
-            value = makeString(value);
           }
-
-          value = this.escapeValue ? regexSafe(this.escape(value)) : regexSafe(value);
-          str = str.replace(match[0], value);
-          this.regexp.lastIndex = 0;
-          replaces++;
-
-          if (replaces >= this.maxReplaces) {
-            break;
-          }
-        }
-
+        });
         return str;
       }
     }, {
@@ -25910,7 +25848,8 @@ if (typeof define === 'function' && define.amd) {
         nestingPrefix: '$t(',
         nestingSuffix: ')',
         nestingOptionsSeparator: ',',
-        maxReplaces: 1000
+        maxReplaces: 1000,
+        skipOnVariables: false
       }
     };
   }
@@ -26068,12 +26007,22 @@ if (typeof define === 'function' && define.amd) {
           this.logger.warn('init: no languageDetector is used and no lng is defined');
         }
 
-        var storeApi = ['getResource', 'addResource', 'addResources', 'addResourceBundle', 'removeResourceBundle', 'hasResourceBundle', 'getResourceBundle', 'getDataByLanguage'];
+        var storeApi = ['getResource', 'hasResourceBundle', 'getResourceBundle', 'getDataByLanguage'];
         storeApi.forEach(function (fcName) {
           _this2[fcName] = function () {
             var _this2$store;
 
             return (_this2$store = _this2.store)[fcName].apply(_this2$store, arguments);
+          };
+        });
+        var storeApiChained = ['addResource', 'addResources', 'addResourceBundle', 'removeResourceBundle'];
+        storeApiChained.forEach(function (fcName) {
+          _this2[fcName] = function () {
+            var _this2$store2;
+
+            (_this2$store2 = _this2.store)[fcName].apply(_this2$store2, arguments);
+
+            return _this2;
           };
         });
         var deferred = defer();
@@ -56551,7 +56500,7 @@ module.exports = g;
         if (options.addOnClick && options.onClick)
             result.on('click', $.proxy( result._bsButtonOnClick, result ) );
 
-        result._bsAddHtml( options, false, true );
+        result._bsAddHtml( options, false, true, options.allowContent );
 
         if (options.radioGroup)
             options.radioGroup.addElement( result, options );
@@ -58113,7 +58062,7 @@ options
     Set the z-index of this to the current level
     If a className is given => use it, else
     If delta === true the z-index is set to zindexAllwaysOnTop (9999), else
-    increase currwent z-index by 10
+    increase current z-index by 10
     ******************************************************/
     $.fn._setModalBackdropZIndex = function( delta, className ){
         if (className)
@@ -58632,7 +58581,7 @@ jquery-bootstrap-modal-promise.js
 
     $.fn._bsModalCloseElements = function(){
         var _this = this;
-        //'Close' alle elements (eg. select-box
+        //'Close' alle elements (eg. select-box)
         $.each($._bsModal_closeMethods, function(index, options){
             _this.find(options.selector).each(function(){
                 options.method($(this));
@@ -58640,13 +58589,22 @@ jquery-bootstrap-modal-promise.js
         });
     };
 
+    var currentModal = null;
     //******************************************************
     //show_bs_modal - called when a modal is opening
     function show_bs_modal( /*event*/ ) {
         //Close all popover
         $('.popover.show').popover('hide');
 
+
+        //Close elements
+        if (currentModal)
+            currentModal._bsModalCloseElements();
+
+
         openModals++;
+        this.previousModal = currentModal;
+        currentModal = this;
 
         //Move up the backdrop
         $._addModalBackdropLevel();
@@ -58684,6 +58642,8 @@ jquery-bootstrap-modal-promise.js
     //******************************************************
     //hide_bs_modal - called when a modal is closing
     function hide_bs_modal() {
+        currentModal = this.previousModal;
+
         //Close elements
         this._bsModalCloseElements();
 
@@ -60557,7 +60517,7 @@ jquery-bootstrap-modal-promise.js
 
 ****************************************************************************/
 
-(function ($/*, window, document, undefined*/) {
+(function ($, i18next/*, window, document, undefined*/) {
 	"use strict";
 
     // Create $.BSASMODAL - See src/jquery-bootstrap.js for details
@@ -60580,12 +60540,17 @@ options
 TODO:   truncate     : false. If true the column will be truncated. Normally only one column get truncate: true
         fixedWidth   : false. If true the column will not change width when the tables width is changed
 
-        sortable     :  [boolean] false
-        sortBy       : [string or function(e1, e2): int] "string". Possible values: "int" (sort as float), "moment", "moment_date", "moment_time" (sort as moment-obj) or function(e1, e2) return int
-        sortIndex    : [int] null. When sorting and to values are equal the values from an other column is used.
-                                   The default order of the other columns to test is given by the its index in options.columns. Default sortIndex is (column-index+1)*100 (first column = 100). sortIndex can be set to alter the order.
-        sortDefault  : [string or boolean]. false. Possible values = false, true, "asc" or "desc". true => "asc"
-        sortHeader   : [boolean] false. If true a header-row is added every time the sorted value changes
+        createContent : function(content, $td, sortBy) Create the content inside $td. Optional
+
+        sortable           :  [boolean] false
+        sortBy             : [string or function(e1, e2): int] "string". Possible values: "int" (sort as float), "moment", "moment_date", "moment_time" (sort as moment-obj) or function(e1, e2) return int
+        sortIndex          : [int] null. When sorting and to values are equal the values from an other column is used.
+                             The default order of the other columns to test is given by the its index in options.columns. Default sortIndex is (column-index+1)*100 (first column = 100). sortIndex can be set to alter the order.
+        sortDefault        : [string or boolean]. false. Possible values = false, true, "asc" or "desc". true => "asc"
+        updateAfterSorting : [boolean] false. If true and createContent is given the content of the coumun is updated after the tabel has been sorted
+        getSortContent     : function(content) return the part of content to be used when sorting. optional
+        sortHeader         : [boolean] false. If true a header-row is added every time the sorted value changes
+        createHeaderContent: function(content, $span, sortBy) Create the content of a sort-group-heade insider $span. Optional
 
         filter       : function(rawValue, colunmOptions) null. Return true if row is included based on single value
 
@@ -60620,7 +60585,8 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 *******************************************************************/
 
     /********************************************************************
-    Different sort-functions for moment-objects: (a,b) return a-b
+    Add different sort-functions for moment-objects: (a,b) return a-b and extend
+    string-sort to accept content-object = {da,en} or {text:{da,en}}
     ********************************************************************/
     function momentSort(m1, m2, startOf){
         var moment1 = moment(m1),
@@ -60633,19 +60599,41 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         return moment1 - moment2;
     }
 
-    //momentDateSort - sort by date despide the time
-    function momentDateSort(m1, m2){
-        return momentSort(m1, m2, 'day');
-    }
+    $.extend( $.fn.stupidtable.default_sort_fns, {
+        //'moment' = sort by moment
+        'moment'     : momentSort,
 
-    //momentTimeSort - sort by time despide ther date
-    function momentTimeSort(m1, m2){
-        return momentSort(
-            moment(m1).date(1).month(0).year(2000),
-            moment(m2).date(1).month(0).year(2000)
-        );
-    }
+        //'moment_date' - sort by date despide the time
+        'moment_date': function (m1, m2){
+            return momentSort(m1, m2, 'day');
+        },
 
+        //'moment_time' - sort by time despide ther date
+        'moment_time': function (m1, m2){
+            return momentSort(
+                moment(m1).date(1).month(0).year(2000),
+                moment(m2).date(1).month(0).year(2000)
+            );
+        },
+
+        //Extend string-sort to include content-obj
+        "string": function(a, b) {
+            //Convert a and b to {text:...} and get only text-part
+            a = $._bsAdjustIconAndText( a ).text;
+            b = $._bsAdjustIconAndText( b ).text;
+
+            //Translate a and b if they are {da,en}
+            a = $.isPlainObject(a) ? i18next.sentence( a ) : a;
+            b = $.isPlainObject(b) ? i18next.sentence( b ) : b;
+
+            return a.toString().localeCompare(b.toString());
+        },    });
+
+
+    //Adjust default stupidtable-options (if any)
+    $.extend( $.fn.stupidtable.default_settings, {
+
+    });
 
 
     var defaultOptions = {
@@ -60662,12 +60650,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             defaultColunmOptions: {},
             rowClassName        : [],
 
-
-            stupidtable: {
-                'moment'     : momentSort,
-                'moment_date': momentDateSort,
-                'moment_time': momentTimeSort
-            }
+            stupidtable         : {}
         },
 
         defaultColunmOptions = {
@@ -60681,7 +60664,6 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         },
 
         dataTableId = 'bsTable_options';
-
 
     //********************************************************************
     function adjustThOrTd( $element, columnOptions, addWidth ){
@@ -60796,6 +60778,8 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             if (options.selectable)
                 $tr.attr('id', rowContent.id || 'rowId_'+rowId++);
 
+//HER            var lastSortBy = this.lastSortBy || {};
+            var _this = this;
             $.each( options.columns, function( index, columnOptions ){
                 var content = rowContent[columnOptions.id],
                     $td = $('<td/>').appendTo($tr);
@@ -60804,24 +60788,20 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                 if ($.isPlainObject(content) && content.className)
                     $td.addClass(content.className);
 
+                //Save original contant as sort-by-value
+                $td.data('sort-value', columnOptions.getSortContent ?  columnOptions.getSortContent(content) : content );
+                //If raw-value and sort-value are differnt => also save raw-value
+                if (columnOptions.getSortContent)
+                    $td.data('raw-value', content );
+
                 //Build the content using the createContent-function, _bsAppendContent, or jquery-value-format
-                if (columnOptions.createContent){
-                    columnOptions.createContent( content, $td );
-                    //Save original contant as sort-by-value
-                    $td.data('sort-value', content );
-                }
-                else
-                    if (columnOptions.vfFormat)
-                        $td.vfValueFormat( content, columnOptions.vfFormat, columnOptions.vfOptions );
-                    else
-                        $td._bsAppendContent( content );
+                _this._createTdContent( content, $td, index );
             });
 
             //Add rows to radioGroup
             if (options.selectable)
                 options.radioGroup.addElement( $tr );
         },
-
 
         /**********************************************************
         _getColumn - Return the column with id or index
@@ -60830,10 +60810,41 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             return $.isNumeric(idOrIndex) ? this.columns[idOrIndex] : this.columnIds[idOrIndex];
         },
 
+        /**********************************************************
+        _createTdContent
+        **********************************************************/
+        _createTdContent: function( content, $td, columnIndex, createContent ){
+            var columnOptions = this._getColumn(columnIndex);
 
+            //Build the content using the given create-function, column.createContent-function, _bsAppendContent, or jquery-value-format
+            var sortBy = this.lastSortBy.columnIndex == columnIndex ? this.lastSortBy.direction : false;
+            if (createContent)
+                createContent( content, $td, sortBy );
+            else
+                if (columnOptions.createContent)
+                    columnOptions.createContent( content, $td, sortBy );
+                    else
+                        if (columnOptions.vfFormat)
+                            $td.vfValueFormat( content, columnOptions.vfFormat, columnOptions.vfOptions );
+                        else
+                            $td._bsAppendContent( content );
+        },
 
         /**********************************************************
-        eachRow - Call rowFunc = function($tr, $tdList, sortValueList) for all rows
+        eachRow - Call rowFunc = function(rowOptions)  for all rows
+        rowOptions = {
+            id      : Row-id
+            $tr     : tr-element
+            $tdList : [] of td-elements
+
+            valueList: [] of raw-value
+            values   : {ID} of raw-value;
+
+            sortValueList: [] of sort-value
+            sortValues   : {ID} of sort-value;
+
+            columns: All column of the table
+        }
         **********************************************************/
         eachRow: function( rowFunc ){
             var _this = this;
@@ -60843,37 +60854,42 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                     id = $tr.attr('id'),
                     $tdList = [],
                     valueList = [],
-                    values = {};
+                    values = {},
+                    sortValueList = [],
+                    sortValues = {};
 
                 $tr.find('td').each(function(index, td){
                     var $td = $(td);
                     $tdList.push( $td );
                 });
 
-                //Find the "raw" content eq. before any display adjusting was made
+                //Find the "raw" content eq. before any display adjusting was made and the content used for sorting
                 $.each($tdList, function( columnIndex, $td ){
-                    var column = _this._getColumn( columnIndex ),
-                        value  = '';
+                    var column    = _this._getColumn( columnIndex ),
+                        sortValue = $td.data('sort-value'),
+                        value     = column.getSortContent ? $td.data('raw-value') : sortValue;
 
-                    //If cell-content is vfFormat-object => Get 'sort-value' from vfFormat
-                    if (column.vfFormat)
-                        value = $td.vfValue();
-                    else
-                        //If cell-content is created using the createContent-function => Get value for data-sort-value
-                        if (column.createContent)
-                            value = $td.data('sort-value');
-                        else
-                            value = $td.text();
                     valueList.push(value);
                     values[column.id] = value;
+
+                    sortValueList.push(sortValue);
+                    sortValues[column.id] = sortValue;
+
                 });
 
                 rowFunc({
                     id       : id,
                     $tr      : $tr,
                     $tdList  : $tdList,
+
                     valueList: valueList,
-                    values   : values
+                    values   : values,
+
+                    sortValueList: sortValueList,
+                    sortValues   : sortValues,
+
+                    columns: this.columns
+
                 });
             });
             return this;
@@ -60897,8 +60913,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         **********************************************************/
         beforeTableSort: function(event, sortInfo){
             var column          = this._getColumn(sortInfo.column),
-                sortMulticolumn = column.$th.attr('data-sort-multicolumn') || '',
-                _this           = this;
+                sortMulticolumn = column.$th.attr('data-sort-multicolumn') || '';
 
             //Remove all group-header-rows
             this.find('.table-sort-group-header').remove();
@@ -60906,14 +60921,6 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             //Convert sortMulticolumn to array
             sortMulticolumn = sortMulticolumn ? sortMulticolumn.split(',') : [];
             sortMulticolumn.push(column.index);
-
-            //Save all vfFormat-values as data-sort-value
-            this.eachRow(function(opt){
-                $.each(sortMulticolumn, function(dummy, columnIndex ){
-                    if (_this._getColumn( columnIndex ).vfFormat)
-                        opt.$tdList[columnIndex].data('sort-value', opt.valueList[columnIndex]);
-                });
-            });
         },
 
         /**********************************************************
@@ -60933,11 +60940,38 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                     .addClass( $(th).attr('class') );
             });
 
+
+            //Update all cells if column.options.updateAfterSorting == true
+            var updateColumn = [],
+                updateAnyColumn = false;
+
+            $.each( this.columns, function( index, columnOptions ){
+                updateColumn[index] = !!columnOptions.updateAfterSorting && !!columnOptions.createContent;
+                updateAnyColumn = updateAnyColumn || updateColumn[index];
+            });
+
+            var _this = this;
+            if (updateAnyColumn)
+                this.eachRow( function(rowOptions){
+
+                    $.each(updateColumn, function(columnIndex){
+                        if (updateColumn[columnIndex]){
+                            var $td = rowOptions.$tdList[columnIndex];
+                            $td.empty();
+
+                            _this._getColumn(columnIndex).createContent(
+                                rowOptions.valueList[columnIndex],
+                                $td,
+                                _this.lastSortBy.columnIndex == columnIndex ? _this.lastSortBy.direction : false
+                            );
+                        }
+                    });
+                });
+
             var column = this._getColumn( sortInfo.column );
 
             //Marks first row of changed value
             if (column.sortHeader) {
-
                 //$tdBase = a <td> as $-object acting as base for all tds in header-row
                 var $tdBase =
                         $('<td/>')
@@ -60946,14 +60980,22 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                 column.$th.contents().clone().appendTo( $tdBase );
                 $tdBase.append( $('<span>:</span>') );
 
-                var lastText = "Denne her text kommer sikkert ikke igen";
+                var lastHeaderContent = "Denne her text kommer sikkert ikke igen";
+
                 this.find('tbody tr:not(.filter-out) td:nth-child(' + (sortInfo.column+1) +')').each( function( index, td ){
                     var $td = $(td),
-                        nextText = $td.text();
-                    if (nextText != lastText){
+                        nextHeaderContent = column.getSortContent ? $td.data('raw-value') : $td.data('sort-value');
+
+                    if (column.getHeaderContent)
+                        nextHeaderContent = column.getHeaderContent(nextHeaderContent);
+
+                    if (!$._isEqual(nextHeaderContent, lastHeaderContent)){
+
                         //Create a clone of $tdBase and 'copy' all children from $td to $newTd
-                        var $newTd = $tdBase.clone(true);
-                        $td.contents().clone().appendTo( $newTd );
+                        var $newTd = $tdBase.clone(true),
+                            $span = $('<span/>').appendTo($newTd);
+
+                        _this._createTdContent( nextHeaderContent, $span/*$newTd*/, column.index, column.createHeaderContent );
 
                         //Create new row and insert before current row
                         $('<tr/>')
@@ -60961,7 +61003,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                             .append( $newTd )
                             .insertBefore( $td.parent() );
 
-                        lastText = nextText;
+                        lastHeaderContent = nextHeaderContent;
                     }
                 });
             }
@@ -61004,10 +61046,10 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                 var result = true; //Included
                 if (rowFilter)
                     //Row filter always before column-filter
-                    result = rowFilter(opt.values, opt.id );
+                    result = rowFilter(opt.values, opt.id ); //<- HER: Måske nyt navn i stedet for values
                 else {
                     $.each(columnFilter, function(id, filterFunc){
-                        if (!filterFunc(opt.values[id], _this._getColumn(id))){
+                        if (!filterFunc(opt.values[id], _this._getColumn(id))){ //<- HER: Måske nyt navn i stedet for values
                             result = false;
                             return false;
                         }
@@ -61038,7 +61080,6 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 
         options = $._bsAdjustOptions( options, defaultOptions );
         options.class =
-//Removed because useTouchSize added to options            (options.small ? 'table-sm ' : '' ) +
             (options.verticalBorder && !options.noBorder ? 'table-bordered ' : '' ) +
             (options.noBorder ? 'table-no-border ' : '' ) +
             (options.hoverRow ? 'table-hover ' : '' ) +
@@ -61178,7 +61219,6 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             $table.addRow( rowContent );
         });
 
-
         if (sortableTable){
             $table.stupidtable( options.stupidtable )
                 .bind('beforetablesort', $.proxy( $table.beforeTableSort, $table ) )
@@ -61188,17 +61228,10 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                 $table.sortBy(sortDefaultId, sortDefaultDir);
         }
 
-
-
-//HER        this.lastSortBy.columnIndex, this.lastSortBy.direction );
-
-
         return $table;
     };
 
-
-
-}(jQuery, this, document));
+}(jQuery, this.i18next, this, document));
 ;
 /****************************************************************************
 	jquery-bootstrap-tabs.js,
@@ -61365,17 +61398,17 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 }(jQuery, this, document));
 ;
 /****************************************************************************
-	jquery-bootstrap.js,
+    jquery-bootstrap.js,
 
-	(c) 2017, FCOO
+    (c) 2017, FCOO
 
-	https://github.com/fcoo/jquery-bootstrap
-	https://github.com/fcoo
+    https://github.com/fcoo/jquery-bootstrap
+    https://github.com/fcoo
 
 ****************************************************************************/
 
 (function ($, i18next, window, document, undefined) {
-	"use strict";
+    "use strict";
 
     /*
 
@@ -61392,7 +61425,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     */
 
     //Create namespace
-	var ns = window;
+    var ns = window;
 
     /*
     Create $.BSASMODAL = record with {className: asModal-function} where className is added to any $element that have a asModal-function
@@ -61619,6 +61652,74 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         $icon.appendTo( $appendTo );
         return $icon;
     };
+
+    /****************************************************************************************
+    $._isEqual(obj1, obj2 OR array)
+    Check if two objects or arrays are equal
+    (c) 2017 Chris Ferdinandi, MIT License, https://gomakethings.com
+    @param  {Object|Array|String}  value  The first object or array to compare
+    @param  {Object|Array|String}  other  The second object or array to compare
+    @return {Boolean}              Returns true if they're equal
+    ****************************************************************************************/
+    $._isEqual = function (value, other) {
+        // Get the value type
+        var type = Object.prototype.toString.call(value);
+
+        // If the two objects are not the same type, return false
+        if (type !== Object.prototype.toString.call(other)) return false;
+
+        // Compare the length of the length of the two items
+        var valueLen = type === '[object Array]' ? value.length : Object.keys(value).length;
+        var otherLen = type === '[object Array]' ? other.length : Object.keys(other).length;
+        if (valueLen !== otherLen) return false;
+
+        // Compare two items
+        var compare = function (item1, item2) {
+            // Get the object type
+            var itemType = Object.prototype.toString.call(item1);
+
+            // If an object or array, compare recursively
+            if (['[object Array]', '[object Object]'].indexOf(itemType) >= 0) {
+                if (!$._isEqual(item1, item2)) return false;
+            }
+            // Otherwise, do a simple comparison
+            else {
+                // If the two items are not the same type, return false
+                if (itemType !== Object.prototype.toString.call(item2)) return false;
+
+                // Else if it's a function, convert to a string and compare
+                // Otherwise, just compare
+                if (itemType === '[object Function]') {
+                    if (item1.toString() !== item2.toString())
+                        return false;
+                }
+                else {
+                    if (item1 !== item2) return false;
+                }
+            }
+        };
+
+        // Compare properties
+          if (type === '[object Array]'){
+               for (var i=0; i<valueLen; i++){
+                if (compare(value[i], other[i]) === false)
+                    return false;
+            }
+        }
+        else
+            if (type === '[object Object]'){
+                for (var key in value){
+                    if ( (value.hasOwnProperty(key)) && (compare(value[key], other[key]) === false))
+                        return false;
+                }
+            }
+            else
+                // If nothing failed, return simple comparison
+                return value == other;
+
+        return true;
+    };
+
 
 
     $.fn.extend({
@@ -62055,7 +62156,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
 ;
 /*!
     localForage -- Offline Storage, Improved
-    Version 1.7.4
+    Version 1.9.0
     https://localforage.github.io/localForage
     (c) 2013-2017 Mozilla, Apache License 2.0
 */
