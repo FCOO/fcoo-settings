@@ -266,8 +266,9 @@
 
                             content   : {type: 'accordion', list: list },
                             onChanging: $.proxy(this.onChanging, this),
+                            onSubmit  : $.proxy(this.onSubmit,   this),
                             onCancel  : $.proxy(this.onCancel,   this),
-                            onSubmit  : $.proxy(this.onSubmit,   this)
+                            onClose   : $.proxy(this.onClose,    this)
                         }
                     )
                 );
@@ -316,21 +317,6 @@
         },
 
         /*****************************************************
-        onCancel(data)
-        /*****************************************************/
-        onCancel: function(){
-            var _this = this,
-                resetData = {};
-
-            //Reset any setting that was changed during editing
-            $.each(this.originalData, function(id, value){
-                if (value != _this.get(id))
-                    resetData[id] = value;
-            });
-            this.set(resetData);
-        },
-
-        /*****************************************************
         onSubmit(data)
         /*****************************************************/
         onSubmit: function(data){
@@ -358,7 +344,33 @@
 
             $.workingOff();
 
-        }
+        },
+
+        /*****************************************************
+        onCancel
+        /*****************************************************/
+        onCancel: function(){
+            var _this = this,
+                resetData = {};
+
+            //Reset any setting that was changed during editing
+            $.each(this.originalData, function(id, value){
+                if (value != _this.get(id))
+                    resetData[id] = value;
+            });
+            this.set(resetData);
+
+            if (this.options.onCancel)
+                this.options.onCancel(this.originalData);
+        },
+
+        /*****************************************************
+        onClose
+        /*****************************************************/
+        onClose: function(){
+            if (this.options.onClose)
+                this.options.onClose(this);
+        },
     };
 
 
