@@ -483,6 +483,12 @@
                 icon: 'fa-cog',
                 text: {da: 'Indstillinger', en:'Settings'}
             },
+            //Modal-options to allow close modal by clicking outside the modal
+            modalOptions: {
+                static             : false,
+                closeWithoutWarning: true
+            },
+
             accordionList: [
                 {id: ns.events.LANGUAGECHANGED,       header: {icon: 'fa-comments',       iconClass: 'fa-fw', text: {da: 'Sprog', en: 'Language'}} },
                 {id: ns.events.TIMEZONECHANGED,       header: {icon: 'fa-globe',          iconClass: 'fa-fw', text: {da: 'Tidszone', en: 'Time Zone'}} },
