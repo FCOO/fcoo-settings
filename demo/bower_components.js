@@ -24171,17 +24171,11 @@ if (typeof define === 'function' && define.amd) {
   function _typeof(obj) {
     "@babel/helpers - typeof";
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function _typeof(obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function _typeof(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
   }
 
   function _classCallCheck(instance, Constructor) {
@@ -24203,6 +24197,9 @@ if (typeof define === 'function' && define.amd) {
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
     return Constructor;
   }
 
@@ -24235,12 +24232,17 @@ if (typeof define === 'function' && define.amd) {
         configurable: true
       }
     });
+    Object.defineProperty(subClass, "prototype", {
+      writable: false
+    });
     if (superClass) _setPrototypeOf(subClass, superClass);
   }
 
   function _possibleConstructorReturn(self, call) {
     if (call && (_typeof(call) === "object" || typeof call === "function")) {
       return call;
+    } else if (call !== void 0) {
+      throw new TypeError("Derived constructors may only return object or undefined");
     }
 
     return _assertThisInitialized(self);
@@ -24549,7 +24551,7 @@ if (typeof define === 'function' && define.amd) {
 
     return data;
   }
-  var isIE10 = typeof window !== 'undefined' && window.navigator && window.navigator.userAgent && window.navigator.userAgent.indexOf('MSIE') > -1;
+  var isIE10 = typeof window !== 'undefined' && window.navigator && typeof window.navigator.userAgentData === 'undefined' && window.navigator.userAgent && window.navigator.userAgent.indexOf('MSIE') > -1;
   var chars = [' ', ',', '?', '!', ';'];
   function looksLikeObjectPath(key, nsSeparator, keySeparator) {
     nsSeparator = nsSeparator || '';
@@ -24608,8 +24610,12 @@ if (typeof define === 'function' && define.amd) {
         }
 
         if (mix === undefined) return undefined;
-        if (typeof mix === 'string') return mix;
-        if (p && typeof mix[p] === 'string') return mix[p];
+
+        if (path.endsWith(p)) {
+          if (typeof mix === 'string') return mix;
+          if (p && typeof mix[p] === 'string') return mix[p];
+        }
+
         var joinedPath = paths.slice(i + j).join(keySeparator);
         if (joinedPath) return deepFind(mix, joinedPath, keySeparator);
         return undefined;
@@ -24914,6 +24920,7 @@ if (typeof define === 'function' && define.amd) {
         if (!options) options = {};
         if (keys === undefined || keys === null) return '';
         if (!Array.isArray(keys)) keys = [String(keys)];
+        var returnDetails = options.returnDetails !== undefined ? options.returnDetails : this.options.returnDetails;
         var keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
 
         var _this$extractFromKey = this.extractFromKey(keys[keys.length - 1], options),
@@ -24927,7 +24934,18 @@ if (typeof define === 'function' && define.amd) {
         if (lng && lng.toLowerCase() === 'cimode') {
           if (appendNamespaceToCIMode) {
             var nsSeparator = options.nsSeparator || this.options.nsSeparator;
-            return namespace + nsSeparator + key;
+
+            if (returnDetails) {
+              resolved.res = "".concat(namespace).concat(nsSeparator).concat(key);
+              return resolved;
+            }
+
+            return "".concat(namespace).concat(nsSeparator).concat(key);
+          }
+
+          if (returnDetails) {
+            resolved.res = key;
+            return resolved;
           }
 
           return key;
@@ -24949,9 +24967,16 @@ if (typeof define === 'function' && define.amd) {
               this.logger.warn('accessing an object - but returnObjects options is not enabled!');
             }
 
-            return this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, res, _objectSpread$2(_objectSpread$2({}, options), {}, {
+            var r = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, res, _objectSpread$2(_objectSpread$2({}, options), {}, {
               ns: namespaces
             })) : "key '".concat(key, " (").concat(this.language, ")' returned an object instead of string.");
+
+            if (returnDetails) {
+              resolved.res = r;
+              return resolved;
+            }
+
+            return r;
           }
 
           if (keySeparator) {
@@ -25035,7 +25060,7 @@ if (typeof define === 'function' && define.amd) {
             if (this.options.saveMissing) {
               if (this.options.saveMissingPlurals && needsPluralHandling) {
                 lngs.forEach(function (language) {
-                  _this2.pluralResolver.getSuffixes(language).forEach(function (suffix) {
+                  _this2.pluralResolver.getSuffixes(language, options).forEach(function (suffix) {
                     send([language], key + suffix, options["defaultValue".concat(suffix)] || defaultValue);
                   });
                 });
@@ -25047,7 +25072,19 @@ if (typeof define === 'function' && define.amd) {
 
           res = this.extendTranslation(res, keys, options, resolved, lastKey);
           if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = "".concat(namespace, ":").concat(key);
-          if ((usedKey || usedDefault) && this.options.parseMissingKeyHandler) res = this.options.parseMissingKeyHandler(res);
+
+          if ((usedKey || usedDefault) && this.options.parseMissingKeyHandler) {
+            if (this.options.compatibilityAPI !== 'v1') {
+              res = this.options.parseMissingKeyHandler(key, usedDefault ? res : undefined);
+            } else {
+              res = this.options.parseMissingKeyHandler(res);
+            }
+          }
+        }
+
+        if (returnDetails) {
+          resolved.res = res;
+          return resolved;
         }
 
         return res;
@@ -25058,14 +25095,14 @@ if (typeof define === 'function' && define.amd) {
         var _this3 = this;
 
         if (this.i18nFormat && this.i18nFormat.parse) {
-          res = this.i18nFormat.parse(res, options, resolved.usedLng, resolved.usedNS, resolved.usedKey, {
+          res = this.i18nFormat.parse(res, _objectSpread$2(_objectSpread$2({}, this.options.interpolation.defaultVariables), options), resolved.usedLng, resolved.usedNS, resolved.usedKey, {
             resolved: resolved
           });
         } else if (!options.skipInterpolation) {
           if (options.interpolation) this.interpolator.init(_objectSpread$2(_objectSpread$2({}, options), {
             interpolation: _objectSpread$2(_objectSpread$2({}, this.options.interpolation), options.interpolation)
           }));
-          var skipOnVariables = typeof res === 'string' && (options.interpolation && options.interpolation.skipOnVariables || this.options.interpolation.skipOnVariables);
+          var skipOnVariables = typeof res === 'string' && (options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
           var nestBef;
 
           if (skipOnVariables) {
@@ -25796,7 +25833,7 @@ if (typeof define === 'function' && define.amd) {
 
         this.resetRegExp();
         var missingInterpolationHandler = options && options.missingInterpolationHandler || this.options.missingInterpolationHandler;
-        var skipOnVariables = options && options.interpolation && options.interpolation.skipOnVariables || this.options.interpolation.skipOnVariables;
+        var skipOnVariables = options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables;
         var todos = [{
           regex: this.regexpUnescape,
           safeValue: function safeValue(val) {
@@ -25812,17 +25849,20 @@ if (typeof define === 'function' && define.amd) {
           replaces = 0;
 
           while (match = todo.regex.exec(str)) {
-            value = handleFormat(match[1].trim());
+            var matchedVar = match[1].trim();
+            value = handleFormat(matchedVar);
 
             if (value === undefined) {
               if (typeof missingInterpolationHandler === 'function') {
                 var temp = missingInterpolationHandler(str, match, options);
                 value = typeof temp === 'string' ? temp : '';
+              } else if (options && options.hasOwnProperty(matchedVar)) {
+                value = '';
               } else if (skipOnVariables) {
                 value = match[0];
                 continue;
               } else {
-                _this.logger.warn("missed to pass in variable ".concat(match[1], " for interpolating ").concat(str));
+                _this.logger.warn("missed to pass in variable ".concat(matchedVar, " for interpolating ").concat(str));
 
                 value = '';
               }
@@ -25834,7 +25874,7 @@ if (typeof define === 'function' && define.amd) {
             str = str.replace(match[0], safeValue);
 
             if (skipOnVariables) {
-              todo.regex.lastIndex += safeValue.length;
+              todo.regex.lastIndex += value.length;
               todo.regex.lastIndex -= match[0].length;
             } else {
               todo.regex.lastIndex = 0;
@@ -25929,31 +25969,8 @@ if (typeof define === 'function' && define.amd) {
     if (Array.isArray(arr)) return arr;
   }
 
-  function _iterableToArrayLimit(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"] != null) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _arrayLikeToArray(arr, len) {
@@ -25979,8 +25996,8 @@ if (typeof define === 'function' && define.amd) {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  function _toArray(arr) {
+    return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
   }
 
   function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -26006,14 +26023,15 @@ if (typeof define === 'function' && define.amd) {
           if (!opt) return;
 
           var _opt$split = opt.split(':'),
-              _opt$split2 = _slicedToArray(_opt$split, 2),
+              _opt$split2 = _toArray(_opt$split),
               key = _opt$split2[0],
-              val = _opt$split2[1];
+              rest = _opt$split2.slice(1);
 
+          var val = rest.join(':');
+          if (!formatOptions[key.trim()]) formatOptions[key.trim()] = val.trim();
           if (val.trim() === 'false') formatOptions[key.trim()] = false;
           if (val.trim() === 'true') formatOptions[key.trim()] = true;
           if (!isNaN(val.trim())) formatOptions[key.trim()] = parseInt(val.trim(), 10);
-          if (!formatOptions[key.trim()]) formatOptions[key.trim()] = val.trim();
         });
       }
     }
@@ -26066,7 +26084,7 @@ if (typeof define === 'function' && define.amd) {
     }, {
       key: "add",
       value: function add(name, fc) {
-        this.formats[name] = fc;
+        this.formats[name.toLowerCase().trim()] = fc;
       }
     }, {
       key: "format",
@@ -26113,13 +26131,9 @@ if (typeof define === 'function' && define.amd) {
 
   function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-  function remove(arr, what) {
-    var found = arr.indexOf(what);
-
-    while (found !== -1) {
-      arr.splice(found, 1);
-      found = arr.indexOf(what);
-    }
+  function removePending(q, name) {
+    delete q.pending[name];
+    q.pendingCount--;
   }
 
   var Connector = function (_EventEmitter) {
@@ -26146,6 +26160,9 @@ if (typeof define === 'function' && define.amd) {
       _this.languageUtils = services.languageUtils;
       _this.options = options;
       _this.logger = baseLogger.create('backendConnector');
+      _this.waitingReads = [];
+      _this.maxParallelReads = options.maxParallelReads || 10;
+      _this.readingCalls = 0;
       _this.state = {};
       _this.queue = [];
 
@@ -26161,10 +26178,10 @@ if (typeof define === 'function' && define.amd) {
       value: function queueLoad(languages, namespaces, options, callback) {
         var _this2 = this;
 
-        var toLoad = [];
-        var pending = [];
-        var toLoadLanguages = [];
-        var toLoadNamespaces = [];
+        var toLoad = {};
+        var pending = {};
+        var toLoadLanguages = {};
+        var toLoadNamespaces = {};
         languages.forEach(function (lng) {
           var hasAllNamespaces = true;
           namespaces.forEach(function (ns) {
@@ -26173,21 +26190,22 @@ if (typeof define === 'function' && define.amd) {
             if (!options.reload && _this2.store.hasResourceBundle(lng, ns)) {
               _this2.state[name] = 2;
             } else if (_this2.state[name] < 0) ; else if (_this2.state[name] === 1) {
-              if (pending.indexOf(name) < 0) pending.push(name);
+              if (pending[name] === undefined) pending[name] = true;
             } else {
               _this2.state[name] = 1;
               hasAllNamespaces = false;
-              if (pending.indexOf(name) < 0) pending.push(name);
-              if (toLoad.indexOf(name) < 0) toLoad.push(name);
-              if (toLoadNamespaces.indexOf(ns) < 0) toLoadNamespaces.push(ns);
+              if (pending[name] === undefined) pending[name] = true;
+              if (toLoad[name] === undefined) toLoad[name] = true;
+              if (toLoadNamespaces[ns] === undefined) toLoadNamespaces[ns] = true;
             }
           });
-          if (!hasAllNamespaces) toLoadLanguages.push(lng);
+          if (!hasAllNamespaces) toLoadLanguages[lng] = true;
         });
 
-        if (toLoad.length || pending.length) {
+        if (Object.keys(toLoad).length || Object.keys(pending).length) {
           this.queue.push({
             pending: pending,
+            pendingCount: Object.keys(pending).length,
             loaded: {},
             errors: [],
             callback: callback
@@ -26195,10 +26213,10 @@ if (typeof define === 'function' && define.amd) {
         }
 
         return {
-          toLoad: toLoad,
-          pending: pending,
-          toLoadLanguages: toLoadLanguages,
-          toLoadNamespaces: toLoadNamespaces
+          toLoad: Object.keys(toLoad),
+          pending: Object.keys(pending),
+          toLoadLanguages: Object.keys(toLoadLanguages),
+          toLoadNamespaces: Object.keys(toLoadNamespaces)
         };
       }
     }, {
@@ -26217,16 +26235,17 @@ if (typeof define === 'function' && define.amd) {
         var loaded = {};
         this.queue.forEach(function (q) {
           pushPath(q.loaded, [lng], ns);
-          remove(q.pending, name);
+          removePending(q, name);
           if (err) q.errors.push(err);
 
-          if (q.pending.length === 0 && !q.done) {
+          if (q.pendingCount === 0 && !q.done) {
             Object.keys(q.loaded).forEach(function (l) {
-              if (!loaded[l]) loaded[l] = [];
+              if (!loaded[l]) loaded[l] = {};
+              var loadedKeys = Object.keys(loaded[l]);
 
-              if (q.loaded[l].length) {
-                q.loaded[l].forEach(function (ns) {
-                  if (loaded[l].indexOf(ns) < 0) loaded[l].push(ns);
+              if (loadedKeys.length) {
+                loadedKeys.forEach(function (ns) {
+                  if (loadedKeys[ns] !== undefined) loaded[l][ns] = true;
                 });
               }
             });
@@ -26253,12 +26272,34 @@ if (typeof define === 'function' && define.amd) {
         var wait = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 350;
         var callback = arguments.length > 5 ? arguments[5] : undefined;
         if (!lng.length) return callback(null, {});
+
+        if (this.readingCalls >= this.maxParallelReads) {
+          this.waitingReads.push({
+            lng: lng,
+            ns: ns,
+            fcName: fcName,
+            tried: tried,
+            wait: wait,
+            callback: callback
+          });
+          return;
+        }
+
+        this.readingCalls++;
         return this.backend[fcName](lng, ns, function (err, data) {
           if (err && data && tried < 5) {
             setTimeout(function () {
               _this3.read.call(_this3, lng, ns, fcName, tried + 1, wait * 2, callback);
             }, wait);
             return;
+          }
+
+          _this3.readingCalls--;
+
+          if (_this3.waitingReads.length > 0) {
+            var next = _this3.waitingReads.shift();
+
+            _this3.read(next.lng, next.ns, next.fcName, next.tried, next.wait, next.callback);
           }
 
           callback(err, data);
@@ -26506,7 +26547,10 @@ if (typeof define === 'function' && define.amd) {
 
         var defOpts = get();
         this.options = _objectSpread$6(_objectSpread$6(_objectSpread$6({}, defOpts), this.options), transformOptions(options));
-        this.options.interpolation = _objectSpread$6({}, this.options.interpolation);
+
+        if (this.options.compatibilityAPI !== 'v1') {
+          this.options.interpolation = _objectSpread$6(_objectSpread$6({}, defOpts.interpolation), this.options.interpolation);
+        }
 
         if (options.keySeparator !== undefined) {
           this.options.userDefinedKeySeparator = options.keySeparator;
@@ -26687,7 +26731,10 @@ if (typeof define === 'function' && define.amd) {
             });
           }
 
-          this.services.backendConnector.load(toLoad, this.options.ns, usedCallback);
+          this.services.backendConnector.load(toLoad, this.options.ns, function (e) {
+            if (!e && !_this3.resolvedLanguage && _this3.language) _this3.setResolvedLanguage(_this3.language);
+            usedCallback(e);
+          });
         } else {
           usedCallback(null);
         }
@@ -26742,6 +26789,22 @@ if (typeof define === 'function' && define.amd) {
         return this;
       }
     }, {
+      key: "setResolvedLanguage",
+      value: function setResolvedLanguage(l) {
+        if (!l || !this.languages) return;
+        if (['cimode', 'dev'].indexOf(l) > -1) return;
+
+        for (var li = 0; li < this.languages.length; li++) {
+          var lngInLngs = this.languages[li];
+          if (['cimode', 'dev'].indexOf(lngInLngs) > -1) continue;
+
+          if (this.store.hasLanguageSomeTranslations(lngInLngs)) {
+            this.resolvedLanguage = lngInLngs;
+            break;
+          }
+        }
+      }
+    }, {
       key: "changeLanguage",
       value: function changeLanguage(lng, callback) {
         var _this4 = this;
@@ -26754,17 +26817,8 @@ if (typeof define === 'function' && define.amd) {
           _this4.language = l;
           _this4.languages = _this4.services.languageUtils.toResolveHierarchy(l);
           _this4.resolvedLanguage = undefined;
-          if (['cimode', 'dev'].indexOf(l) > -1) return;
 
-          for (var li = 0; li < _this4.languages.length; li++) {
-            var lngInLngs = _this4.languages[li];
-            if (['cimode', 'dev'].indexOf(lngInLngs) > -1) continue;
-
-            if (_this4.store.hasLanguageSomeTranslations(lngInLngs)) {
-              _this4.resolvedLanguage = lngInLngs;
-              break;
-            }
-          }
+          _this4.setResolvedLanguage(l);
         };
 
         var done = function done(err, l) {
@@ -26907,7 +26961,7 @@ if (typeof define === 'function' && define.amd) {
         }
 
         if (this.hasResourceBundle(lng, ns)) return true;
-        if (!this.services.backendConnector.backend) return true;
+        if (!this.services.backendConnector.backend || this.options.resources && !this.options.partialBundledLanguages) return true;
         if (loadNotPending(lng, ns) && (!fallbackLng || loadNotPending(lastLng, ns))) return true;
         return false;
       }
@@ -34038,6 +34092,7 @@ if (typeof define === 'function' && define.amd) {
                         id       : options.id || $this.prop('id') || 'checkbox_' + globalCheckboxId++,
                         prop     : '',
                         className: '',
+                        className_semi: '',
                         selector : null,
                         modernizr: false,
                         selected : false,
@@ -34045,13 +34100,10 @@ if (typeof define === 'function' && define.amd) {
                     }, options);
                 $this.data('cbx_options', _options );
 
+                if (options.getSelected)
+                    _options.selected = options.getSelected.apply( options.getSelectedContext, [this, _options] );
 
-                if (options.className_semi && options.semiSelected){
-                    _options.selected = true;
-                    $this.addClass(options.className_semi);
-                }
-
-                $this._cbxSet( _options.selected, true );
+                $this._cbxSet( _options.selected, true, options.className_semi && options.semiSelected );
 
                 $this.on('click', $.proxy( $this._cbxOnClick, $this ));
                 if (options.onDblClick)
@@ -34064,10 +34116,9 @@ if (typeof define === 'function' && define.amd) {
             return this.data('cbx_options').selected;
         },
 
-        _cbxSet: function( selected, dontCallOnChange ){
+        _cbxSet: function( selected, dontCallOnChange, semiSelected, semiSelectedValue ){
             var options = this.data('cbx_options');
             options.selected = !!selected;
-            this.data('cbx_options', options );
 
             var $elements = options.selector ? this.children( options.selector ) : this;
             $elements.each( function(){
@@ -34084,16 +34135,23 @@ if (typeof define === 'function' && define.amd) {
 
             });
 
-            if (!dontCallOnChange){
-                this.removeClass(options.className_semi);
-                this._cbxCallOnChange();
+            if (typeof semiSelected == 'boolean'){
+                this.toggleClass(options.className_semi, semiSelected);
+                options.semiSelected = semiSelected;
+                options.semiSelectedValue = semiSelectedValue || options.semiSelectedValue || 'semi';
             }
+
+            this.data('cbx_options', options );
+
+            if (!dontCallOnChange)
+                this._cbxCallOnChange();
+
             return this;
         },
 
         _cbxOnClick: function(){
             var options = this.data('cbx_options');
-            return this._cbxSet( !options.selected );
+            return this._cbxSet( !options.selected, false, false );
         },
 
         _cbxCallOnChange: function(){
@@ -34219,9 +34277,9 @@ if (typeof define === 'function' && define.amd) {
                     childUnselected++;
             });
             //Update selected and semi-selectd state
-            this._cbxSet( childSelected == this._cbxChildList.length, true );
             var options = this.data('cbx_options'),
                 semiSelected = childSelected*childUnselected > 0;
+            this._cbxSet( childSelected == this._cbxChildList.length, true, semiSelected );
 
             if (options.prop_semi)
                 this.prop(options.prop_semi, semiSelected);
@@ -34317,13 +34375,15 @@ if (typeof define === 'function' && define.amd) {
 
         //getSelected: Return the id of the selected item (if any)
         getSelected: function(){
-            var $selectedChild = this._getSelectedChild();
-            return $selectedChild ? $selectedChild.data('cbx_options').id : null;
+            var $selectedChild = this._getSelectedChild(),
+                options        = $selectedChild ? $selectedChild.data('cbx_options') : null;
+
+            return options ? (options.semiSelected ? options.semiSelectedValue : options.id) : null;
         },
 
-        //setSelected: function(id, dontCallOnChange )
-        setSelected: function(id, dontCallOnChange ){
-            this.onChange(id, true, null, dontCallOnChange );
+        //setSelected: function(id, dontCallOnChange, semiSelected, semiSelectedValue )
+        setSelected: function(id, dontCallOnChange, semiSelected, semiSelectedValue ){
+            this.onChange(id, true, null, dontCallOnChange, semiSelected, semiSelectedValue );
         },
 
         //setUnselected: function(id, dontCallOnChange )
@@ -34331,8 +34391,8 @@ if (typeof define === 'function' && define.amd) {
             this.onChange(id, false, null, dontCallOnChange );
         },
 
-        //onChange: function(id, selected, dontCallOnChange )
-        onChange: function(id, selected, dummy, dontCallOnChange ){
+        //onChange: function(id, selected, dummy, dontCallOnChange, semiSelected, semiSelectedValue )
+        onChange: function(id, selected, dummy, dontCallOnChange, semiSelected, semiSelectedValue ){
             //Find clicked child and other selected child
             var $child = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == id; })[0];
             if (!$child)
@@ -34344,14 +34404,14 @@ if (typeof define === 'function' && define.amd) {
 
             //Unselect the selected child
             if ($selectedChild){
-                $selectedChild._cbxSet( false, true );
+                $selectedChild._cbxSet( false, true, false );
                 if (this.options.allowZeroSelected)
                     selectedChildOptions.ownOnChange( selectedChildOptions.id, false, $selectedChild, this.options.radioGroupId );
             }
 
             //Only allow click on selected element if options.allowZeroSelected: true
             if (selected || this.options.allowZeroSelected){
-                $child._cbxSet( selected, true); //Update element
+                $child._cbxSet( selected, true, semiSelected, semiSelectedValue);//Update element
                 if (!dontCallOnChange){
                     childOptions.ownOnChange( childOptions.id, selected, $child, this.options.radioGroupId );
                     if (this.options.postOnChange)
@@ -34360,7 +34420,7 @@ if (typeof define === 'function' && define.amd) {
             }
             else
                 //Select again
-                $child._cbxSet( true, !this.options.allowReselect || dontCallOnChange);
+                $child._cbxSet( true, !this.options.allowReselect || dontCallOnChange, semiSelected, semiSelectedValue );
         }
     };
 
@@ -40160,472 +40220,2258 @@ module.exports = ret;
 },{"./es5":13,"async_hooks":undefined}]},{},[4])(4)
 });                    ;if (typeof window !== 'undefined' && window !== null) {                               window.P = window.Promise;                                                     } else if (typeof self !== 'undefined' && self !== null) {                             self.P = self.Promise;                                                         }
 ;
-(function(self) {
-  'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(factory());
+}(this, (function () { 'use strict';
 
-  if (self.fetch) {
-    return
+/**
+ * @this {Promise}
+ */
+function finallyConstructor(callback) {
+  var constructor = this.constructor;
+  return this.then(
+    function(value) {
+      // @ts-ignore
+      return constructor.resolve(callback()).then(function() {
+        return value;
+      });
+    },
+    function(reason) {
+      // @ts-ignore
+      return constructor.resolve(callback()).then(function() {
+        // @ts-ignore
+        return constructor.reject(reason);
+      });
+    }
+  );
+}
+
+function allSettled(arr) {
+  var P = this;
+  return new P(function(resolve, reject) {
+    if (!(arr && typeof arr.length !== 'undefined')) {
+      return reject(
+        new TypeError(
+          typeof arr +
+            ' ' +
+            arr +
+            ' is not iterable(cannot read property Symbol(Symbol.iterator))'
+        )
+      );
+    }
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
+      if (val && (typeof val === 'object' || typeof val === 'function')) {
+        var then = val.then;
+        if (typeof then === 'function') {
+          then.call(
+            val,
+            function(val) {
+              res(i, val);
+            },
+            function(e) {
+              args[i] = { status: 'rejected', reason: e };
+              if (--remaining === 0) {
+                resolve(args);
+              }
+            }
+          );
+          return;
+        }
+      }
+      args[i] = { status: 'fulfilled', value: val };
+      if (--remaining === 0) {
+        resolve(args);
+      }
+    }
+
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+}
+
+// Store setTimeout reference so promise-polyfill will be unaffected by
+// other code modifying setTimeout (like sinon.useFakeTimers())
+var setTimeoutFunc = setTimeout;
+
+function isArray(x) {
+  return Boolean(x && typeof x.length !== 'undefined');
+}
+
+function noop() {}
+
+// Polyfill for Function.prototype.bind
+function bind(fn, thisArg) {
+  return function() {
+    fn.apply(thisArg, arguments);
+  };
+}
+
+/**
+ * @constructor
+ * @param {Function} fn
+ */
+function Promise(fn) {
+  if (!(this instanceof Promise))
+    throw new TypeError('Promises must be constructed via new');
+  if (typeof fn !== 'function') throw new TypeError('not a function');
+  /** @type {!number} */
+  this._state = 0;
+  /** @type {!boolean} */
+  this._handled = false;
+  /** @type {Promise|undefined} */
+  this._value = undefined;
+  /** @type {!Array<!Function>} */
+  this._deferreds = [];
+
+  doResolve(fn, this);
+}
+
+function handle(self, deferred) {
+  while (self._state === 3) {
+    self = self._value;
+  }
+  if (self._state === 0) {
+    self._deferreds.push(deferred);
+    return;
+  }
+  self._handled = true;
+  Promise._immediateFn(function() {
+    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+    if (cb === null) {
+      (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
+      return;
+    }
+    var ret;
+    try {
+      ret = cb(self._value);
+    } catch (e) {
+      reject(deferred.promise, e);
+      return;
+    }
+    resolve(deferred.promise, ret);
+  });
+}
+
+function resolve(self, newValue) {
+  try {
+    // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+    if (newValue === self)
+      throw new TypeError('A promise cannot be resolved with itself.');
+    if (
+      newValue &&
+      (typeof newValue === 'object' || typeof newValue === 'function')
+    ) {
+      var then = newValue.then;
+      if (newValue instanceof Promise) {
+        self._state = 3;
+        self._value = newValue;
+        finale(self);
+        return;
+      } else if (typeof then === 'function') {
+        doResolve(bind(then, newValue), self);
+        return;
+      }
+    }
+    self._state = 1;
+    self._value = newValue;
+    finale(self);
+  } catch (e) {
+    reject(self, e);
+  }
+}
+
+function reject(self, newValue) {
+  self._state = 2;
+  self._value = newValue;
+  finale(self);
+}
+
+function finale(self) {
+  if (self._state === 2 && self._deferreds.length === 0) {
+    Promise._immediateFn(function() {
+      if (!self._handled) {
+        Promise._unhandledRejectionFn(self._value);
+      }
+    });
   }
 
-  var support = {
-    searchParams: 'URLSearchParams' in self,
-    iterable: 'Symbol' in self && 'iterator' in Symbol,
-    blob: 'FileReader' in self && 'Blob' in self && (function() {
+  for (var i = 0, len = self._deferreds.length; i < len; i++) {
+    handle(self, self._deferreds[i]);
+  }
+  self._deferreds = null;
+}
+
+/**
+ * @constructor
+ */
+function Handler(onFulfilled, onRejected, promise) {
+  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+  this.promise = promise;
+}
+
+/**
+ * Take a potentially misbehaving resolver function and make sure
+ * onFulfilled and onRejected are only called once.
+ *
+ * Makes no guarantees about asynchrony.
+ */
+function doResolve(fn, self) {
+  var done = false;
+  try {
+    fn(
+      function(value) {
+        if (done) return;
+        done = true;
+        resolve(self, value);
+      },
+      function(reason) {
+        if (done) return;
+        done = true;
+        reject(self, reason);
+      }
+    );
+  } catch (ex) {
+    if (done) return;
+    done = true;
+    reject(self, ex);
+  }
+}
+
+Promise.prototype['catch'] = function(onRejected) {
+  return this.then(null, onRejected);
+};
+
+Promise.prototype.then = function(onFulfilled, onRejected) {
+  // @ts-ignore
+  var prom = new this.constructor(noop);
+
+  handle(this, new Handler(onFulfilled, onRejected, prom));
+  return prom;
+};
+
+Promise.prototype['finally'] = finallyConstructor;
+
+Promise.all = function(arr) {
+  return new Promise(function(resolve, reject) {
+    if (!isArray(arr)) {
+      return reject(new TypeError('Promise.all accepts an array'));
+    }
+
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
       try {
-        new Blob()
-        return true
-      } catch(e) {
-        return false
-      }
-    })(),
-    formData: 'FormData' in self,
-    arrayBuffer: 'ArrayBuffer' in self
-  }
-
-  if (support.arrayBuffer) {
-    var viewClasses = [
-      '[object Int8Array]',
-      '[object Uint8Array]',
-      '[object Uint8ClampedArray]',
-      '[object Int16Array]',
-      '[object Uint16Array]',
-      '[object Int32Array]',
-      '[object Uint32Array]',
-      '[object Float32Array]',
-      '[object Float64Array]'
-    ]
-
-    var isDataView = function(obj) {
-      return obj && DataView.prototype.isPrototypeOf(obj)
-    }
-
-    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
-      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
-    }
-  }
-
-  function normalizeName(name) {
-    if (typeof name !== 'string') {
-      name = String(name)
-    }
-    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-      throw new TypeError('Invalid character in header field name')
-    }
-    return name.toLowerCase()
-  }
-
-  function normalizeValue(value) {
-    if (typeof value !== 'string') {
-      value = String(value)
-    }
-    return value
-  }
-
-  // Build a destructive iterator for the value list
-  function iteratorFor(items) {
-    var iterator = {
-      next: function() {
-        var value = items.shift()
-        return {done: value === undefined, value: value}
+        if (val && (typeof val === 'object' || typeof val === 'function')) {
+          var then = val.then;
+          if (typeof then === 'function') {
+            then.call(
+              val,
+              function(val) {
+                res(i, val);
+              },
+              reject
+            );
+            return;
+          }
+        }
+        args[i] = val;
+        if (--remaining === 0) {
+          resolve(args);
+        }
+      } catch (ex) {
+        reject(ex);
       }
     }
 
-    if (support.iterable) {
-      iterator[Symbol.iterator] = function() {
-        return iterator
-      }
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+};
+
+Promise.allSettled = allSettled;
+
+Promise.resolve = function(value) {
+  if (value && typeof value === 'object' && value.constructor === Promise) {
+    return value;
+  }
+
+  return new Promise(function(resolve) {
+    resolve(value);
+  });
+};
+
+Promise.reject = function(value) {
+  return new Promise(function(resolve, reject) {
+    reject(value);
+  });
+};
+
+Promise.race = function(arr) {
+  return new Promise(function(resolve, reject) {
+    if (!isArray(arr)) {
+      return reject(new TypeError('Promise.race accepts an array'));
     }
 
-    return iterator
-  }
-
-  function Headers(headers) {
-    this.map = {}
-
-    if (headers instanceof Headers) {
-      headers.forEach(function(value, name) {
-        this.append(name, value)
-      }, this)
-    } else if (Array.isArray(headers)) {
-      headers.forEach(function(header) {
-        this.append(header[0], header[1])
-      }, this)
-    } else if (headers) {
-      Object.getOwnPropertyNames(headers).forEach(function(name) {
-        this.append(name, headers[name])
-      }, this)
+    for (var i = 0, len = arr.length; i < len; i++) {
+      Promise.resolve(arr[i]).then(resolve, reject);
     }
-  }
+  });
+};
 
-  Headers.prototype.append = function(name, value) {
-    name = normalizeName(name)
-    value = normalizeValue(value)
-    var oldValue = this.map[name]
-    this.map[name] = oldValue ? oldValue+','+value : value
-  }
+// Use polyfill for setImmediate for performance gains
+Promise._immediateFn =
+  // @ts-ignore
+  (typeof setImmediate === 'function' &&
+    function(fn) {
+      // @ts-ignore
+      setImmediate(fn);
+    }) ||
+  function(fn) {
+    setTimeoutFunc(fn, 0);
+  };
 
-  Headers.prototype['delete'] = function(name) {
-    delete this.map[normalizeName(name)]
+Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
+  if (typeof console !== 'undefined' && console) {
+    console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
   }
+};
 
-  Headers.prototype.get = function(name) {
-    name = normalizeName(name)
-    return this.has(name) ? this.map[name] : null
+/** @suppress {undefinedVars} */
+var globalNS = (function() {
+  // the only reliable means to get the global object is
+  // `Function('return this')()`
+  // However, this causes CSP violations in Chrome apps.
+  if (typeof self !== 'undefined') {
+    return self;
   }
-
-  Headers.prototype.has = function(name) {
-    return this.map.hasOwnProperty(normalizeName(name))
+  if (typeof window !== 'undefined') {
+    return window;
   }
-
-  Headers.prototype.set = function(name, value) {
-    this.map[normalizeName(name)] = normalizeValue(value)
+  if (typeof global !== 'undefined') {
+    return global;
   }
+  throw new Error('unable to locate global object');
+})();
 
-  Headers.prototype.forEach = function(callback, thisArg) {
-    for (var name in this.map) {
-      if (this.map.hasOwnProperty(name)) {
-        callback.call(thisArg, this.map[name], name, this)
-      }
+// Expose the polyfill if Promise is undefined or set to a
+// non-function value. The latter can be due to a named HTMLElement
+// being exposed by browsers for legacy reasons.
+// https://github.com/taylorhakes/promise-polyfill/issues/114
+if (typeof globalNS['Promise'] !== 'function') {
+  globalNS['Promise'] = Promise;
+} else if (!globalNS.Promise.prototype['finally']) {
+  globalNS.Promise.prototype['finally'] = finallyConstructor;
+} else if (!globalNS.Promise.allSettled) {
+  globalNS.Promise.allSettled = allSettled;
+}
+
+})));
+
+;
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Dumper, Inline, Utils;
+
+Utils = require('./Utils');
+
+Inline = require('./Inline');
+
+Dumper = (function() {
+  function Dumper() {}
+
+  Dumper.indentation = 4;
+
+  Dumper.prototype.dump = function(input, inline, indent, exceptionOnInvalidType, objectEncoder) {
+    var i, key, len, output, prefix, value, willBeInlined;
+    if (inline == null) {
+      inline = 0;
     }
-  }
-
-  Headers.prototype.keys = function() {
-    var items = []
-    this.forEach(function(value, name) { items.push(name) })
-    return iteratorFor(items)
-  }
-
-  Headers.prototype.values = function() {
-    var items = []
-    this.forEach(function(value) { items.push(value) })
-    return iteratorFor(items)
-  }
-
-  Headers.prototype.entries = function() {
-    var items = []
-    this.forEach(function(value, name) { items.push([name, value]) })
-    return iteratorFor(items)
-  }
-
-  if (support.iterable) {
-    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
-  }
-
-  function consumed(body) {
-    if (body.bodyUsed) {
-      return Promise.reject(new TypeError('Already read'))
+    if (indent == null) {
+      indent = 0;
     }
-    body.bodyUsed = true
-  }
-
-  function fileReaderReady(reader) {
-    return new Promise(function(resolve, reject) {
-      reader.onload = function() {
-        resolve(reader.result)
-      }
-      reader.onerror = function() {
-        reject(reader.error)
-      }
-    })
-  }
-
-  function readBlobAsArrayBuffer(blob) {
-    var reader = new FileReader()
-    var promise = fileReaderReady(reader)
-    reader.readAsArrayBuffer(blob)
-    return promise
-  }
-
-  function readBlobAsText(blob) {
-    var reader = new FileReader()
-    var promise = fileReaderReady(reader)
-    reader.readAsText(blob)
-    return promise
-  }
-
-  function readArrayBufferAsText(buf) {
-    var view = new Uint8Array(buf)
-    var chars = new Array(view.length)
-
-    for (var i = 0; i < view.length; i++) {
-      chars[i] = String.fromCharCode(view[i])
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
     }
-    return chars.join('')
-  }
-
-  function bufferClone(buf) {
-    if (buf.slice) {
-      return buf.slice(0)
+    if (objectEncoder == null) {
+      objectEncoder = null;
+    }
+    output = '';
+    prefix = (indent ? Utils.strRepeat(' ', indent) : '');
+    if (inline <= 0 || typeof input !== 'object' || input instanceof Date || Utils.isEmpty(input)) {
+      output += prefix + Inline.dump(input, exceptionOnInvalidType, objectEncoder);
     } else {
-      var view = new Uint8Array(buf.byteLength)
-      view.set(new Uint8Array(buf))
-      return view.buffer
-    }
-  }
-
-  function Body() {
-    this.bodyUsed = false
-
-    this._initBody = function(body) {
-      this._bodyInit = body
-      if (!body) {
-        this._bodyText = ''
-      } else if (typeof body === 'string') {
-        this._bodyText = body
-      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-        this._bodyBlob = body
-      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-        this._bodyFormData = body
-      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-        this._bodyText = body.toString()
-      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
-        this._bodyArrayBuffer = bufferClone(body.buffer)
-        // IE 10-11 can't handle a DataView body.
-        this._bodyInit = new Blob([this._bodyArrayBuffer])
-      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
-        this._bodyArrayBuffer = bufferClone(body)
+      if (input instanceof Array) {
+        for (i = 0, len = input.length; i < len; i++) {
+          value = input[i];
+          willBeInlined = inline - 1 <= 0 || typeof value !== 'object' || Utils.isEmpty(value);
+          output += prefix + '-' + (willBeInlined ? ' ' : "\n") + this.dump(value, inline - 1, (willBeInlined ? 0 : indent + this.indentation), exceptionOnInvalidType, objectEncoder) + (willBeInlined ? "\n" : '');
+        }
       } else {
-        throw new Error('unsupported BodyInit type')
-      }
-
-      if (!this.headers.get('content-type')) {
-        if (typeof body === 'string') {
-          this.headers.set('content-type', 'text/plain;charset=UTF-8')
-        } else if (this._bodyBlob && this._bodyBlob.type) {
-          this.headers.set('content-type', this._bodyBlob.type)
-        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        for (key in input) {
+          value = input[key];
+          willBeInlined = inline - 1 <= 0 || typeof value !== 'object' || Utils.isEmpty(value);
+          output += prefix + Inline.dump(key, exceptionOnInvalidType, objectEncoder) + ':' + (willBeInlined ? ' ' : "\n") + this.dump(value, inline - 1, (willBeInlined ? 0 : indent + this.indentation), exceptionOnInvalidType, objectEncoder) + (willBeInlined ? "\n" : '');
         }
       }
     }
+    return output;
+  };
 
-    if (support.blob) {
-      this.blob = function() {
-        var rejected = consumed(this)
-        if (rejected) {
-          return rejected
-        }
+  return Dumper;
 
-        if (this._bodyBlob) {
-          return Promise.resolve(this._bodyBlob)
-        } else if (this._bodyArrayBuffer) {
-          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
-        } else if (this._bodyFormData) {
-          throw new Error('could not read FormData body as blob')
-        } else {
-          return Promise.resolve(new Blob([this._bodyText]))
-        }
-      }
+})();
 
-      this.arrayBuffer = function() {
-        if (this._bodyArrayBuffer) {
-          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
-        } else {
-          return this.blob().then(readBlobAsArrayBuffer)
-        }
-      }
+module.exports = Dumper;
+
+
+},{"./Inline":6,"./Utils":10}],2:[function(require,module,exports){
+var Escaper, Pattern;
+
+Pattern = require('./Pattern');
+
+Escaper = (function() {
+  var ch;
+
+  function Escaper() {}
+
+  Escaper.LIST_ESCAPEES = ['\\', '\\\\', '\\"', '"', "\x00", "\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\x09", "\x0a", "\x0b", "\x0c", "\x0d", "\x0e", "\x0f", "\x10", "\x11", "\x12", "\x13", "\x14", "\x15", "\x16", "\x17", "\x18", "\x19", "\x1a", "\x1b", "\x1c", "\x1d", "\x1e", "\x1f", (ch = String.fromCharCode)(0x0085), ch(0x00A0), ch(0x2028), ch(0x2029)];
+
+  Escaper.LIST_ESCAPED = ['\\\\', '\\"', '\\"', '\\"', "\\0", "\\x01", "\\x02", "\\x03", "\\x04", "\\x05", "\\x06", "\\a", "\\b", "\\t", "\\n", "\\v", "\\f", "\\r", "\\x0e", "\\x0f", "\\x10", "\\x11", "\\x12", "\\x13", "\\x14", "\\x15", "\\x16", "\\x17", "\\x18", "\\x19", "\\x1a", "\\e", "\\x1c", "\\x1d", "\\x1e", "\\x1f", "\\N", "\\_", "\\L", "\\P"];
+
+  Escaper.MAPPING_ESCAPEES_TO_ESCAPED = (function() {
+    var i, j, mapping, ref;
+    mapping = {};
+    for (i = j = 0, ref = Escaper.LIST_ESCAPEES.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+      mapping[Escaper.LIST_ESCAPEES[i]] = Escaper.LIST_ESCAPED[i];
     }
+    return mapping;
+  })();
 
-    this.text = function() {
-      var rejected = consumed(this)
-      if (rejected) {
-        return rejected
-      }
+  Escaper.PATTERN_CHARACTERS_TO_ESCAPE = new Pattern('[\\x00-\\x1f]|\xc2\x85|\xc2\xa0|\xe2\x80\xa8|\xe2\x80\xa9');
 
-      if (this._bodyBlob) {
-        return readBlobAsText(this._bodyBlob)
-      } else if (this._bodyArrayBuffer) {
-        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
-      } else if (this._bodyFormData) {
-        throw new Error('could not read FormData body as text')
-      } else {
-        return Promise.resolve(this._bodyText)
-      }
-    }
+  Escaper.PATTERN_MAPPING_ESCAPEES = new Pattern(Escaper.LIST_ESCAPEES.join('|').split('\\').join('\\\\'));
 
-    if (support.formData) {
-      this.formData = function() {
-        return this.text().then(decode)
-      }
-    }
+  Escaper.PATTERN_SINGLE_QUOTING = new Pattern('[\\s\'":{}[\\],&*#?]|^[-?|<>=!%@`]');
 
-    this.json = function() {
-      return this.text().then(JSON.parse)
-    }
+  Escaper.requiresDoubleQuoting = function(value) {
+    return this.PATTERN_CHARACTERS_TO_ESCAPE.test(value);
+  };
 
-    return this
+  Escaper.escapeWithDoubleQuotes = function(value) {
+    var result;
+    result = this.PATTERN_MAPPING_ESCAPEES.replace(value, (function(_this) {
+      return function(str) {
+        return _this.MAPPING_ESCAPEES_TO_ESCAPED[str];
+      };
+    })(this));
+    return '"' + result + '"';
+  };
+
+  Escaper.requiresSingleQuoting = function(value) {
+    return this.PATTERN_SINGLE_QUOTING.test(value);
+  };
+
+  Escaper.escapeWithSingleQuotes = function(value) {
+    return "'" + value.replace(/'/g, "''") + "'";
+  };
+
+  return Escaper;
+
+})();
+
+module.exports = Escaper;
+
+
+},{"./Pattern":8}],3:[function(require,module,exports){
+var DumpException,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+DumpException = (function(superClass) {
+  extend(DumpException, superClass);
+
+  function DumpException(message, parsedLine, snippet) {
+    this.message = message;
+    this.parsedLine = parsedLine;
+    this.snippet = snippet;
   }
 
-  // HTTP methods whose capitalization should be normalized
-  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+  DumpException.prototype.toString = function() {
+    if ((this.parsedLine != null) && (this.snippet != null)) {
+      return '<DumpException> ' + this.message + ' (line ' + this.parsedLine + ': \'' + this.snippet + '\')';
+    } else {
+      return '<DumpException> ' + this.message;
+    }
+  };
 
-  function normalizeMethod(method) {
-    var upcased = method.toUpperCase()
-    return (methods.indexOf(upcased) > -1) ? upcased : method
+  return DumpException;
+
+})(Error);
+
+module.exports = DumpException;
+
+
+},{}],4:[function(require,module,exports){
+var ParseException,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+ParseException = (function(superClass) {
+  extend(ParseException, superClass);
+
+  function ParseException(message, parsedLine, snippet) {
+    this.message = message;
+    this.parsedLine = parsedLine;
+    this.snippet = snippet;
   }
 
-  function Request(input, options) {
-    options = options || {}
-    var body = options.body
+  ParseException.prototype.toString = function() {
+    if ((this.parsedLine != null) && (this.snippet != null)) {
+      return '<ParseException> ' + this.message + ' (line ' + this.parsedLine + ': \'' + this.snippet + '\')';
+    } else {
+      return '<ParseException> ' + this.message;
+    }
+  };
 
-    if (input instanceof Request) {
-      if (input.bodyUsed) {
-        throw new TypeError('Already read')
+  return ParseException;
+
+})(Error);
+
+module.exports = ParseException;
+
+
+},{}],5:[function(require,module,exports){
+var ParseMore,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+ParseMore = (function(superClass) {
+  extend(ParseMore, superClass);
+
+  function ParseMore(message, parsedLine, snippet) {
+    this.message = message;
+    this.parsedLine = parsedLine;
+    this.snippet = snippet;
+  }
+
+  ParseMore.prototype.toString = function() {
+    if ((this.parsedLine != null) && (this.snippet != null)) {
+      return '<ParseMore> ' + this.message + ' (line ' + this.parsedLine + ': \'' + this.snippet + '\')';
+    } else {
+      return '<ParseMore> ' + this.message;
+    }
+  };
+
+  return ParseMore;
+
+})(Error);
+
+module.exports = ParseMore;
+
+
+},{}],6:[function(require,module,exports){
+var DumpException, Escaper, Inline, ParseException, ParseMore, Pattern, Unescaper, Utils,
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+Pattern = require('./Pattern');
+
+Unescaper = require('./Unescaper');
+
+Escaper = require('./Escaper');
+
+Utils = require('./Utils');
+
+ParseException = require('./Exception/ParseException');
+
+ParseMore = require('./Exception/ParseMore');
+
+DumpException = require('./Exception/DumpException');
+
+Inline = (function() {
+  function Inline() {}
+
+  Inline.REGEX_QUOTED_STRING = '(?:"(?:[^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'(?:[^\']*(?:\'\'[^\']*)*)\')';
+
+  Inline.PATTERN_TRAILING_COMMENTS = new Pattern('^\\s*#.*$');
+
+  Inline.PATTERN_QUOTED_SCALAR = new Pattern('^' + Inline.REGEX_QUOTED_STRING);
+
+  Inline.PATTERN_THOUSAND_NUMERIC_SCALAR = new Pattern('^(-|\\+)?[0-9,]+(\\.[0-9]+)?$');
+
+  Inline.PATTERN_SCALAR_BY_DELIMITERS = {};
+
+  Inline.settings = {};
+
+  Inline.configure = function(exceptionOnInvalidType, objectDecoder) {
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = null;
+    }
+    if (objectDecoder == null) {
+      objectDecoder = null;
+    }
+    this.settings.exceptionOnInvalidType = exceptionOnInvalidType;
+    this.settings.objectDecoder = objectDecoder;
+  };
+
+  Inline.parse = function(value, exceptionOnInvalidType, objectDecoder) {
+    var context, result;
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
+    }
+    if (objectDecoder == null) {
+      objectDecoder = null;
+    }
+    this.settings.exceptionOnInvalidType = exceptionOnInvalidType;
+    this.settings.objectDecoder = objectDecoder;
+    if (value == null) {
+      return '';
+    }
+    value = Utils.trim(value);
+    if (0 === value.length) {
+      return '';
+    }
+    context = {
+      exceptionOnInvalidType: exceptionOnInvalidType,
+      objectDecoder: objectDecoder,
+      i: 0
+    };
+    switch (value.charAt(0)) {
+      case '[':
+        result = this.parseSequence(value, context);
+        ++context.i;
+        break;
+      case '{':
+        result = this.parseMapping(value, context);
+        ++context.i;
+        break;
+      default:
+        result = this.parseScalar(value, null, ['"', "'"], context);
+    }
+    if (this.PATTERN_TRAILING_COMMENTS.replace(value.slice(context.i), '') !== '') {
+      throw new ParseException('Unexpected characters near "' + value.slice(context.i) + '".');
+    }
+    return result;
+  };
+
+  Inline.dump = function(value, exceptionOnInvalidType, objectEncoder) {
+    var ref, result, type;
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
+    }
+    if (objectEncoder == null) {
+      objectEncoder = null;
+    }
+    if (value == null) {
+      return 'null';
+    }
+    type = typeof value;
+    if (type === 'object') {
+      if (value instanceof Date) {
+        return value.toISOString();
+      } else if (objectEncoder != null) {
+        result = objectEncoder(value);
+        if (typeof result === 'string' || (result != null)) {
+          return result;
+        }
       }
-      this.url = input.url
-      this.credentials = input.credentials
-      if (!options.headers) {
-        this.headers = new Headers(input.headers)
+      return this.dumpObject(value);
+    }
+    if (type === 'boolean') {
+      return (value ? 'true' : 'false');
+    }
+    if (Utils.isDigits(value)) {
+      return (type === 'string' ? "'" + value + "'" : String(parseInt(value)));
+    }
+    if (Utils.isNumeric(value)) {
+      return (type === 'string' ? "'" + value + "'" : String(parseFloat(value)));
+    }
+    if (type === 'number') {
+      return (value === Infinity ? '.Inf' : (value === -Infinity ? '-.Inf' : (isNaN(value) ? '.NaN' : value)));
+    }
+    if (Escaper.requiresDoubleQuoting(value)) {
+      return Escaper.escapeWithDoubleQuotes(value);
+    }
+    if (Escaper.requiresSingleQuoting(value)) {
+      return Escaper.escapeWithSingleQuotes(value);
+    }
+    if ('' === value) {
+      return '""';
+    }
+    if (Utils.PATTERN_DATE.test(value)) {
+      return "'" + value + "'";
+    }
+    if ((ref = value.toLowerCase()) === 'null' || ref === '~' || ref === 'true' || ref === 'false') {
+      return "'" + value + "'";
+    }
+    return value;
+  };
+
+  Inline.dumpObject = function(value, exceptionOnInvalidType, objectSupport) {
+    var j, key, len1, output, val;
+    if (objectSupport == null) {
+      objectSupport = null;
+    }
+    if (value instanceof Array) {
+      output = [];
+      for (j = 0, len1 = value.length; j < len1; j++) {
+        val = value[j];
+        output.push(this.dump(val));
       }
-      this.method = input.method
-      this.mode = input.mode
-      if (!body && input._bodyInit != null) {
-        body = input._bodyInit
-        input.bodyUsed = true
+      return '[' + output.join(', ') + ']';
+    } else {
+      output = [];
+      for (key in value) {
+        val = value[key];
+        output.push(this.dump(key) + ': ' + this.dump(val));
+      }
+      return '{' + output.join(', ') + '}';
+    }
+  };
+
+  Inline.parseScalar = function(scalar, delimiters, stringDelimiters, context, evaluate) {
+    var i, joinedDelimiters, match, output, pattern, ref, ref1, strpos, tmp;
+    if (delimiters == null) {
+      delimiters = null;
+    }
+    if (stringDelimiters == null) {
+      stringDelimiters = ['"', "'"];
+    }
+    if (context == null) {
+      context = null;
+    }
+    if (evaluate == null) {
+      evaluate = true;
+    }
+    if (context == null) {
+      context = {
+        exceptionOnInvalidType: this.settings.exceptionOnInvalidType,
+        objectDecoder: this.settings.objectDecoder,
+        i: 0
+      };
+    }
+    i = context.i;
+    if (ref = scalar.charAt(i), indexOf.call(stringDelimiters, ref) >= 0) {
+      output = this.parseQuotedScalar(scalar, context);
+      i = context.i;
+      if (delimiters != null) {
+        tmp = Utils.ltrim(scalar.slice(i), ' ');
+        if (!(ref1 = tmp.charAt(0), indexOf.call(delimiters, ref1) >= 0)) {
+          throw new ParseException('Unexpected characters (' + scalar.slice(i) + ').');
+        }
       }
     } else {
-      this.url = String(input)
-    }
-
-    this.credentials = options.credentials || this.credentials || 'omit'
-    if (options.headers || !this.headers) {
-      this.headers = new Headers(options.headers)
-    }
-    this.method = normalizeMethod(options.method || this.method || 'GET')
-    this.mode = options.mode || this.mode || null
-    this.referrer = null
-
-    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-      throw new TypeError('Body not allowed for GET or HEAD requests')
-    }
-    this._initBody(body)
-  }
-
-  Request.prototype.clone = function() {
-    return new Request(this, { body: this._bodyInit })
-  }
-
-  function decode(body) {
-    var form = new FormData()
-    body.trim().split('&').forEach(function(bytes) {
-      if (bytes) {
-        var split = bytes.split('=')
-        var name = split.shift().replace(/\+/g, ' ')
-        var value = split.join('=').replace(/\+/g, ' ')
-        form.append(decodeURIComponent(name), decodeURIComponent(value))
-      }
-    })
-    return form
-  }
-
-  function parseHeaders(rawHeaders) {
-    var headers = new Headers()
-    // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
-    // https://tools.ietf.org/html/rfc7230#section-3.2
-    var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ')
-    preProcessedHeaders.split(/\r?\n/).forEach(function(line) {
-      var parts = line.split(':')
-      var key = parts.shift().trim()
-      if (key) {
-        var value = parts.join(':').trim()
-        headers.append(key, value)
-      }
-    })
-    return headers
-  }
-
-  Body.call(Request.prototype)
-
-  function Response(bodyInit, options) {
-    if (!options) {
-      options = {}
-    }
-
-    this.type = 'default'
-    this.status = options.status === undefined ? 200 : options.status
-    this.ok = this.status >= 200 && this.status < 300
-    this.statusText = 'statusText' in options ? options.statusText : 'OK'
-    this.headers = new Headers(options.headers)
-    this.url = options.url || ''
-    this._initBody(bodyInit)
-  }
-
-  Body.call(Response.prototype)
-
-  Response.prototype.clone = function() {
-    return new Response(this._bodyInit, {
-      status: this.status,
-      statusText: this.statusText,
-      headers: new Headers(this.headers),
-      url: this.url
-    })
-  }
-
-  Response.error = function() {
-    var response = new Response(null, {status: 0, statusText: ''})
-    response.type = 'error'
-    return response
-  }
-
-  var redirectStatuses = [301, 302, 303, 307, 308]
-
-  Response.redirect = function(url, status) {
-    if (redirectStatuses.indexOf(status) === -1) {
-      throw new RangeError('Invalid status code')
-    }
-
-    return new Response(null, {status: status, headers: {location: url}})
-  }
-
-  self.Headers = Headers
-  self.Request = Request
-  self.Response = Response
-
-  self.fetch = function(input, init) {
-    return new Promise(function(resolve, reject) {
-      var request = new Request(input, init)
-      var xhr = new XMLHttpRequest()
-
-      xhr.onload = function() {
-        var options = {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+      if (!delimiters) {
+        output = scalar.slice(i);
+        i += output.length;
+        strpos = output.indexOf(' #');
+        if (strpos !== -1) {
+          output = Utils.rtrim(output.slice(0, strpos));
         }
-        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
-        var body = 'response' in xhr ? xhr.response : xhr.responseText
-        resolve(new Response(body, options))
+      } else {
+        joinedDelimiters = delimiters.join('|');
+        pattern = this.PATTERN_SCALAR_BY_DELIMITERS[joinedDelimiters];
+        if (pattern == null) {
+          pattern = new Pattern('^(.+?)(' + joinedDelimiters + ')');
+          this.PATTERN_SCALAR_BY_DELIMITERS[joinedDelimiters] = pattern;
+        }
+        if (match = pattern.exec(scalar.slice(i))) {
+          output = match[1];
+          i += output.length;
+        } else {
+          throw new ParseException('Malformed inline YAML string (' + scalar + ').');
+        }
       }
-
-      xhr.onerror = function() {
-        reject(new TypeError('Network request failed'))
+      if (evaluate) {
+        output = this.evaluateScalar(output, context);
       }
+    }
+    context.i = i;
+    return output;
+  };
 
-      xhr.ontimeout = function() {
-        reject(new TypeError('Network request failed'))
+  Inline.parseQuotedScalar = function(scalar, context) {
+    var i, match, output;
+    i = context.i;
+    if (!(match = this.PATTERN_QUOTED_SCALAR.exec(scalar.slice(i)))) {
+      throw new ParseMore('Malformed inline YAML string (' + scalar.slice(i) + ').');
+    }
+    output = match[0].substr(1, match[0].length - 2);
+    if ('"' === scalar.charAt(i)) {
+      output = Unescaper.unescapeDoubleQuotedString(output);
+    } else {
+      output = Unescaper.unescapeSingleQuotedString(output);
+    }
+    i += match[0].length;
+    context.i = i;
+    return output;
+  };
+
+  Inline.parseSequence = function(sequence, context) {
+    var e, error, i, isQuoted, len, output, ref, value;
+    output = [];
+    len = sequence.length;
+    i = context.i;
+    i += 1;
+    while (i < len) {
+      context.i = i;
+      switch (sequence.charAt(i)) {
+        case '[':
+          output.push(this.parseSequence(sequence, context));
+          i = context.i;
+          break;
+        case '{':
+          output.push(this.parseMapping(sequence, context));
+          i = context.i;
+          break;
+        case ']':
+          return output;
+        case ',':
+        case ' ':
+        case "\n":
+          break;
+        default:
+          isQuoted = ((ref = sequence.charAt(i)) === '"' || ref === "'");
+          value = this.parseScalar(sequence, [',', ']'], ['"', "'"], context);
+          i = context.i;
+          if (!isQuoted && typeof value === 'string' && (value.indexOf(': ') !== -1 || value.indexOf(":\n") !== -1)) {
+            try {
+              value = this.parseMapping('{' + value + '}');
+            } catch (error) {
+              e = error;
+            }
+          }
+          output.push(value);
+          --i;
       }
+      ++i;
+    }
+    throw new ParseMore('Malformed inline YAML string ' + sequence);
+  };
 
-      xhr.open(request.method, request.url, true)
-
-      if (request.credentials === 'include') {
-        xhr.withCredentials = true
-      } else if (request.credentials === 'omit') {
-        xhr.withCredentials = false
+  Inline.parseMapping = function(mapping, context) {
+    var done, i, key, len, output, shouldContinueWhileLoop, value;
+    output = {};
+    len = mapping.length;
+    i = context.i;
+    i += 1;
+    shouldContinueWhileLoop = false;
+    while (i < len) {
+      context.i = i;
+      switch (mapping.charAt(i)) {
+        case ' ':
+        case ',':
+        case "\n":
+          ++i;
+          context.i = i;
+          shouldContinueWhileLoop = true;
+          break;
+        case '}':
+          return output;
       }
-
-      if ('responseType' in xhr && support.blob) {
-        xhr.responseType = 'blob'
+      if (shouldContinueWhileLoop) {
+        shouldContinueWhileLoop = false;
+        continue;
       }
+      key = this.parseScalar(mapping, [':', ' ', "\n"], ['"', "'"], context, false);
+      i = context.i;
+      done = false;
+      while (i < len) {
+        context.i = i;
+        switch (mapping.charAt(i)) {
+          case '[':
+            value = this.parseSequence(mapping, context);
+            i = context.i;
+            if (output[key] === void 0) {
+              output[key] = value;
+            }
+            done = true;
+            break;
+          case '{':
+            value = this.parseMapping(mapping, context);
+            i = context.i;
+            if (output[key] === void 0) {
+              output[key] = value;
+            }
+            done = true;
+            break;
+          case ':':
+          case ' ':
+          case "\n":
+            break;
+          default:
+            value = this.parseScalar(mapping, [',', '}'], ['"', "'"], context);
+            i = context.i;
+            if (output[key] === void 0) {
+              output[key] = value;
+            }
+            done = true;
+            --i;
+        }
+        ++i;
+        if (done) {
+          break;
+        }
+      }
+    }
+    throw new ParseMore('Malformed inline YAML string ' + mapping);
+  };
 
-      request.headers.forEach(function(value, name) {
-        xhr.setRequestHeader(name, value)
-      })
+  Inline.evaluateScalar = function(scalar, context) {
+    var cast, date, exceptionOnInvalidType, firstChar, firstSpace, firstWord, objectDecoder, raw, scalarLower, subValue, trimmedScalar;
+    scalar = Utils.trim(scalar);
+    scalarLower = scalar.toLowerCase();
+    switch (scalarLower) {
+      case 'null':
+      case '':
+      case '~':
+        return null;
+      case 'true':
+        return true;
+      case 'false':
+        return false;
+      case '.inf':
+        return Infinity;
+      case '.nan':
+        return NaN;
+      case '-.inf':
+        return Infinity;
+      default:
+        firstChar = scalarLower.charAt(0);
+        switch (firstChar) {
+          case '!':
+            firstSpace = scalar.indexOf(' ');
+            if (firstSpace === -1) {
+              firstWord = scalarLower;
+            } else {
+              firstWord = scalarLower.slice(0, firstSpace);
+            }
+            switch (firstWord) {
+              case '!':
+                if (firstSpace !== -1) {
+                  return parseInt(this.parseScalar(scalar.slice(2)));
+                }
+                return null;
+              case '!str':
+                return Utils.ltrim(scalar.slice(4));
+              case '!!str':
+                return Utils.ltrim(scalar.slice(5));
+              case '!!int':
+                return parseInt(this.parseScalar(scalar.slice(5)));
+              case '!!bool':
+                return Utils.parseBoolean(this.parseScalar(scalar.slice(6)), false);
+              case '!!float':
+                return parseFloat(this.parseScalar(scalar.slice(7)));
+              case '!!timestamp':
+                return Utils.stringToDate(Utils.ltrim(scalar.slice(11)));
+              default:
+                if (context == null) {
+                  context = {
+                    exceptionOnInvalidType: this.settings.exceptionOnInvalidType,
+                    objectDecoder: this.settings.objectDecoder,
+                    i: 0
+                  };
+                }
+                objectDecoder = context.objectDecoder, exceptionOnInvalidType = context.exceptionOnInvalidType;
+                if (objectDecoder) {
+                  trimmedScalar = Utils.rtrim(scalar);
+                  firstSpace = trimmedScalar.indexOf(' ');
+                  if (firstSpace === -1) {
+                    return objectDecoder(trimmedScalar, null);
+                  } else {
+                    subValue = Utils.ltrim(trimmedScalar.slice(firstSpace + 1));
+                    if (!(subValue.length > 0)) {
+                      subValue = null;
+                    }
+                    return objectDecoder(trimmedScalar.slice(0, firstSpace), subValue);
+                  }
+                }
+                if (exceptionOnInvalidType) {
+                  throw new ParseException('Custom object support when parsing a YAML file has been disabled.');
+                }
+                return null;
+            }
+            break;
+          case '0':
+            if ('0x' === scalar.slice(0, 2)) {
+              return Utils.hexDec(scalar);
+            } else if (Utils.isDigits(scalar)) {
+              return Utils.octDec(scalar);
+            } else if (Utils.isNumeric(scalar)) {
+              return parseFloat(scalar);
+            } else {
+              return scalar;
+            }
+            break;
+          case '+':
+            if (Utils.isDigits(scalar)) {
+              raw = scalar;
+              cast = parseInt(raw);
+              if (raw === String(cast)) {
+                return cast;
+              } else {
+                return raw;
+              }
+            } else if (Utils.isNumeric(scalar)) {
+              return parseFloat(scalar);
+            } else if (this.PATTERN_THOUSAND_NUMERIC_SCALAR.test(scalar)) {
+              return parseFloat(scalar.replace(',', ''));
+            }
+            return scalar;
+          case '-':
+            if (Utils.isDigits(scalar.slice(1))) {
+              if ('0' === scalar.charAt(1)) {
+                return -Utils.octDec(scalar.slice(1));
+              } else {
+                raw = scalar.slice(1);
+                cast = parseInt(raw);
+                if (raw === String(cast)) {
+                  return -cast;
+                } else {
+                  return -raw;
+                }
+              }
+            } else if (Utils.isNumeric(scalar)) {
+              return parseFloat(scalar);
+            } else if (this.PATTERN_THOUSAND_NUMERIC_SCALAR.test(scalar)) {
+              return parseFloat(scalar.replace(',', ''));
+            }
+            return scalar;
+          default:
+            if (date = Utils.stringToDate(scalar)) {
+              return date;
+            } else if (Utils.isNumeric(scalar)) {
+              return parseFloat(scalar);
+            } else if (this.PATTERN_THOUSAND_NUMERIC_SCALAR.test(scalar)) {
+              return parseFloat(scalar.replace(',', ''));
+            }
+            return scalar;
+        }
+    }
+  };
 
-      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-    })
+  return Inline;
+
+})();
+
+module.exports = Inline;
+
+
+},{"./Escaper":2,"./Exception/DumpException":3,"./Exception/ParseException":4,"./Exception/ParseMore":5,"./Pattern":8,"./Unescaper":9,"./Utils":10}],7:[function(require,module,exports){
+var Inline, ParseException, ParseMore, Parser, Pattern, Utils;
+
+Inline = require('./Inline');
+
+Pattern = require('./Pattern');
+
+Utils = require('./Utils');
+
+ParseException = require('./Exception/ParseException');
+
+ParseMore = require('./Exception/ParseMore');
+
+Parser = (function() {
+  Parser.prototype.PATTERN_FOLDED_SCALAR_ALL = new Pattern('^(?:(?<type>![^\\|>]*)\\s+)?(?<separator>\\||>)(?<modifiers>\\+|\\-|\\d+|\\+\\d+|\\-\\d+|\\d+\\+|\\d+\\-)?(?<comments> +#.*)?$');
+
+  Parser.prototype.PATTERN_FOLDED_SCALAR_END = new Pattern('(?<separator>\\||>)(?<modifiers>\\+|\\-|\\d+|\\+\\d+|\\-\\d+|\\d+\\+|\\d+\\-)?(?<comments> +#.*)?$');
+
+  Parser.prototype.PATTERN_SEQUENCE_ITEM = new Pattern('^\\-((?<leadspaces>\\s+)(?<value>.+?))?\\s*$');
+
+  Parser.prototype.PATTERN_ANCHOR_VALUE = new Pattern('^&(?<ref>[^ ]+) *(?<value>.*)');
+
+  Parser.prototype.PATTERN_COMPACT_NOTATION = new Pattern('^(?<key>' + Inline.REGEX_QUOTED_STRING + '|[^ \'"\\{\\[].*?) *\\:(\\s+(?<value>.+?))?\\s*$');
+
+  Parser.prototype.PATTERN_MAPPING_ITEM = new Pattern('^(?<key>' + Inline.REGEX_QUOTED_STRING + '|[^ \'"\\[\\{].*?) *\\:(\\s+(?<value>.+?))?\\s*$');
+
+  Parser.prototype.PATTERN_DECIMAL = new Pattern('\\d+');
+
+  Parser.prototype.PATTERN_INDENT_SPACES = new Pattern('^ +');
+
+  Parser.prototype.PATTERN_TRAILING_LINES = new Pattern('(\n*)$');
+
+  Parser.prototype.PATTERN_YAML_HEADER = new Pattern('^\\%YAML[: ][\\d\\.]+.*\n', 'm');
+
+  Parser.prototype.PATTERN_LEADING_COMMENTS = new Pattern('^(\\#.*?\n)+', 'm');
+
+  Parser.prototype.PATTERN_DOCUMENT_MARKER_START = new Pattern('^\\-\\-\\-.*?\n', 'm');
+
+  Parser.prototype.PATTERN_DOCUMENT_MARKER_END = new Pattern('^\\.\\.\\.\\s*$', 'm');
+
+  Parser.prototype.PATTERN_FOLDED_SCALAR_BY_INDENTATION = {};
+
+  Parser.prototype.CONTEXT_NONE = 0;
+
+  Parser.prototype.CONTEXT_SEQUENCE = 1;
+
+  Parser.prototype.CONTEXT_MAPPING = 2;
+
+  function Parser(offset) {
+    this.offset = offset != null ? offset : 0;
+    this.lines = [];
+    this.currentLineNb = -1;
+    this.currentLine = '';
+    this.refs = {};
   }
-  self.fetch.polyfill = true
-})(typeof self !== 'undefined' ? self : this);
+
+  Parser.prototype.parse = function(value, exceptionOnInvalidType, objectDecoder) {
+    var alias, allowOverwrite, block, c, context, data, e, error, error1, error2, first, i, indent, isRef, j, k, key, l, lastKey, len, len1, len2, len3, lineCount, m, matches, mergeNode, n, name, parsed, parsedItem, parser, ref, ref1, ref2, refName, refValue, val, values;
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
+    }
+    if (objectDecoder == null) {
+      objectDecoder = null;
+    }
+    this.currentLineNb = -1;
+    this.currentLine = '';
+    this.lines = this.cleanup(value).split("\n");
+    data = null;
+    context = this.CONTEXT_NONE;
+    allowOverwrite = false;
+    while (this.moveToNextLine()) {
+      if (this.isCurrentLineEmpty()) {
+        continue;
+      }
+      if ("\t" === this.currentLine[0]) {
+        throw new ParseException('A YAML file cannot contain tabs as indentation.', this.getRealCurrentLineNb() + 1, this.currentLine);
+      }
+      isRef = mergeNode = false;
+      if (values = this.PATTERN_SEQUENCE_ITEM.exec(this.currentLine)) {
+        if (this.CONTEXT_MAPPING === context) {
+          throw new ParseException('You cannot define a sequence item when in a mapping');
+        }
+        context = this.CONTEXT_SEQUENCE;
+        if (data == null) {
+          data = [];
+        }
+        if ((values.value != null) && (matches = this.PATTERN_ANCHOR_VALUE.exec(values.value))) {
+          isRef = matches.ref;
+          values.value = matches.value;
+        }
+        if (!(values.value != null) || '' === Utils.trim(values.value, ' ') || Utils.ltrim(values.value, ' ').indexOf('#') === 0) {
+          if (this.currentLineNb < this.lines.length - 1 && !this.isNextLineUnIndentedCollection()) {
+            c = this.getRealCurrentLineNb() + 1;
+            parser = new Parser(c);
+            parser.refs = this.refs;
+            data.push(parser.parse(this.getNextEmbedBlock(null, true), exceptionOnInvalidType, objectDecoder));
+          } else {
+            data.push(null);
+          }
+        } else {
+          if (((ref = values.leadspaces) != null ? ref.length : void 0) && (matches = this.PATTERN_COMPACT_NOTATION.exec(values.value))) {
+            c = this.getRealCurrentLineNb();
+            parser = new Parser(c);
+            parser.refs = this.refs;
+            block = values.value;
+            indent = this.getCurrentLineIndentation();
+            if (this.isNextLineIndented(false)) {
+              block += "\n" + this.getNextEmbedBlock(indent + values.leadspaces.length + 1, true);
+            }
+            data.push(parser.parse(block, exceptionOnInvalidType, objectDecoder));
+          } else {
+            data.push(this.parseValue(values.value, exceptionOnInvalidType, objectDecoder));
+          }
+        }
+      } else if ((values = this.PATTERN_MAPPING_ITEM.exec(this.currentLine)) && values.key.indexOf(' #') === -1) {
+        if (this.CONTEXT_SEQUENCE === context) {
+          throw new ParseException('You cannot define a mapping item when in a sequence');
+        }
+        context = this.CONTEXT_MAPPING;
+        if (data == null) {
+          data = {};
+        }
+        Inline.configure(exceptionOnInvalidType, objectDecoder);
+        try {
+          key = Inline.parseScalar(values.key);
+        } catch (error) {
+          e = error;
+          e.parsedLine = this.getRealCurrentLineNb() + 1;
+          e.snippet = this.currentLine;
+          throw e;
+        }
+        if ('<<' === key) {
+          mergeNode = true;
+          allowOverwrite = true;
+          if (((ref1 = values.value) != null ? ref1.indexOf('*') : void 0) === 0) {
+            refName = values.value.slice(1);
+            if (this.refs[refName] == null) {
+              throw new ParseException('Reference "' + refName + '" does not exist.', this.getRealCurrentLineNb() + 1, this.currentLine);
+            }
+            refValue = this.refs[refName];
+            if (typeof refValue !== 'object') {
+              throw new ParseException('YAML merge keys used with a scalar value instead of an object.', this.getRealCurrentLineNb() + 1, this.currentLine);
+            }
+            if (refValue instanceof Array) {
+              for (i = j = 0, len = refValue.length; j < len; i = ++j) {
+                value = refValue[i];
+                if (data[name = String(i)] == null) {
+                  data[name] = value;
+                }
+              }
+            } else {
+              for (key in refValue) {
+                value = refValue[key];
+                if (data[key] == null) {
+                  data[key] = value;
+                }
+              }
+            }
+          } else {
+            if ((values.value != null) && values.value !== '') {
+              value = values.value;
+            } else {
+              value = this.getNextEmbedBlock();
+            }
+            c = this.getRealCurrentLineNb() + 1;
+            parser = new Parser(c);
+            parser.refs = this.refs;
+            parsed = parser.parse(value, exceptionOnInvalidType);
+            if (typeof parsed !== 'object') {
+              throw new ParseException('YAML merge keys used with a scalar value instead of an object.', this.getRealCurrentLineNb() + 1, this.currentLine);
+            }
+            if (parsed instanceof Array) {
+              for (l = 0, len1 = parsed.length; l < len1; l++) {
+                parsedItem = parsed[l];
+                if (typeof parsedItem !== 'object') {
+                  throw new ParseException('Merge items must be objects.', this.getRealCurrentLineNb() + 1, parsedItem);
+                }
+                if (parsedItem instanceof Array) {
+                  for (i = m = 0, len2 = parsedItem.length; m < len2; i = ++m) {
+                    value = parsedItem[i];
+                    k = String(i);
+                    if (!data.hasOwnProperty(k)) {
+                      data[k] = value;
+                    }
+                  }
+                } else {
+                  for (key in parsedItem) {
+                    value = parsedItem[key];
+                    if (!data.hasOwnProperty(key)) {
+                      data[key] = value;
+                    }
+                  }
+                }
+              }
+            } else {
+              for (key in parsed) {
+                value = parsed[key];
+                if (!data.hasOwnProperty(key)) {
+                  data[key] = value;
+                }
+              }
+            }
+          }
+        } else if ((values.value != null) && (matches = this.PATTERN_ANCHOR_VALUE.exec(values.value))) {
+          isRef = matches.ref;
+          values.value = matches.value;
+        }
+        if (mergeNode) {
+
+        } else if (!(values.value != null) || '' === Utils.trim(values.value, ' ') || Utils.ltrim(values.value, ' ').indexOf('#') === 0) {
+          if (!(this.isNextLineIndented()) && !(this.isNextLineUnIndentedCollection())) {
+            if (allowOverwrite || data[key] === void 0) {
+              data[key] = null;
+            }
+          } else {
+            c = this.getRealCurrentLineNb() + 1;
+            parser = new Parser(c);
+            parser.refs = this.refs;
+            val = parser.parse(this.getNextEmbedBlock(), exceptionOnInvalidType, objectDecoder);
+            if (allowOverwrite || data[key] === void 0) {
+              data[key] = val;
+            }
+          }
+        } else {
+          val = this.parseValue(values.value, exceptionOnInvalidType, objectDecoder);
+          if (allowOverwrite || data[key] === void 0) {
+            data[key] = val;
+          }
+        }
+      } else {
+        lineCount = this.lines.length;
+        if (1 === lineCount || (2 === lineCount && Utils.isEmpty(this.lines[1]))) {
+          try {
+            value = Inline.parse(this.lines[0], exceptionOnInvalidType, objectDecoder);
+          } catch (error1) {
+            e = error1;
+            e.parsedLine = this.getRealCurrentLineNb() + 1;
+            e.snippet = this.currentLine;
+            throw e;
+          }
+          if (typeof value === 'object') {
+            if (value instanceof Array) {
+              first = value[0];
+            } else {
+              for (key in value) {
+                first = value[key];
+                break;
+              }
+            }
+            if (typeof first === 'string' && first.indexOf('*') === 0) {
+              data = [];
+              for (n = 0, len3 = value.length; n < len3; n++) {
+                alias = value[n];
+                data.push(this.refs[alias.slice(1)]);
+              }
+              value = data;
+            }
+          }
+          return value;
+        } else if ((ref2 = Utils.ltrim(value).charAt(0)) === '[' || ref2 === '{') {
+          try {
+            return Inline.parse(value, exceptionOnInvalidType, objectDecoder);
+          } catch (error2) {
+            e = error2;
+            e.parsedLine = this.getRealCurrentLineNb() + 1;
+            e.snippet = this.currentLine;
+            throw e;
+          }
+        }
+        throw new ParseException('Unable to parse.', this.getRealCurrentLineNb() + 1, this.currentLine);
+      }
+      if (isRef) {
+        if (data instanceof Array) {
+          this.refs[isRef] = data[data.length - 1];
+        } else {
+          lastKey = null;
+          for (key in data) {
+            lastKey = key;
+          }
+          this.refs[isRef] = data[lastKey];
+        }
+      }
+    }
+    if (Utils.isEmpty(data)) {
+      return null;
+    } else {
+      return data;
+    }
+  };
+
+  Parser.prototype.getRealCurrentLineNb = function() {
+    return this.currentLineNb + this.offset;
+  };
+
+  Parser.prototype.getCurrentLineIndentation = function() {
+    return this.currentLine.length - Utils.ltrim(this.currentLine, ' ').length;
+  };
+
+  Parser.prototype.getNextEmbedBlock = function(indentation, includeUnindentedCollection) {
+    var data, indent, isItUnindentedCollection, newIndent, removeComments, removeCommentsPattern, unindentedEmbedBlock;
+    if (indentation == null) {
+      indentation = null;
+    }
+    if (includeUnindentedCollection == null) {
+      includeUnindentedCollection = false;
+    }
+    this.moveToNextLine();
+    if (indentation == null) {
+      newIndent = this.getCurrentLineIndentation();
+      unindentedEmbedBlock = this.isStringUnIndentedCollectionItem(this.currentLine);
+      if (!(this.isCurrentLineEmpty()) && 0 === newIndent && !unindentedEmbedBlock) {
+        throw new ParseException('Indentation problem.', this.getRealCurrentLineNb() + 1, this.currentLine);
+      }
+    } else {
+      newIndent = indentation;
+    }
+    data = [this.currentLine.slice(newIndent)];
+    if (!includeUnindentedCollection) {
+      isItUnindentedCollection = this.isStringUnIndentedCollectionItem(this.currentLine);
+    }
+    removeCommentsPattern = this.PATTERN_FOLDED_SCALAR_END;
+    removeComments = !removeCommentsPattern.test(this.currentLine);
+    while (this.moveToNextLine()) {
+      indent = this.getCurrentLineIndentation();
+      if (indent === newIndent) {
+        removeComments = !removeCommentsPattern.test(this.currentLine);
+      }
+      if (removeComments && this.isCurrentLineComment()) {
+        continue;
+      }
+      if (this.isCurrentLineBlank()) {
+        data.push(this.currentLine.slice(newIndent));
+        continue;
+      }
+      if (isItUnindentedCollection && !this.isStringUnIndentedCollectionItem(this.currentLine) && indent === newIndent) {
+        this.moveToPreviousLine();
+        break;
+      }
+      if (indent >= newIndent) {
+        data.push(this.currentLine.slice(newIndent));
+      } else if (Utils.ltrim(this.currentLine).charAt(0) === '#') {
+
+      } else if (0 === indent) {
+        this.moveToPreviousLine();
+        break;
+      } else {
+        throw new ParseException('Indentation problem.', this.getRealCurrentLineNb() + 1, this.currentLine);
+      }
+    }
+    return data.join("\n");
+  };
+
+  Parser.prototype.moveToNextLine = function() {
+    if (this.currentLineNb >= this.lines.length - 1) {
+      return false;
+    }
+    this.currentLine = this.lines[++this.currentLineNb];
+    return true;
+  };
+
+  Parser.prototype.moveToPreviousLine = function() {
+    this.currentLine = this.lines[--this.currentLineNb];
+  };
+
+  Parser.prototype.parseValue = function(value, exceptionOnInvalidType, objectDecoder) {
+    var e, error, foldedIndent, matches, modifiers, pos, ref, ref1, val;
+    if (0 === value.indexOf('*')) {
+      pos = value.indexOf('#');
+      if (pos !== -1) {
+        value = value.substr(1, pos - 2);
+      } else {
+        value = value.slice(1);
+      }
+      if (this.refs[value] === void 0) {
+        throw new ParseException('Reference "' + value + '" does not exist.', this.currentLine);
+      }
+      return this.refs[value];
+    }
+    if (matches = this.PATTERN_FOLDED_SCALAR_ALL.exec(value)) {
+      modifiers = (ref = matches.modifiers) != null ? ref : '';
+      foldedIndent = Math.abs(parseInt(modifiers));
+      if (isNaN(foldedIndent)) {
+        foldedIndent = 0;
+      }
+      val = this.parseFoldedScalar(matches.separator, this.PATTERN_DECIMAL.replace(modifiers, ''), foldedIndent);
+      if (matches.type != null) {
+        Inline.configure(exceptionOnInvalidType, objectDecoder);
+        return Inline.parseScalar(matches.type + ' ' + val);
+      } else {
+        return val;
+      }
+    }
+    if ((ref1 = value.charAt(0)) === '[' || ref1 === '{' || ref1 === '"' || ref1 === "'") {
+      while (true) {
+        try {
+          return Inline.parse(value, exceptionOnInvalidType, objectDecoder);
+        } catch (error) {
+          e = error;
+          if (e instanceof ParseMore && this.moveToNextLine()) {
+            value += "\n" + Utils.trim(this.currentLine, ' ');
+          } else {
+            e.parsedLine = this.getRealCurrentLineNb() + 1;
+            e.snippet = this.currentLine;
+            throw e;
+          }
+        }
+      }
+    } else {
+      if (this.isNextLineIndented()) {
+        value += "\n" + this.getNextEmbedBlock();
+      }
+      return Inline.parse(value, exceptionOnInvalidType, objectDecoder);
+    }
+  };
+
+  Parser.prototype.parseFoldedScalar = function(separator, indicator, indentation) {
+    var isCurrentLineBlank, j, len, line, matches, newText, notEOF, pattern, ref, text;
+    if (indicator == null) {
+      indicator = '';
+    }
+    if (indentation == null) {
+      indentation = 0;
+    }
+    notEOF = this.moveToNextLine();
+    if (!notEOF) {
+      return '';
+    }
+    isCurrentLineBlank = this.isCurrentLineBlank();
+    text = '';
+    while (notEOF && isCurrentLineBlank) {
+      if (notEOF = this.moveToNextLine()) {
+        text += "\n";
+        isCurrentLineBlank = this.isCurrentLineBlank();
+      }
+    }
+    if (0 === indentation) {
+      if (matches = this.PATTERN_INDENT_SPACES.exec(this.currentLine)) {
+        indentation = matches[0].length;
+      }
+    }
+    if (indentation > 0) {
+      pattern = this.PATTERN_FOLDED_SCALAR_BY_INDENTATION[indentation];
+      if (pattern == null) {
+        pattern = new Pattern('^ {' + indentation + '}(.*)$');
+        Parser.prototype.PATTERN_FOLDED_SCALAR_BY_INDENTATION[indentation] = pattern;
+      }
+      while (notEOF && (isCurrentLineBlank || (matches = pattern.exec(this.currentLine)))) {
+        if (isCurrentLineBlank) {
+          text += this.currentLine.slice(indentation);
+        } else {
+          text += matches[1];
+        }
+        if (notEOF = this.moveToNextLine()) {
+          text += "\n";
+          isCurrentLineBlank = this.isCurrentLineBlank();
+        }
+      }
+    } else if (notEOF) {
+      text += "\n";
+    }
+    if (notEOF) {
+      this.moveToPreviousLine();
+    }
+    if ('>' === separator) {
+      newText = '';
+      ref = text.split("\n");
+      for (j = 0, len = ref.length; j < len; j++) {
+        line = ref[j];
+        if (line.length === 0 || line.charAt(0) === ' ') {
+          newText = Utils.rtrim(newText, ' ') + line + "\n";
+        } else {
+          newText += line + ' ';
+        }
+      }
+      text = newText;
+    }
+    if ('+' !== indicator) {
+      text = Utils.rtrim(text);
+    }
+    if ('' === indicator) {
+      text = this.PATTERN_TRAILING_LINES.replace(text, "\n");
+    } else if ('-' === indicator) {
+      text = this.PATTERN_TRAILING_LINES.replace(text, '');
+    }
+    return text;
+  };
+
+  Parser.prototype.isNextLineIndented = function(ignoreComments) {
+    var EOF, currentIndentation, ret;
+    if (ignoreComments == null) {
+      ignoreComments = true;
+    }
+    currentIndentation = this.getCurrentLineIndentation();
+    EOF = !this.moveToNextLine();
+    if (ignoreComments) {
+      while (!EOF && this.isCurrentLineEmpty()) {
+        EOF = !this.moveToNextLine();
+      }
+    } else {
+      while (!EOF && this.isCurrentLineBlank()) {
+        EOF = !this.moveToNextLine();
+      }
+    }
+    if (EOF) {
+      return false;
+    }
+    ret = false;
+    if (this.getCurrentLineIndentation() > currentIndentation) {
+      ret = true;
+    }
+    this.moveToPreviousLine();
+    return ret;
+  };
+
+  Parser.prototype.isCurrentLineEmpty = function() {
+    var trimmedLine;
+    trimmedLine = Utils.trim(this.currentLine, ' ');
+    return trimmedLine.length === 0 || trimmedLine.charAt(0) === '#';
+  };
+
+  Parser.prototype.isCurrentLineBlank = function() {
+    return '' === Utils.trim(this.currentLine, ' ');
+  };
+
+  Parser.prototype.isCurrentLineComment = function() {
+    var ltrimmedLine;
+    ltrimmedLine = Utils.ltrim(this.currentLine, ' ');
+    return ltrimmedLine.charAt(0) === '#';
+  };
+
+  Parser.prototype.cleanup = function(value) {
+    var count, i, indent, j, l, len, len1, line, lines, ref, ref1, ref2, smallestIndent, trimmedValue;
+    if (value.indexOf("\r") !== -1) {
+      value = value.split("\r\n").join("\n").split("\r").join("\n");
+    }
+    count = 0;
+    ref = this.PATTERN_YAML_HEADER.replaceAll(value, ''), value = ref[0], count = ref[1];
+    this.offset += count;
+    ref1 = this.PATTERN_LEADING_COMMENTS.replaceAll(value, '', 1), trimmedValue = ref1[0], count = ref1[1];
+    if (count === 1) {
+      this.offset += Utils.subStrCount(value, "\n") - Utils.subStrCount(trimmedValue, "\n");
+      value = trimmedValue;
+    }
+    ref2 = this.PATTERN_DOCUMENT_MARKER_START.replaceAll(value, '', 1), trimmedValue = ref2[0], count = ref2[1];
+    if (count === 1) {
+      this.offset += Utils.subStrCount(value, "\n") - Utils.subStrCount(trimmedValue, "\n");
+      value = trimmedValue;
+      value = this.PATTERN_DOCUMENT_MARKER_END.replace(value, '');
+    }
+    lines = value.split("\n");
+    smallestIndent = -1;
+    for (j = 0, len = lines.length; j < len; j++) {
+      line = lines[j];
+      if (Utils.trim(line, ' ').length === 0) {
+        continue;
+      }
+      indent = line.length - Utils.ltrim(line).length;
+      if (smallestIndent === -1 || indent < smallestIndent) {
+        smallestIndent = indent;
+      }
+    }
+    if (smallestIndent > 0) {
+      for (i = l = 0, len1 = lines.length; l < len1; i = ++l) {
+        line = lines[i];
+        lines[i] = line.slice(smallestIndent);
+      }
+      value = lines.join("\n");
+    }
+    return value;
+  };
+
+  Parser.prototype.isNextLineUnIndentedCollection = function(currentIndentation) {
+    var notEOF, ret;
+    if (currentIndentation == null) {
+      currentIndentation = null;
+    }
+    if (currentIndentation == null) {
+      currentIndentation = this.getCurrentLineIndentation();
+    }
+    notEOF = this.moveToNextLine();
+    while (notEOF && this.isCurrentLineEmpty()) {
+      notEOF = this.moveToNextLine();
+    }
+    if (false === notEOF) {
+      return false;
+    }
+    ret = false;
+    if (this.getCurrentLineIndentation() === currentIndentation && this.isStringUnIndentedCollectionItem(this.currentLine)) {
+      ret = true;
+    }
+    this.moveToPreviousLine();
+    return ret;
+  };
+
+  Parser.prototype.isStringUnIndentedCollectionItem = function() {
+    return this.currentLine === '-' || this.currentLine.slice(0, 2) === '- ';
+  };
+
+  return Parser;
+
+})();
+
+module.exports = Parser;
+
+
+},{"./Exception/ParseException":4,"./Exception/ParseMore":5,"./Inline":6,"./Pattern":8,"./Utils":10}],8:[function(require,module,exports){
+var Pattern;
+
+Pattern = (function() {
+  Pattern.prototype.regex = null;
+
+  Pattern.prototype.rawRegex = null;
+
+  Pattern.prototype.cleanedRegex = null;
+
+  Pattern.prototype.mapping = null;
+
+  function Pattern(rawRegex, modifiers) {
+    var _char, capturingBracketNumber, cleanedRegex, i, len, mapping, name, part, subChar;
+    if (modifiers == null) {
+      modifiers = '';
+    }
+    cleanedRegex = '';
+    len = rawRegex.length;
+    mapping = null;
+    capturingBracketNumber = 0;
+    i = 0;
+    while (i < len) {
+      _char = rawRegex.charAt(i);
+      if (_char === '\\') {
+        cleanedRegex += rawRegex.slice(i, +(i + 1) + 1 || 9e9);
+        i++;
+      } else if (_char === '(') {
+        if (i < len - 2) {
+          part = rawRegex.slice(i, +(i + 2) + 1 || 9e9);
+          if (part === '(?:') {
+            i += 2;
+            cleanedRegex += part;
+          } else if (part === '(?<') {
+            capturingBracketNumber++;
+            i += 2;
+            name = '';
+            while (i + 1 < len) {
+              subChar = rawRegex.charAt(i + 1);
+              if (subChar === '>') {
+                cleanedRegex += '(';
+                i++;
+                if (name.length > 0) {
+                  if (mapping == null) {
+                    mapping = {};
+                  }
+                  mapping[name] = capturingBracketNumber;
+                }
+                break;
+              } else {
+                name += subChar;
+              }
+              i++;
+            }
+          } else {
+            cleanedRegex += _char;
+            capturingBracketNumber++;
+          }
+        } else {
+          cleanedRegex += _char;
+        }
+      } else {
+        cleanedRegex += _char;
+      }
+      i++;
+    }
+    this.rawRegex = rawRegex;
+    this.cleanedRegex = cleanedRegex;
+    this.regex = new RegExp(this.cleanedRegex, 'g' + modifiers.replace('g', ''));
+    this.mapping = mapping;
+  }
+
+  Pattern.prototype.exec = function(str) {
+    var index, matches, name, ref;
+    this.regex.lastIndex = 0;
+    matches = this.regex.exec(str);
+    if (matches == null) {
+      return null;
+    }
+    if (this.mapping != null) {
+      ref = this.mapping;
+      for (name in ref) {
+        index = ref[name];
+        matches[name] = matches[index];
+      }
+    }
+    return matches;
+  };
+
+  Pattern.prototype.test = function(str) {
+    this.regex.lastIndex = 0;
+    return this.regex.test(str);
+  };
+
+  Pattern.prototype.replace = function(str, replacement) {
+    this.regex.lastIndex = 0;
+    return str.replace(this.regex, replacement);
+  };
+
+  Pattern.prototype.replaceAll = function(str, replacement, limit) {
+    var count;
+    if (limit == null) {
+      limit = 0;
+    }
+    this.regex.lastIndex = 0;
+    count = 0;
+    while (this.regex.test(str) && (limit === 0 || count < limit)) {
+      this.regex.lastIndex = 0;
+      str = str.replace(this.regex, replacement);
+      count++;
+    }
+    return [str, count];
+  };
+
+  return Pattern;
+
+})();
+
+module.exports = Pattern;
+
+
+},{}],9:[function(require,module,exports){
+var Pattern, Unescaper, Utils;
+
+Utils = require('./Utils');
+
+Pattern = require('./Pattern');
+
+Unescaper = (function() {
+  function Unescaper() {}
+
+  Unescaper.PATTERN_ESCAPED_CHARACTER = new Pattern('\\\\([0abt\tnvfre "\\/\\\\N_LP]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})');
+
+  Unescaper.unescapeSingleQuotedString = function(value) {
+    return value.replace(/\'\'/g, '\'');
+  };
+
+  Unescaper.unescapeDoubleQuotedString = function(value) {
+    if (this._unescapeCallback == null) {
+      this._unescapeCallback = (function(_this) {
+        return function(str) {
+          return _this.unescapeCharacter(str);
+        };
+      })(this);
+    }
+    return this.PATTERN_ESCAPED_CHARACTER.replace(value, this._unescapeCallback);
+  };
+
+  Unescaper.unescapeCharacter = function(value) {
+    var ch;
+    ch = String.fromCharCode;
+    switch (value.charAt(1)) {
+      case '0':
+        return ch(0);
+      case 'a':
+        return ch(7);
+      case 'b':
+        return ch(8);
+      case 't':
+        return "\t";
+      case "\t":
+        return "\t";
+      case 'n':
+        return "\n";
+      case 'v':
+        return ch(11);
+      case 'f':
+        return ch(12);
+      case 'r':
+        return ch(13);
+      case 'e':
+        return ch(27);
+      case ' ':
+        return ' ';
+      case '"':
+        return '"';
+      case '/':
+        return '/';
+      case '\\':
+        return '\\';
+      case 'N':
+        return ch(0x0085);
+      case '_':
+        return ch(0x00A0);
+      case 'L':
+        return ch(0x2028);
+      case 'P':
+        return ch(0x2029);
+      case 'x':
+        return Utils.utf8chr(Utils.hexDec(value.substr(2, 2)));
+      case 'u':
+        return Utils.utf8chr(Utils.hexDec(value.substr(2, 4)));
+      case 'U':
+        return Utils.utf8chr(Utils.hexDec(value.substr(2, 8)));
+      default:
+        return '';
+    }
+  };
+
+  return Unescaper;
+
+})();
+
+module.exports = Unescaper;
+
+
+},{"./Pattern":8,"./Utils":10}],10:[function(require,module,exports){
+var Pattern, Utils,
+  hasProp = {}.hasOwnProperty;
+
+Pattern = require('./Pattern');
+
+Utils = (function() {
+  function Utils() {}
+
+  Utils.REGEX_LEFT_TRIM_BY_CHAR = {};
+
+  Utils.REGEX_RIGHT_TRIM_BY_CHAR = {};
+
+  Utils.REGEX_SPACES = /\s+/g;
+
+  Utils.REGEX_DIGITS = /^\d+$/;
+
+  Utils.REGEX_OCTAL = /[^0-7]/gi;
+
+  Utils.REGEX_HEXADECIMAL = /[^a-f0-9]/gi;
+
+  Utils.PATTERN_DATE = new Pattern('^' + '(?<year>[0-9][0-9][0-9][0-9])' + '-(?<month>[0-9][0-9]?)' + '-(?<day>[0-9][0-9]?)' + '(?:(?:[Tt]|[ \t]+)' + '(?<hour>[0-9][0-9]?)' + ':(?<minute>[0-9][0-9])' + ':(?<second>[0-9][0-9])' + '(?:\.(?<fraction>[0-9]*))?' + '(?:[ \t]*(?<tz>Z|(?<tz_sign>[-+])(?<tz_hour>[0-9][0-9]?)' + '(?::(?<tz_minute>[0-9][0-9]))?))?)?' + '$', 'i');
+
+  Utils.LOCAL_TIMEZONE_OFFSET = new Date().getTimezoneOffset() * 60 * 1000;
+
+  Utils.trim = function(str, _char) {
+    var regexLeft, regexRight;
+    if (_char == null) {
+      _char = '\\s';
+    }
+    regexLeft = this.REGEX_LEFT_TRIM_BY_CHAR[_char];
+    if (regexLeft == null) {
+      this.REGEX_LEFT_TRIM_BY_CHAR[_char] = regexLeft = new RegExp('^' + _char + '' + _char + '*');
+    }
+    regexLeft.lastIndex = 0;
+    regexRight = this.REGEX_RIGHT_TRIM_BY_CHAR[_char];
+    if (regexRight == null) {
+      this.REGEX_RIGHT_TRIM_BY_CHAR[_char] = regexRight = new RegExp(_char + '' + _char + '*$');
+    }
+    regexRight.lastIndex = 0;
+    return str.replace(regexLeft, '').replace(regexRight, '');
+  };
+
+  Utils.ltrim = function(str, _char) {
+    var regexLeft;
+    if (_char == null) {
+      _char = '\\s';
+    }
+    regexLeft = this.REGEX_LEFT_TRIM_BY_CHAR[_char];
+    if (regexLeft == null) {
+      this.REGEX_LEFT_TRIM_BY_CHAR[_char] = regexLeft = new RegExp('^' + _char + '' + _char + '*');
+    }
+    regexLeft.lastIndex = 0;
+    return str.replace(regexLeft, '');
+  };
+
+  Utils.rtrim = function(str, _char) {
+    var regexRight;
+    if (_char == null) {
+      _char = '\\s';
+    }
+    regexRight = this.REGEX_RIGHT_TRIM_BY_CHAR[_char];
+    if (regexRight == null) {
+      this.REGEX_RIGHT_TRIM_BY_CHAR[_char] = regexRight = new RegExp(_char + '' + _char + '*$');
+    }
+    regexRight.lastIndex = 0;
+    return str.replace(regexRight, '');
+  };
+
+  Utils.isEmpty = function(value) {
+    return !value || value === '' || value === '0' || (value instanceof Array && value.length === 0) || this.isEmptyObject(value);
+  };
+
+  Utils.isEmptyObject = function(value) {
+    var k;
+    return value instanceof Object && ((function() {
+      var results;
+      results = [];
+      for (k in value) {
+        if (!hasProp.call(value, k)) continue;
+        results.push(k);
+      }
+      return results;
+    })()).length === 0;
+  };
+
+  Utils.subStrCount = function(string, subString, start, length) {
+    var c, i, j, len, ref, sublen;
+    c = 0;
+    string = '' + string;
+    subString = '' + subString;
+    if (start != null) {
+      string = string.slice(start);
+    }
+    if (length != null) {
+      string = string.slice(0, length);
+    }
+    len = string.length;
+    sublen = subString.length;
+    for (i = j = 0, ref = len; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+      if (subString === string.slice(i, sublen)) {
+        c++;
+        i += sublen - 1;
+      }
+    }
+    return c;
+  };
+
+  Utils.isDigits = function(input) {
+    this.REGEX_DIGITS.lastIndex = 0;
+    return this.REGEX_DIGITS.test(input);
+  };
+
+  Utils.octDec = function(input) {
+    this.REGEX_OCTAL.lastIndex = 0;
+    return parseInt((input + '').replace(this.REGEX_OCTAL, ''), 8);
+  };
+
+  Utils.hexDec = function(input) {
+    this.REGEX_HEXADECIMAL.lastIndex = 0;
+    input = this.trim(input);
+    if ((input + '').slice(0, 2) === '0x') {
+      input = (input + '').slice(2);
+    }
+    return parseInt((input + '').replace(this.REGEX_HEXADECIMAL, ''), 16);
+  };
+
+  Utils.utf8chr = function(c) {
+    var ch;
+    ch = String.fromCharCode;
+    if (0x80 > (c %= 0x200000)) {
+      return ch(c);
+    }
+    if (0x800 > c) {
+      return ch(0xC0 | c >> 6) + ch(0x80 | c & 0x3F);
+    }
+    if (0x10000 > c) {
+      return ch(0xE0 | c >> 12) + ch(0x80 | c >> 6 & 0x3F) + ch(0x80 | c & 0x3F);
+    }
+    return ch(0xF0 | c >> 18) + ch(0x80 | c >> 12 & 0x3F) + ch(0x80 | c >> 6 & 0x3F) + ch(0x80 | c & 0x3F);
+  };
+
+  Utils.parseBoolean = function(input, strict) {
+    var lowerInput;
+    if (strict == null) {
+      strict = true;
+    }
+    if (typeof input === 'string') {
+      lowerInput = input.toLowerCase();
+      if (!strict) {
+        if (lowerInput === 'no') {
+          return false;
+        }
+      }
+      if (lowerInput === '0') {
+        return false;
+      }
+      if (lowerInput === 'false') {
+        return false;
+      }
+      if (lowerInput === '') {
+        return false;
+      }
+      return true;
+    }
+    return !!input;
+  };
+
+  Utils.isNumeric = function(input) {
+    this.REGEX_SPACES.lastIndex = 0;
+    return typeof input === 'number' || typeof input === 'string' && !isNaN(input) && input.replace(this.REGEX_SPACES, '') !== '';
+  };
+
+  Utils.stringToDate = function(str) {
+    var date, day, fraction, hour, info, minute, month, second, tz_hour, tz_minute, tz_offset, year;
+    if (!(str != null ? str.length : void 0)) {
+      return null;
+    }
+    info = this.PATTERN_DATE.exec(str);
+    if (!info) {
+      return null;
+    }
+    year = parseInt(info.year, 10);
+    month = parseInt(info.month, 10) - 1;
+    day = parseInt(info.day, 10);
+    if (info.hour == null) {
+      date = new Date(Date.UTC(year, month, day));
+      return date;
+    }
+    hour = parseInt(info.hour, 10);
+    minute = parseInt(info.minute, 10);
+    second = parseInt(info.second, 10);
+    if (info.fraction != null) {
+      fraction = info.fraction.slice(0, 3);
+      while (fraction.length < 3) {
+        fraction += '0';
+      }
+      fraction = parseInt(fraction, 10);
+    } else {
+      fraction = 0;
+    }
+    if (info.tz != null) {
+      tz_hour = parseInt(info.tz_hour, 10);
+      if (info.tz_minute != null) {
+        tz_minute = parseInt(info.tz_minute, 10);
+      } else {
+        tz_minute = 0;
+      }
+      tz_offset = (tz_hour * 60 + tz_minute) * 60000;
+      if ('-' === info.tz_sign) {
+        tz_offset *= -1;
+      }
+    }
+    date = new Date(Date.UTC(year, month, day, hour, minute, second, fraction));
+    if (tz_offset) {
+      date.setTime(date.getTime() - tz_offset);
+    }
+    return date;
+  };
+
+  Utils.strRepeat = function(str, number) {
+    var i, res;
+    res = '';
+    i = 0;
+    while (i < number) {
+      res += str;
+      i++;
+    }
+    return res;
+  };
+
+  Utils.getStringFromFile = function(path, callback) {
+    var data, fs, j, len1, name, ref, req, xhr;
+    if (callback == null) {
+      callback = null;
+    }
+    xhr = null;
+    if (typeof window !== "undefined" && window !== null) {
+      if (window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+      } else if (window.ActiveXObject) {
+        ref = ["Msxml2.XMLHTTP.6.0", "Msxml2.XMLHTTP.3.0", "Msxml2.XMLHTTP", "Microsoft.XMLHTTP"];
+        for (j = 0, len1 = ref.length; j < len1; j++) {
+          name = ref[j];
+          try {
+            xhr = new ActiveXObject(name);
+          } catch (undefined) {}
+        }
+      }
+    }
+    if (xhr != null) {
+      if (callback != null) {
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 0) {
+              return callback(xhr.responseText);
+            } else {
+              return callback(null);
+            }
+          }
+        };
+        xhr.open('GET', path, true);
+        return xhr.send(null);
+      } else {
+        xhr.open('GET', path, false);
+        xhr.send(null);
+        if (xhr.status === 200 || xhr.status === 0) {
+          return xhr.responseText;
+        }
+        return null;
+      }
+    } else {
+      req = require;
+      fs = req('fs');
+      if (callback != null) {
+        return fs.readFile(path, function(err, data) {
+          if (err) {
+            return callback(null);
+          } else {
+            return callback(String(data));
+          }
+        });
+      } else {
+        data = fs.readFileSync(path);
+        if (data != null) {
+          return String(data);
+        }
+        return null;
+      }
+    }
+  };
+
+  return Utils;
+
+})();
+
+module.exports = Utils;
+
+
+},{"./Pattern":8}],11:[function(require,module,exports){
+var Dumper, Parser, Utils, Yaml;
+
+Parser = require('./Parser');
+
+Dumper = require('./Dumper');
+
+Utils = require('./Utils');
+
+Yaml = (function() {
+  function Yaml() {}
+
+  Yaml.parse = function(input, exceptionOnInvalidType, objectDecoder) {
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
+    }
+    if (objectDecoder == null) {
+      objectDecoder = null;
+    }
+    return new Parser().parse(input, exceptionOnInvalidType, objectDecoder);
+  };
+
+  Yaml.parseFile = function(path, callback, exceptionOnInvalidType, objectDecoder) {
+    var input;
+    if (callback == null) {
+      callback = null;
+    }
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
+    }
+    if (objectDecoder == null) {
+      objectDecoder = null;
+    }
+    if (callback != null) {
+      return Utils.getStringFromFile(path, (function(_this) {
+        return function(input) {
+          var result;
+          result = null;
+          if (input != null) {
+            result = _this.parse(input, exceptionOnInvalidType, objectDecoder);
+          }
+          callback(result);
+        };
+      })(this));
+    } else {
+      input = Utils.getStringFromFile(path);
+      if (input != null) {
+        return this.parse(input, exceptionOnInvalidType, objectDecoder);
+      }
+      return null;
+    }
+  };
+
+  Yaml.dump = function(input, inline, indent, exceptionOnInvalidType, objectEncoder) {
+    var yaml;
+    if (inline == null) {
+      inline = 2;
+    }
+    if (indent == null) {
+      indent = 4;
+    }
+    if (exceptionOnInvalidType == null) {
+      exceptionOnInvalidType = false;
+    }
+    if (objectEncoder == null) {
+      objectEncoder = null;
+    }
+    yaml = new Dumper();
+    yaml.indentation = indent;
+    return yaml.dump(input, inline, 0, exceptionOnInvalidType, objectEncoder);
+  };
+
+  Yaml.stringify = function(input, inline, indent, exceptionOnInvalidType, objectEncoder) {
+    return this.dump(input, inline, indent, exceptionOnInvalidType, objectEncoder);
+  };
+
+  Yaml.load = function(path, callback, exceptionOnInvalidType, objectDecoder) {
+    return this.parseFile(path, callback, exceptionOnInvalidType, objectDecoder);
+  };
+
+  return Yaml;
+
+})();
+
+if (typeof window !== "undefined" && window !== null) {
+  window.YAML = Yaml;
+}
+
+if (typeof window === "undefined" || window === null) {
+  this.YAML = Yaml;
+}
+
+module.exports = Yaml;
+
+
+},{"./Dumper":1,"./Parser":7,"./Utils":10}]},{},[11]);
 
 ;
 /****************************************************************************
@@ -40758,6 +42604,20 @@ module.exports = ret;
     }
 
 
+    function parseYAML( response ){
+        var json;
+
+        try{
+            json = window.YAML.parse(response);
+        }
+        catch (e){
+            json = undefined;
+            var error = new Error("Invalid YAML");
+            throw error;
+        }
+        return json;
+    }
+
     function parseXML( response ){
         //Adjusted xml-parser from jQuery.jQuery.parseXML
         var xml;
@@ -40812,6 +42672,12 @@ module.exports = ret;
                     result
                         .then( function(response) { return response.text(); })
                         .then( JSON.parse );
+                break;
+            case 'yaml':
+                result =
+                    result
+                        .then( function(response) { return response.text(); })
+                        .then( parseYAML );
                 break;
             case 'xml' :
                 result =
@@ -40889,6 +42755,17 @@ module.exports = ret;
     Promise.getXML = function(url, options, resolve, reject, fin) {
         return Promise.get( url,
                             $.extend( {}, options , { format: 'xml' }),
+                            resolve, reject, fin );
+    };
+
+    /**************************************************************
+    Promise.getYAML( url, options[, resolve[, reject[, finally]]] )
+    Same as Promise.get with format = 'yaml'.
+    Data are converted to json
+    **************************************************************/
+    Promise.getYAML = function(url, options, resolve, reject, fin) {
+        return Promise.get( url,
+                            $.extend( {}, options , { format: 'yaml' }),
                             resolve, reject, fin );
     };
 
@@ -41868,7 +43745,7 @@ return index;
 
 ;
 //! moment.js
-//! version : 2.29.1
+//! version : 2.29.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -41945,8 +43822,9 @@ return index;
 
     function map(arr, fn) {
         var res = [],
-            i;
-        for (i = 0; i < arr.length; ++i) {
+            i,
+            arrLen = arr.length;
+        for (i = 0; i < arrLen; ++i) {
             res.push(fn(arr[i], i));
         }
         return res;
@@ -42075,7 +43953,10 @@ return index;
         updateInProgress = false;
 
     function copyConfig(to, from) {
-        var i, prop, val;
+        var i,
+            prop,
+            val,
+            momentPropertiesLen = momentProperties.length;
 
         if (!isUndefined(from._isAMomentObject)) {
             to._isAMomentObject = from._isAMomentObject;
@@ -42108,8 +43989,8 @@ return index;
             to._locale = from._locale;
         }
 
-        if (momentProperties.length > 0) {
-            for (i = 0; i < momentProperties.length; i++) {
+        if (momentPropertiesLen > 0) {
+            for (i = 0; i < momentPropertiesLen; i++) {
                 prop = momentProperties[i];
                 val = from[prop];
                 if (!isUndefined(val)) {
@@ -42164,8 +44045,9 @@ return index;
                 var args = [],
                     arg,
                     i,
-                    key;
-                for (i = 0; i < arguments.length; i++) {
+                    key,
+                    argLen = arguments.length;
+                for (i = 0; i < argLen; i++) {
                     arg = '';
                     if (typeof arguments[i] === 'object') {
                         arg += '\n[' + i + '] ';
@@ -42315,7 +44197,8 @@ return index;
         );
     }
 
-    var formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|N{1,5}|YYYYYY|YYYYY|YYYY|YY|y{2,4}|yo?|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g,
+    var formattingTokens =
+            /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|N{1,5}|YYYYYY|YYYYY|YYYY|YY|y{2,4}|yo?|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g,
         localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,
         formatFunctions = {},
         formatTokenFunctions = {};
@@ -42619,8 +44502,9 @@ return index;
         if (typeof units === 'object') {
             units = normalizeObjectUnits(units);
             var prioritized = getPrioritizedUnits(units),
-                i;
-            for (i = 0; i < prioritized.length; i++) {
+                i,
+                prioritizedLen = prioritized.length;
+            for (i = 0; i < prioritizedLen; i++) {
                 this[prioritized[i].unit](units[prioritized[i].unit]);
             }
         } else {
@@ -42650,7 +44534,8 @@ return index;
         matchTimestamp = /[+-]?\d+(\.\d{1,3})?/, // 123456789 123456789.123
         // any word (or two) characters or numbers including two/three word month in arabic.
         // includes scottish gaelic two word and hyphenated months
-        matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i,
+        matchWord =
+            /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i,
         regexes;
 
     regexes = {};
@@ -42676,15 +44561,12 @@ return index;
         return regexEscape(
             s
                 .replace('\\', '')
-                .replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (
-                    matched,
-                    p1,
-                    p2,
-                    p3,
-                    p4
-                ) {
-                    return p1 || p2 || p3 || p4;
-                })
+                .replace(
+                    /\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g,
+                    function (matched, p1, p2, p3, p4) {
+                        return p1 || p2 || p3 || p4;
+                    }
+                )
         );
     }
 
@@ -42696,7 +44578,8 @@ return index;
 
     function addParseToken(token, callback) {
         var i,
-            func = callback;
+            func = callback,
+            tokenLen;
         if (typeof token === 'string') {
             token = [token];
         }
@@ -42705,7 +44588,8 @@ return index;
                 array[callback] = toInt(input);
             };
         }
-        for (i = 0; i < token.length; i++) {
+        tokenLen = token.length;
+        for (i = 0; i < tokenLen; i++) {
             tokens[token[i]] = func;
         }
     }
@@ -42816,12 +44700,12 @@ return index;
 
     // LOCALES
 
-    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
-            '_'
-        ),
-        defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split(
-            '_'
-        ),
+    var defaultLocaleMonths =
+            'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+                '_'
+            ),
+        defaultLocaleMonthsShort =
+            'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_'),
         MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/,
         defaultMonthsShortRegex = matchWord,
         defaultMonthsRegex = matchWord;
@@ -43263,14 +45147,12 @@ return index;
     addRegexToken('W', match1to2);
     addRegexToken('WW', match1to2, match2);
 
-    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (
-        input,
-        week,
-        config,
-        token
-    ) {
-        week[token.substr(0, 1)] = toInt(input);
-    });
+    addWeekParseToken(
+        ['w', 'ww', 'W', 'WW'],
+        function (input, week, config, token) {
+            week[token.substr(0, 1)] = toInt(input);
+        }
+    );
 
     // HELPERS
 
@@ -43395,9 +45277,8 @@ return index;
         return ws.slice(n, 7).concat(ws.slice(0, n));
     }
 
-    var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split(
-            '_'
-        ),
+    var defaultLocaleWeekdays =
+            'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
         defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
         defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_'),
         defaultWeekdaysRegex = matchWord,
@@ -43945,6 +45826,11 @@ return index;
         return globalLocale;
     }
 
+    function isLocaleNameSane(name) {
+        // Prevent names that look like filesystem paths, i.e contain '/' or '\'
+        return name.match('^[^/\\\\]*$') != null;
+    }
+
     function loadLocale(name) {
         var oldLocale = null,
             aliasedRequire;
@@ -43953,7 +45839,8 @@ return index;
             locales[name] === undefined &&
             typeof module !== 'undefined' &&
             module &&
-            module.exports
+            module.exports &&
+            isLocaleNameSane(name)
         ) {
             try {
                 oldLocale = globalLocale._abbr;
@@ -44170,8 +46057,10 @@ return index;
 
     // iso 8601 regex
     // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
-    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([+-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
-        basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d|))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([+-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
+    var extendedIsoRegex =
+            /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([+-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
+        basicIsoRegex =
+            /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d|))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([+-]\d\d(?::?\d\d)?|\s*Z)?)?$/,
         tzRegex = /Z|[+-]\d\d(?::?\d\d)?/,
         isoDates = [
             ['YYYYYY-MM-DD', /[+-]\d{6}-\d\d-\d\d/],
@@ -44202,7 +46091,8 @@ return index;
         ],
         aspNetJsonRegex = /^\/?Date\((-?\d+)/i,
         // RFC 2822 regex: For details see https://tools.ietf.org/html/rfc2822#section-3.3
-        rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|([+-]\d{4}))$/,
+        rfc2822 =
+            /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|([+-]\d{4}))$/,
         obsOffsets = {
             UT: 0,
             GMT: 0,
@@ -44225,12 +46115,13 @@ return index;
             allowTime,
             dateFormat,
             timeFormat,
-            tzFormat;
+            tzFormat,
+            isoDatesLen = isoDates.length,
+            isoTimesLen = isoTimes.length;
 
         if (match) {
             getParsingFlags(config).iso = true;
-
-            for (i = 0, l = isoDates.length; i < l; i++) {
+            for (i = 0, l = isoDatesLen; i < l; i++) {
                 if (isoDates[i][1].exec(match[1])) {
                     dateFormat = isoDates[i][0];
                     allowTime = isoDates[i][2] !== false;
@@ -44242,7 +46133,7 @@ return index;
                 return;
             }
             if (match[3]) {
-                for (i = 0, l = isoTimes.length; i < l; i++) {
+                for (i = 0, l = isoTimesLen; i < l; i++) {
                     if (isoTimes[i][1].exec(match[3])) {
                         // match[2] should be 'T' or space
                         timeFormat = (match[2] || ' ') + isoTimes[i][0];
@@ -44622,12 +46513,13 @@ return index;
             skipped,
             stringLength = string.length,
             totalParsedInputLength = 0,
-            era;
+            era,
+            tokenLen;
 
         tokens =
             expandFormat(config._f, config._locale).match(formattingTokens) || [];
-
-        for (i = 0; i < tokens.length; i++) {
+        tokenLen = tokens.length;
+        for (i = 0; i < tokenLen; i++) {
             token = tokens[i];
             parsedInput = (string.match(getParseRegexForToken(token, config)) ||
                 [])[0];
@@ -44722,15 +46614,16 @@ return index;
             i,
             currentScore,
             validFormatFound,
-            bestFormatIsValid = false;
+            bestFormatIsValid = false,
+            configfLen = config._f.length;
 
-        if (config._f.length === 0) {
+        if (configfLen === 0) {
             getParsingFlags(config).invalidFormat = true;
             config._d = new Date(NaN);
             return;
         }
 
-        for (i = 0; i < config._f.length; i++) {
+        for (i = 0; i < configfLen; i++) {
             currentScore = 0;
             validFormatFound = false;
             tempConfig = copyConfig({}, config);
@@ -44971,7 +46864,8 @@ return index;
     function isDurationValid(m) {
         var key,
             unitHasDecimal = false,
-            i;
+            i,
+            orderLen = ordering.length;
         for (key in m) {
             if (
                 hasOwnProp(m, key) &&
@@ -44984,7 +46878,7 @@ return index;
             }
         }
 
-        for (i = 0; i < ordering.length; ++i) {
+        for (i = 0; i < orderLen; ++i) {
             if (m[ordering[i]]) {
                 if (unitHasDecimal) {
                     return false; // only allow non-integers for smallest unit
@@ -45309,7 +47203,8 @@ return index;
         // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
         // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
         // and further modified to allow for strings containing both week and day
-        isoRegex = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
+        isoRegex =
+            /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
 
     function createDuration(input, key) {
         var duration = input,
@@ -45530,9 +47425,10 @@ return index;
                 'ms',
             ],
             i,
-            property;
+            property,
+            propertyLen = properties.length;
 
-        for (i = 0; i < properties.length; i += 1) {
+        for (i = 0; i < propertyLen; i += 1) {
             property = properties[i];
             propertyTest = propertyTest || hasOwnProp(input, property);
         }
@@ -46155,19 +48051,17 @@ return index;
     addRegexToken('NNNN', matchEraName);
     addRegexToken('NNNNN', matchEraNarrow);
 
-    addParseToken(['N', 'NN', 'NNN', 'NNNN', 'NNNNN'], function (
-        input,
-        array,
-        config,
-        token
-    ) {
-        var era = config._locale.erasParse(input, token, config._strict);
-        if (era) {
-            getParsingFlags(config).era = era;
-        } else {
-            getParsingFlags(config).invalidEra = input;
+    addParseToken(
+        ['N', 'NN', 'NNN', 'NNNN', 'NNNNN'],
+        function (input, array, config, token) {
+            var era = config._locale.erasParse(input, token, config._strict);
+            if (era) {
+                getParsingFlags(config).era = era;
+            } else {
+                getParsingFlags(config).invalidEra = input;
+            }
         }
-    });
+    );
 
     addRegexToken('y', matchUnsigned);
     addRegexToken('yy', matchUnsigned);
@@ -46459,14 +48353,12 @@ return index;
     addRegexToken('GGGGG', match1to6, match6);
     addRegexToken('ggggg', match1to6, match6);
 
-    addWeekParseToken(['gggg', 'ggggg', 'GGGG', 'GGGGG'], function (
-        input,
-        week,
-        config,
-        token
-    ) {
-        week[token.substr(0, 2)] = toInt(input);
-    });
+    addWeekParseToken(
+        ['gggg', 'ggggg', 'GGGG', 'GGGGG'],
+        function (input, week, config, token) {
+            week[token.substr(0, 2)] = toInt(input);
+        }
+    );
 
     addWeekParseToken(['gg', 'GG'], function (input, week, config, token) {
         week[token] = hooks.parseTwoDigitYear(input);
@@ -47489,7 +49381,7 @@ return index;
 
     //! moment.js
 
-    hooks.version = '2.29.1';
+    hooks.version = '2.29.3';
 
     setHookCallback(createLocal);
 
@@ -54980,10 +56872,10 @@ module.exports = g;
 //# sourceMappingURL=noty.js.map
 ;
 /**
- *  PDFObject v2.2.7
+ *  PDFObject v2.2.8
  *  https://github.com/pipwerks/PDFObject
  *  @license
- *  Copyright (c) 2008-2021 Philip Hutchison
+ *  Copyright (c) 2008-2022 Philip Hutchison
  *  MIT-style license: http://pipwerks.mit-license.org/
  *  UMD module pattern from https://github.com/umdjs/umd/blob/master/templates/returnExports.js
  */
@@ -55016,7 +56908,7 @@ module.exports = g;
             return false;
     }
 
-    let pdfobjectversion = "2.2.7";
+    let pdfobjectversion = "2.2.8";
     let nav = window.navigator;
     let ua = window.navigator.userAgent;
 
@@ -55165,78 +57057,56 @@ module.exports = g;
 
     };
 
-    let generatePDFJSMarkup = function (targetNode, url, pdfOpenFragment, PDFJS_URL, id, title, omitInlineStyles){
+    let generatePDFObjectMarkup = function (embedType, targetNode, url, pdfOpenFragment, width, height, id, title, omitInlineStyles, PDFJS_URL){
 
         //Ensure target element is empty first
         emptyNodeContents(targetNode);
 
-        let fullURL = PDFJS_URL + "?file=" + encodeURIComponent(url) + pdfOpenFragment;
-        let div = document.createElement("div");
-        let iframe = document.createElement("iframe");
-        
-        iframe.src = fullURL;
-        iframe.className = "pdfobject";
-        iframe.type = "application/pdf";
-        iframe.frameborder = "0";
-        iframe.allow = "fullscreen";
-        iframe.title = title;
-        
-        if(id){
-            iframe.id = id;
+        let source = url;
+
+        if(embedType === "pdfjs"){ 
+            //If PDFJS_URL already contains a ?, assume querystring is in place, and use an ampersand to append PDFJS's file parameter
+            let connector = (PDFJS_URL.indexOf("?") !== -1) ? "&" : "?"; 
+            source = PDFJS_URL + connector + "file=" + encodeURIComponent(url) + pdfOpenFragment;
         }
 
-        if(!omitInlineStyles){
-            div.style.cssText = "position: absolute; top: 0; right: 0; bottom: 0; left: 0;";
-            iframe.style.cssText = "border: none; width: 100%; height: 100%;";
-            targetNode.style.position = "relative";
-            targetNode.style.overflow = "auto";        
-        }
+        let el_type = (embedType === "pdfjs" || embedType === "iframe") ? "iframe" : "embed";
+        let el = document.createElement(el_type);
 
-        div.appendChild(iframe);
-        targetNode.appendChild(div);
-        targetNode.classList.add("pdfobject-container");
-        
-        return targetNode.getElementsByTagName("iframe")[0];
-
-    };
-
-    let generatePDFObjectMarkup = function (embedType, targetNode, targetSelector, url, pdfOpenFragment, width, height, id, title, omitInlineStyles){
-
-        //Ensure target element is empty first
-        emptyNodeContents(targetNode);
-
-        let embed = document.createElement(embedType);
-        embed.src = url + pdfOpenFragment;
-        embed.className = "pdfobject";
-        embed.type = "application/pdf";
-        embed.title = title;
+        el.className = "pdfobject";
+        el.type = "application/pdf";
+        el.title = title;
+        el.src = source;
 
         if(id){
-            embed.id = id;
+            el.id = id;
         }
 
-        if(embedType === "iframe"){
-            embed.allow = "fullscreen";
+        if(el_type === "iframe"){
+            el.allow = "fullscreen";
+            el.frameborder = "0";
         }
 
         if(!omitInlineStyles){
 
-            let style = (embedType === "embed") ? "overflow: auto;" : "border: none;";
+            let style = (el_type === "embed") ? "overflow: auto;" : "border: none;";
 
-            if(targetSelector && targetSelector !== document.body){
+            if(targetNode !== document.body){
+                //assign width and height to target node
                 style += "width: " + width + "; height: " + height + ";";
             } else {
+                //this is a full-page embed, use CSS to fill the viewport
                 style += "position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%;";
             }
 
-            embed.style.cssText = style; 
+            el.style.cssText = style; 
 
         }
 
         targetNode.classList.add("pdfobject-container");
-        targetNode.appendChild(embed);
+        targetNode.appendChild(el);
 
-        return targetNode.getElementsByTagName(embedType)[0];
+        return targetNode.getElementsByTagName(el_type)[0];
 
     };
 
@@ -55252,7 +57122,7 @@ module.exports = g;
         let id = (typeof opt.id === "string") ? opt.id : "";
         let page = opt.page || false;
         let pdfOpenParams = opt.pdfOpenParams || {};
-        let fallbackLink = opt.fallbackLink || true;
+        let fallbackLink = (typeof opt.fallbackLink === "string" || typeof opt.fallbackLink === "boolean") ? opt.fallbackLink : true;
         let width = opt.width || "100%";
         let height = opt.height || "100%";
         let title = opt.title || "Embedded PDF";
@@ -55285,7 +57155,7 @@ module.exports = g;
 
         //If the forcePDFJS option is invoked, skip everything else and embed as directed
         if(forcePDFJS && PDFJS_URL){
-            return generatePDFJSMarkup(targetNode, url, pdfOpenFragment, PDFJS_URL, id, title, omitInlineStyles);
+            return generatePDFObjectMarkup("pdfjs", targetNode, url, pdfOpenFragment, width, height, id, title, omitInlineStyles, PDFJS_URL);
         }
  
         // --== Embed attempt #2 ==--
@@ -55301,7 +57171,7 @@ module.exports = g;
             //Forcing Safari desktop to use iframe due to freezing bug in macOS 11 (Big Sur)
             let embedtype = (forceIframe || supportRedirect || isSafariDesktop) ? "iframe" : "embed";
             
-            return generatePDFObjectMarkup(embedtype, targetNode, targetSelector, url, pdfOpenFragment, width, height, id, title, omitInlineStyles);
+            return generatePDFObjectMarkup(embedtype, targetNode, url, pdfOpenFragment, width, height, id, title, omitInlineStyles);
 
         }
         
@@ -55309,7 +57179,7 @@ module.exports = g;
         
         //If everything else has failed and a PDFJS fallback is provided, try to use it
         if(PDFJS_URL){
-            return generatePDFJSMarkup(targetNode, url, pdfOpenFragment, PDFJS_URL, id, title, omitInlineStyles);
+            return generatePDFObjectMarkup("pdfjs", targetNode, url, pdfOpenFragment, width, height, id, title, omitInlineStyles, PDFJS_URL);
         }
         
         // --== PDF embed not supported! Use fallback ==-- 
@@ -55406,6 +57276,878 @@ module.exports = g;
     }( $.fn.tooltip.Constructor.prototype.show );
 
 }(jQuery, this, document));
+;
+/****************************************************************************
+    jquery-bootstrap.js,
+
+    (c) 2017, FCOO
+
+    https://github.com/fcoo/jquery-bootstrap
+    https://github.com/fcoo
+
+****************************************************************************/
+
+(function ($, i18next, window, document, undefined) {
+    "use strict";
+
+    /*
+
+    Almost all elements comes in two sizes: normal and small set by options.small: false/true
+
+    In jquery-bootstrap.scss sizing class-postfix -xs is added (from Bootstrap 3)
+
+    Elements to click or touch has a special implementation:
+    For device with 'touch' the Bootstrap size 'normal' and 'small' are used
+    For desktop (only mouse) we using smaller version (large = Bootstrap normal, normal = Bootstrap small, small = Bootstrap x-small)
+
+    The variable window.bsIsTouch must be overwriten with the correct value in the application
+
+    */
+
+    //Create namespace
+    var ns = window;
+
+    /*
+    Create $.BSASMODAL = record with {className: asModal-function} where className is added to any $element that have a asModal-function
+    Ex.:
+    $.BSASMODAL['BSTABLE'] = function(){ //Create bsModal for this }
+    var myTable = $.bsTable({...}); //Add 'BSTABLE' to class-name for  result
+    myTable.asModal({...});
+    */
+    $.BSASMODAL = $.BSASMODAL || {};
+    $.fn.asModal = function(options){
+        var _this   = this,
+            asModal = null;
+
+        $.each($.BSASMODAL, function(id, asModalFunc){
+            if (_this.hasClass(id)){
+                asModal = asModalFunc;
+                return false;
+            }
+        });
+        return asModal ? $.proxy(asModal, this)( options ) : null;
+    };
+
+    //Allow test-pages to set bsIsTouch to fixed value
+    ns.bsIsTouch = typeof ns.bsIsTouch == "boolean" ? ns.bsIsTouch : true;
+
+    $.EMPTY_TEXT = '___***EMPTY***___';
+
+    //FONTAWESOME_PREFIX = the classname-prefix used when non is given. Fontawesome 4.X: 'fa', Fontawesome 5: Free: 'fas' Pro: 'far' or 'fal'
+    $.FONTAWESOME_PREFIX = $.FONTAWESOME_PREFIX || 'fa';
+
+
+    //FONTAWESOME_PREFIX_STANDARD = the classname-prefix used for buttons in standard radio/checkbox-buttons and icons in modal header. Fontawesome 5: Free: 'far'
+    $.FONTAWESOME_PREFIX_STANDARD = $.FONTAWESOME_PREFIX_STANDARD || 'far';
+
+
+    //ICONFONT_PREFIXES = STRING or []STRING with regexp to match class-name setting font-icon class-name. Fontawesome 5: 'fa.?' accepts 'fas', 'far', etc. as class-names => will not add $.FONTAWESOME_PREFIX
+    $.ICONFONT_PREFIXES = 'fa.?';
+
+    /******************************************************
+    $divXXGroup
+    ******************************************************/
+    function $divXXGroup( groupTypeClass, options ){
+        return $('<div/>')
+                   ._bsAddBaseClassAndSize( $.extend({}, options, {
+                       baseClass   : groupTypeClass,
+                       useTouchSize: true
+                   }));
+    }
+
+    //$._bsAdjustIconAndText: Adjust options to fit with {icon"...", text:{da:"", en:".."}
+    // options == {da:"..", en:".."} => return {text: options}
+    // options == array of ??        => array of $._bsAdjustIconAndText( ??? )
+    // options == STRING             => return {text: options}
+
+    $._bsAdjustIconAndText = function( options ){
+        if (!options)
+            return options;
+        if ($.isArray( options )){
+            var result = [];
+            $.each( options, function(index, content){
+                result.push( $._bsAdjustIconAndText(content) );
+            });
+            return result;
+        }
+
+        if ($.type( options ) == "object"){
+            if (!options.icon && !options.text)
+                return {text: options };
+            else
+                return options;
+        }
+        else
+            //options == simple type (string, number etc.)
+            return {text: options };
+
+    };
+
+    //$._bsAdjustText: Adjust options to fit with {da:"...", en:"..."}
+    // options == {da:"..", en:".."} => return options
+    // options == STRING             => return {da: options}
+    $._bsAdjustText = function( options ){
+        if (!options)
+            return options;
+        if ($.type( options ) == "string")
+            return {da: options, en:options};
+        return options;
+    };
+
+    //$._bsAdjustOptions: Adjust options to allow text/name/header etc.
+    $._bsAdjustOptions = function( options, defaultOptions, forceOptions ){
+        //*********************************************************************
+        //adjustContentOptions: Adjust options for the content of elements
+        function adjustContentAndContextOptions( options, context ){
+            options.iconClass = options.iconClass || options.iconClassName;
+            options.textClass = options.textClass || options.textClassName;
+
+            //If context is given => convert all function to proxy
+            if (context)
+                $.each( options, function( id, value ){
+                    if ($.isFunction( value ))
+                        options[id] = $.proxy( value, context );
+                });
+
+            return options;
+        }
+        //*********************************************************************
+
+        options = $.extend( true, {}, defaultOptions || {}, options, forceOptions || {} );
+
+        $.each(['selected', 'checked', 'active', 'open', 'isOpen'], function(index, id){
+            if (options[id] !== undefined){
+                options.selected = !!options[id];
+                return false;
+            }
+        });
+
+        options.list = options.list || options.buttons || options.items || options.children;
+
+        options = adjustContentAndContextOptions( options, options.context );
+
+        //Adjust options.content
+        if (options.content){
+            if ($.isArray( options.content ) )
+                //Adjust each record in options.content
+                for (var i=0; i<options.content.length; i++ )
+                    options.content[i] = adjustContentAndContextOptions( options.content[i], options.context );
+            else
+                if ($.type( options.content ) == "object")
+                    options.content = adjustContentAndContextOptions( options.content, options.context );
+        }
+
+        //Sert context = null to avoid "double" proxy
+        options.context = null;
+
+        return options;
+    };
+
+
+    /****************************************************************************************
+    _bsGetSizeClass
+    baseClass: "BASE" useTouchSize: false
+        small: false => sizeClass = ''
+        small: true  => sizeClass = "BASE-sm"
+
+    baseClass: "BASE" useTouchSize: true
+        small: false => sizeClass = 'BASE-sm'
+        small: true  => sizeClass = "BASE-xs"
+    ****************************************************************************************/
+    $._bsGetSizeClass = function( options ){
+        var sizeClassPostfix = '';
+
+        if (options.useTouchSize){
+            if (ns.bsIsTouch)
+                sizeClassPostfix = options.small ? 'sm' : '';
+            else
+                sizeClassPostfix = options.small ? 'xs' : 'sm';
+        }
+        else
+            sizeClassPostfix = options.small ? 'sm' : '';
+
+        return sizeClassPostfix && options.baseClass ? options.baseClass + '-' + sizeClassPostfix : '';
+    };
+
+
+    /****************************************************************************************
+    $._bsCreateElement = internal method to create $-element
+    ****************************************************************************************/
+    $._bsCreateElement = function( tagName, link, title, textStyle, className, data ){
+        var $result;
+        if (link){
+            $result = $('<a/>');
+            if ($.isFunction( link ))
+                $result
+                    .prop('href', 'javascript:undefined')
+                    .on('click', link );
+            else
+                $result
+                    .i18n(link, 'href')
+                    .prop('target', '_blank');
+        }
+        else
+            $result = $('<'+tagName+'/>');
+
+        if (title)
+            $result.i18n(title, 'title');
+
+        $result._bsAddStyleClasses( textStyle || '' );
+
+        if (className)
+            $result.addClass( className );
+
+        if (data)
+            $result.data( data );
+
+        return $result;
+    };
+
+    /****************************************************************************************
+    $._bsCreateIcon = internal method to create $-icon
+    ****************************************************************************************/
+    var iconfontPrefixRegExp = null;
+    $._bsCreateIcon = function( options, $appendTo, title, className/*, insideStack*/ ){
+        if (!iconfontPrefixRegExp){
+            var prefixes = $.isArray($.ICONFONT_PREFIXES) ? $.ICONFONT_PREFIXES : [$.ICONFONT_PREFIXES];
+            iconfontPrefixRegExp = new window.RegExp('(\\s|^)(' + prefixes.join('|') + ')(\\s|$)', 'g');
+        }
+
+        var $icon;
+
+        if ($.type(options) == 'string')
+            options = {class: options};
+
+        if ($.isArray( options)){
+            //Create a stacked icon
+             $icon = $._bsCreateElement( 'div', null, title, null, 'container-stacked-icons ' + (className || '')  );
+
+            $.each( options, function( index, opt ){
+                $._bsCreateIcon( opt, $icon, null, 'stacked-icon' );
+            });
+
+            //If any of the stacked icons have class fa-no-margin => set if on the container
+            if ($icon.find('.fa-no-margin').length)
+                $icon.addClass('fa-no-margin');
+        }
+        else {
+            var allClassNames = options.icon || options.class || '';
+
+            //Append $.FONTAWESOME_PREFIX if icon don't contain fontawesome prefix ("fa?")
+            if (allClassNames.search(iconfontPrefixRegExp) == -1)
+                allClassNames = $.FONTAWESOME_PREFIX + ' ' + allClassNames;
+
+            allClassNames = allClassNames + ' ' + (className || '');
+
+            $icon = $._bsCreateElement( 'i', null, title, null, allClassNames );
+
+        }
+        $icon.appendTo( $appendTo );
+        return $icon;
+    };
+
+    /****************************************************************************************
+    $._isEqual(obj1, obj2 OR array)
+    Check if two objects or arrays are equal
+    (c) 2017 Chris Ferdinandi, MIT License, https://gomakethings.com
+    @param  {Object|Array|String}  value  The first object or array to compare
+    @param  {Object|Array|String}  other  The second object or array to compare
+    @return {Boolean}              Returns true if they're equal
+    ****************************************************************************************/
+    $._isEqual = function (value, other) {
+        // Get the value type
+        var type = Object.prototype.toString.call(value);
+
+        // If the two objects are not the same type, return false
+        if (type !== Object.prototype.toString.call(other)) return false;
+
+        // Compare the length of the length of the two items
+        var valueLen = type === '[object Array]' ? value.length : Object.keys(value).length;
+        var otherLen = type === '[object Array]' ? other.length : Object.keys(other).length;
+        if (valueLen !== otherLen) return false;
+
+        // Compare two items
+        var compare = function (item1, item2) {
+            // Get the object type
+            var itemType = Object.prototype.toString.call(item1);
+
+            // If an object or array, compare recursively
+            if (['[object Array]', '[object Object]'].indexOf(itemType) >= 0) {
+                if (!$._isEqual(item1, item2)) return false;
+            }
+            // Otherwise, do a simple comparison
+            else {
+                // If the two items are not the same type, return false
+                if (itemType !== Object.prototype.toString.call(item2)) return false;
+
+                // Else if it's a function, convert to a string and compare
+                // Otherwise, just compare
+                if (itemType === '[object Function]') {
+                    if (item1.toString() !== item2.toString())
+                        return false;
+                }
+                else {
+                    if (item1 !== item2) return false;
+                }
+            }
+        };
+
+        // Compare properties
+          if (type === '[object Array]'){
+               for (var i=0; i<valueLen; i++){
+                if (compare(value[i], other[i]) === false)
+                    return false;
+            }
+        }
+        else
+            if (type === '[object Object]'){
+                for (var key in value){
+                    if ( (value.hasOwnProperty(key)) && (compare(value[key], other[key]) === false))
+                        return false;
+                }
+            }
+            else
+                // If nothing failed, return simple comparison
+                return value == other;
+
+        return true;
+    };
+
+
+    //$.parentOptionsToInherit = []ID = id of options that modal-content can inherit from the modal itself
+    $.parentOptionsToInherit = ['small'];
+
+    $.fn.extend({
+        //_bsAddIdAndName
+        _bsAddIdAndName: function( options ){
+            this.attr('id', options.id || '');
+            this.attr('name', options.name || options.id || '');
+            return this;
+        },
+
+        /****************************************************************************************
+        _bsAddBaseClassAndSize
+
+        Add classes
+
+        options:
+            baseClass           [string]
+            baseClassPostfix    [string]
+            styleClass          [string]
+            class               [string]
+            textStyle           [string] or [object]. see _bsAddStyleClasses
+        ****************************************************************************************/
+        _bsAddBaseClassAndSize: function( options ){
+            var classNames = options.baseClass ? [options.baseClass + (options.baseClassPostfix || '')] : [];
+
+            classNames.push( $._bsGetSizeClass(options) );
+
+            if (options.styleClass)
+                classNames.push( options.styleClass );
+
+            if (options.class)
+                classNames.push( options.class );
+
+            this.addClass( classNames.join(' ') );
+
+            this._bsAddStyleClasses( options.textStyle );
+
+            return this;
+        },
+
+        /****************************************************************************************
+        _bsAddStyleClasses
+        Add classes for text-styel
+
+        options [string] or [object]
+            Style for the contents. String or object with part of the following
+            "left right center lowercase uppercase capitalize normal bold italic" or
+            {left: true, right: true, center: true, lowercase: true, uppercase: true, capitalize: true, normal: true, bold: true, italic: true}
+        ****************************************************************************************/
+        _bsAddStyleClasses: function( options = {}){
+            var _this = this,
+
+                bsStyleClass = {
+                    //Text color
+                    "primary"     : "text-primary",
+                    "secondary"   : "text-secondary",
+                    "success"     : "text-success",
+                    "danger"      : "text-danger",
+                    "warning"     : "text-warning",
+                    "info"        : "text-info",
+                    "light"       : "text-light",
+                    "dark"        : "text-dark",
+
+                    //Align
+                    "left"        : "text-left",
+                    "right"       : "text-right",
+                    "center"      : "text-center",
+
+                    //Case
+                    "lowercase"   : "text-lowercase",
+                    "uppercase"   : "text-uppercase",
+                    "capitalize"  : "text-capitalize",
+
+                    //Weight
+                    "normal"      : "font-weight-normal",
+                    "bold"        : "font-weight-bold",
+                    "italic"      : "font-italic"
+                };
+
+            $.each( bsStyleClass, function( style, className ){
+                if (
+                      ( (typeof options == 'string') && (options.indexOf(style) > -1 )  ) ||
+                      ( (typeof options == 'object') && (options[style]) )
+                    )
+                    _this.addClass( className );
+            });
+            return this;
+        },
+
+        /****************************************************************************************
+        _bsAddHtml
+        Internal methods to add innerHTML to button or other element
+        options: array of textOptions or textOptions
+        textOptions: {
+            icon     : String / {class, data, attr} or array of String / {className, data, attr}
+            text     : String or array of String
+            vfFormat : String or array of String
+            vfValue  : any type or array of any-type
+            vfOptions: JSON-object or array of JSON-object
+            textStyle: String or array of String
+            link     : String or array of String
+            title    : String or array of String
+            iconClass: string or array of String
+            textClass: string or array of String
+            textData : obj or array of obj
+        }
+        checkForContent: [Boolean] If true AND options.content exists => use options.content instead
+        ****************************************************************************************/
+
+        _bsAddHtml:  function( options, htmlInDiv, ignoreLink, checkForContent ){
+            //**************************************************
+            function getArray( input ){
+                return input ? $.isArray( input ) ? input : [input] : [];
+            }
+            //**************************************************
+            function isHtmlString( str ){
+                if (!htmlInDiv || ($.type(str) != 'string')) return false;
+
+                var isHtml = false,
+                    $str = null;
+                try       { $str = $(str); }
+                catch (e) { $str = null;   }
+
+                if ($str && $str.length){
+                    isHtml = true;
+                    $str.each( function( index, elem ){
+                        if (!elem.nodeType || (elem.nodeType != 1)){
+                            isHtml = false;
+                            return false;
+                        }
+                    });
+                }
+                return isHtml;
+            }
+
+            //**************************************************
+            options = options || '';
+
+            if (options.content && checkForContent)
+                return this._bsAddHtml(options.content, htmlInDiv, ignoreLink);
+
+
+            var _this = this;
+
+            //options = array => add each
+            if ($.isArray( options )){
+                $.each( options, function( index, textOptions ){
+                    _this._bsAddHtml( textOptions, htmlInDiv, ignoreLink );
+                });
+                return this;
+            }
+
+            this.addClass('container-icon-and-text');
+
+            //If the options is a jQuery-object: append it and return
+            if (options.jquery){
+                this.append( options );
+                return this;
+            }
+
+            //If the content is a string containing html-code => append it and return
+            if (isHtmlString(options)){
+                this.append( $(options) );
+                return this;
+            }
+
+            //Adjust icon and/or text if it is not at format-options
+            if (!options.vfFormat)
+                options = $._bsAdjustIconAndText( options );
+
+            //options = simple textOptions
+            var iconArray       = getArray( options.icon ),
+                textArray       = getArray( options.text ),
+                vfFormatArray   = getArray( options.vfFormat ),
+                vfValueArray    = getArray( options.vfValue ),
+                i18nextArray    = getArray( options.i18next ),
+                vfOptionsArray  = getArray( options.vfOptions ),
+                textStyleArray  = getArray( options.textStyle ),
+                linkArray       = getArray( ignoreLink ? [] : options.link || options.onClick ),
+                titleArray      = getArray( options.title ),
+                iconClassArray  = getArray( options.iconClass ),
+                textClassArray  = getArray( options.textClass ),
+                textDataArray   = getArray( options.textData );
+
+            //Add icons (optional)
+            $.each( iconArray, function( index, icon ){
+                $._bsCreateIcon( icon, _this, titleArray[ index ], iconClassArray[index] );
+            });
+
+            //Add color (optional)
+            if (options.color)
+                _this.addClass('text-'+ options.color);
+
+            //Add text
+            $.each( textArray, function( index, text ){
+                //If text ={da,en} and both da and is html-stirng => build inside div
+                var tagName = 'span';
+                if ( (text.hasOwnProperty('da') && isHtmlString(text.da)) || (text.hasOwnProperty('en') && isHtmlString(text.en)) )
+                    tagName = 'div';
+
+                var $text = $._bsCreateElement( tagName, linkArray[ index ], titleArray[ index ], textStyleArray[ index ], textClassArray[index], textDataArray[index] );
+                $text.appendTo( _this );
+
+                if ($.isFunction( text ))
+                    text( $text );
+                else
+                    if (text == $.EMPTY_TEXT)
+                        $text.html( '&nbsp;');
+                    else
+                        if (text != ""){
+                            //If text is a string and not a key to i18next => just add the text
+                            if ( ($.type( text ) == "string") && !i18next.exists(text) )
+                                $text.html( text );
+                            else
+                                $text.i18n( text, 'html', i18nextArray[ index ] );
+                        }
+
+                if (index < textClassArray.length)
+                    $text.addClass( textClassArray[index] );
+
+            });
+
+            //Add value-format content
+            $.each( vfFormatArray, function( index ){
+                $._bsCreateElement( 'span', linkArray[ index ], titleArray[ index ], textStyleArray[ index ], textClassArray[index] )
+                    .vfValueFormat(
+                        vfValueArray[index] || '',
+                        vfFormatArray[index],
+                        vfOptionsArray[index]
+                    )
+                    .appendTo( _this );
+            });
+
+            return this;
+        },
+
+        //_bsButtonOnClick
+        _bsButtonOnClick: function(){
+            var options = this.data('bsButton_options');
+            $.proxy( options.onClick, options.context )( options.id, null, this );
+            return options.returnFromClick || false;
+        },
+
+        /****************************************************************************************
+        _bsAppendContent( options, context, arg, parentOptions )
+        Create and append any content to this.
+        options can be $-element, function, json-object or array of same
+
+        If parentOptions is given => some options from parentOptions is used if they are not given in options
+
+
+        The default bootstrap structure used for elements in a form is
+        <div class="form-group">
+            <div class="input-group input-group-with-float-label">
+                <div class="input-group-prepend">               //optional
+                    <button class="btn btn-standard">..</buton> //optional 1-N times
+                </div>                                          //optional
+
+                <label class="has-float-label">
+                    <input class="form-control form-control-with-label" type="text" placeholder="The placeholder...">
+                    <span>The label</span>
+                </label>
+
+                <div class="input-group-append">                //optional
+                    <button class="btn btn-standard">..</buton> //optional 1-N times
+                </div>                                          //optional
+            </div>
+        </div>
+        ****************************************************************************************/
+        _bsAppendContent: function( options, context, arg, parentOptions = {} ){
+
+            //Internal functions to create baseSlider and timeSlider
+            function buildSlider(options, constructorName, $parent){
+                var $sliderInput = $('<input/>').appendTo( $parent ),
+                    slider = $sliderInput[constructorName]( options ).data(constructorName),
+                    $element = slider.cache.$outerContainer || slider.cache.$container;
+
+                $element
+                    .attr('id', options.id)
+                    .data('slider', slider );
+            }
+            function buildBaseSlider(options, $parent){ buildSlider(options, 'baseSlider', $parent); }
+            function buildTimeSlider(options, $parent){ buildSlider(options, 'timeSlider', $parent); }
+
+
+            //buildCompactText - Compact box with label-icon to the left
+            function buildCompactText( options ){
+                var $result = $();
+                options.title = options.title || (options.label ? options.label.text : null);
+                $result = $result.add(
+                    $._bsCreateIcon(
+                        {icon: options.label ? options.label.icon : 'fas fa_'},
+                        null,
+                        options.title,
+                        'part-of-compact-text fa-fw text-center flex-grow-0 align-self-center'
+                    )
+                );
+
+                var $content = $('<div/>')
+                        ._bsAddHtml( options )
+                        .addClass('_input-group-with-text flex-grow-1');
+
+                if (options.title)
+                    $content.i18n(options.title, 'title');
+
+                return $result.add( $content );
+            }
+
+
+            //buildTextBox - Simple multi-line text-box
+            function buildTextBox( options ){
+                return $('<div/>')
+                        ._bsAddHtml( options )
+                        .addClass('input-group-with-text');
+            }
+
+            //buildInlineTextBox - Inline (pre/post) with single line text
+            function buildInlineTextBox( options ){
+                var $inner =
+                        $('<div/>')
+                           ._bsAddHtml( options )
+                           .addClass('form-control-border form-control no-hover');
+
+                return options.label ? $inner._wrapLabel(options) : $inner;
+            }
+
+
+            function buildHidden( options ){
+                return $.bsInput( options ).css('display', 'none');
+            }
+
+            function buildInputGroup( options, $parent ){
+                return $parent
+                           .attr('id', options.id)
+                           .addClass('flex-column')
+                           ._bsAppendContent(options.content, null, null, options);
+            }
+
+
+            if (!options)
+                return this;
+
+            //Array of $-element, function etc
+            if ($.isArray( options )){
+                var _this = this;
+                $.each(options, function( index, opt){
+                    _this._bsAppendContent(opt, context, null, parentOptions );
+                });
+                return this;
+            }
+
+            //Function: Include arg (if any) in call to method (=options)
+            if ($.isFunction( options )){
+                arg = arg ? ($.isArray(arg) ? arg.slice() : [arg]) : [];
+                arg.unshift(this);
+                options.apply( context, arg );
+                return this;
+            }
+
+            if (!$.isPlainObject(options)){
+                //Assume it is a $-element or other object that can be appended directly
+                this.append( options );
+                return this;
+            }
+
+            //json-object with options to create bs-elements
+            var buildFunc = $.fn._bsAddHtml,
+                insideFormGroup   = false,
+                addBorder         = false,
+                buildInsideParent = false,
+                noValidation      = false;
+
+
+            //Set values fro parentOptions into options
+            $.each($.parentOptionsToInherit, function(index, id){
+                if (parentOptions.hasOwnProperty(id) && !options.hasOwnProperty(id))
+                    options[id] = parentOptions[id];
+            });
+
+
+            var hasPreOrPost = options.prepend || options.before || options.append || options.after;
+
+            if (options.type){
+                var type = options.type.toLowerCase();
+                switch (type){
+                    case 'button'                : buildFunc = $.bsButton;                  break;
+
+                    case 'checkboxbutton'        : buildFunc = $.bsCheckboxButton;          break;
+                    case 'standardcheckboxbutton': buildFunc = $.bsStandardCheckboxButton;  break;
+                    case 'iconcheckboxbutton'    : buildFunc = $.bsIconCheckboxButton;      break;
+
+                    case 'buttongroup'           : buildFunc = $.bsButtonGroup;             insideFormGroup = true; break;
+
+                    case 'menu'             :   buildFunc = $.bsMenu;               break;
+                    case 'select'           :   buildFunc = $.bsSelectBox;          insideFormGroup = true; break;
+                    case 'selectlist'       :   buildFunc = $.bsSelectList;         break;
+                    case 'radiobuttongroup' :   buildFunc = $.bsRadioButtonGroup;   addBorder = true; insideFormGroup = true; break;
+                    case 'checkbox'         :   buildFunc = $.bsCheckbox;           insideFormGroup = true; break;
+
+                    case 'tabs'             :   buildFunc = $.bsTabs;               break;
+                    case 'table'            :   buildFunc = $.bsTable;              break;
+                    case 'list'             :   buildFunc = $.bsList;               break;
+                    case 'accordion'        :   buildFunc = $.bsAccordion;          break;
+                    case 'slider'           :   buildFunc = buildBaseSlider;        insideFormGroup = true; addBorder = true; buildInsideParent = true; break;
+                    case 'timeslider'       :   buildFunc = buildTimeSlider;        insideFormGroup = true; addBorder = true; buildInsideParent = true; break;
+
+
+                    case 'compact'          :
+                    case 'conpacttext'      :   buildFunc = buildCompactText;
+                                                options.noLabel = true; options.noVerticalPadding = true;
+                                                insideFormGroup = true; addBorder = true; noValidation = true; break;
+
+                    case 'text'             ://REMOVED                        buildFunc = $.bsText;               insideFormGroup = true; break;
+                    case 'textarea'         ://REMOVED                        buildFunc = $.bsTextArea;           insideFormGroup = true; break;
+                    case 'textbox'          :   if (!options.vfFormat)
+                                                    options.text = options.text || $.EMPTY_TEXT;
+                                                if (hasPreOrPost){
+                                                    buildFunc = buildInlineTextBox; insideFormGroup = true; break;
+                                                }
+                                                else {
+                                                    if (options.compact){
+                                                        //Same as type="compacttext" but with outer padding
+                                                        buildFunc = buildCompactText;
+                                                        options.noLabel = true;
+                                                    }
+                                                    else
+                                                        buildFunc = buildTextBox;
+                                                    insideFormGroup = true; addBorder = true; noValidation = true;
+                                                }
+                                                break;
+
+                    case 'fileview'         :   buildFunc = $.bsFileView;           break;
+                    case 'hidden'           :   buildFunc = buildHidden;            noValidation = true; break;
+
+                    case 'input'            :   buildFunc = $.bsInput;              insideFormGroup = true; break;
+                    case 'inputgroup'       :   buildFunc = buildInputGroup;        addBorder = true; insideFormGroup = true; buildInsideParent = true; break;
+//                    case 'xx'               :   buildFunc = $.bsXx;               break;
+
+                    default                 :   buildFunc = $.fn._bsAddHtml;        buildInsideParent = true;
+                }
+            }
+
+            //Overwrite insideFormGroup if value given in options
+            if ( $.type( options.insideFormGroup ) == "boolean")
+                insideFormGroup = options.insideFormGroup;
+
+            //Set the parent-element where to append to created element(s)
+            var $parent = this,
+                insideInputGroup = false;
+
+            if (insideFormGroup){
+                //Create outer form-group
+                insideInputGroup = true;
+                $parent = $divXXGroup('form-group', options).appendTo( $parent );
+
+                if (options.smallBottomPadding)
+                    $parent.addClass('small-bottom-padding');
+
+                if (options.noVerticalPadding)
+                    $parent.addClass('no-vertical-padding');
+
+
+                if (options.lineBefore)
+                    $('<hr/>')
+                        .addClass('before')
+                        .toggleClass('above-label', !!options.label)
+                        .appendTo( $parent );
+
+                if (noValidation || options.noValidation)
+                    $parent.addClass('no-validation');
+            }
+            var $originalParent = $parent,
+                isInputGroupWithFloatLabel = !!options.label;
+
+            if (insideInputGroup || hasPreOrPost){
+                //Create element inside input-group
+                var $inputGroup = $divXXGroup('input-group', options);
+                if (addBorder && !options.noBorder){
+                    //Add border and label (if any)
+                    $inputGroup.addClass('input-group-border');
+
+                    if (options.darkBorderlabel)
+                        $inputGroup.addClass('input-group-border-dark');
+
+                    if (options.label && !options.noLabel){
+                        isInputGroupWithFloatLabel = false; //Correct padding is set via input-group-border-with-label
+                        $inputGroup.addClass('input-group-border-with-label');
+                        $('<span/>')
+                            .addClass('has-fixed-label')
+                            ._bsAddHtml( options.label )
+                            .appendTo( $inputGroup );
+                    }
+                }
+
+                if (isInputGroupWithFloatLabel)
+                    $inputGroup.addClass('input-group-with-float-label');
+
+                $parent = $inputGroup.appendTo( $parent );
+            }
+
+            //Build the element. Build inside $parent or add to $parent after
+            if (buildInsideParent)
+                buildFunc.call( this, options, $parent );
+            else
+                buildFunc.call( this, options ).appendTo( $parent );
+
+            if (options.center)
+                $parent.addClass('justify-content-center text-center');
+
+            var prepend = options.prepend || options.before;
+            if (prepend)
+                $('<div/>')
+                    .addClass('input-group-prepend')
+                    ._bsAppendContent( prepend, options.contentContext, null, options  )
+                    .prependTo( $parent );
+            var append = options.append || options.after;
+            if (append)
+                $('<div/>')
+                    .addClass('input-group-append')
+                    ._bsAppendContent( append, options.contentContext, null, options  )
+                    .appendTo( $parent );
+
+            if (options.lineAfter)
+                $('<hr/>')
+                    .addClass('after')
+                    .appendTo( $originalParent );
+
+            return this;
+        }   //end of _bsAppendContent
+    }); //$.fn.extend
+
+
+}(jQuery, this.i18next, this, document));
 ;
 /****************************************************************************
 	jquery-bootstrap-accordion.js,
@@ -55677,11 +58419,15 @@ module.exports = g;
                 transparentOnDark   : 'transparent-on-dark',
                 semiTransparent     : 'semi-transparent',
                 square              : 'square',
+                bigSquare           : 'square big-square',
                 bigIcon             : 'big-icon',
                 extraLargeIcon      : 'extra-large-icon',
                 selected            : 'active',
                 noBorder            : 'no-border',
-                focus               : 'init_focus'
+                noShadow            : 'no-shadow',
+                focus               : 'init_focus',
+                fullWidth           : 'w-100'
+
             };
 
         //Add class-name corresponding to options
@@ -55763,7 +58509,12 @@ module.exports = g;
     $.bsCheckboxButton = function( options ){
         //Clone options to avoid reflux
         options = $.extend({}, options);
-        options.class = 'allow-zero-selected';
+
+        if (options.semiSelected)
+            options.selected = true;
+
+        options.class = 'allow-zero-selected' + (options.class ? ' '+options.class : '');
+        options.className_semi = 'semi-selected';
 
         //Use modernizr-mode and classes if icon and/or text containe two values
         if ($.isArray(options.icon) && (options.icon.length == 2)){
@@ -55786,28 +58537,38 @@ module.exports = g;
     Bootstrap-button as a checkbox with check-icon in blue box
     **********************************************************/
     $.bsStandardCheckboxButton = function( options = {}){
-        if (!options.icon)
-            options.icon =
+        var icon = [
                 options.type == 'radio' ?
                     //Radio-button icons
-                    [[
-                        'fas fa-circle text-checked   icon-show-for-checked', //"Blue" background
-                        'far fa-dot-circle text-white icon-show-for-checked', //Dot marker
-                        'far fa-circle'                                       //Border
-                    ]] :
+                    [
+                        'fas fa-circle standard-checkbox-checked-color icon-show-for-checked',              //"Blue"/"Semi-selected-orange" background
+                        $.FONTAWESOME_PREFIX_STANDARD + ' fa-dot-circle text-white icon-show-for-checked',  //Dot marker
+                        $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle'                                        //Border
+                    ] :
                     //Checkbox-button icons
-                    [[
-                        'fas fa-square text-checked      icon-show-for-checked', //"Blue" background
-                        'far fa-check-square text-white  icon-show-for-checked', //Check marker
-                        'far fa-square'                                          //Border
-                    ]];
+                    [
+                        'fas fa-square standard-checkbox-checked-color icon-show-for-checked',                //"Blue"/"Semi-selected-orange" background
+                        $.FONTAWESOME_PREFIX_STANDARD + ' fa-check-square text-white  icon-show-for-checked', //Check marker
+                        $.FONTAWESOME_PREFIX_STANDARD + ' fa-square'                                          //Border
+                    ]
+            ];
 
+        if (options.icon)
+            icon.push(options.icon);
+
+        options.icon = options.forceIcon || icon;
 
         //Clone options to avoid reflux
         options = $.extend({}, options, {
-            class    : 'allow-zero-selected',
+            class    : 'allow-zero-selected' + (options.class ? ' '+options.class : ''),
             modernizr: true,
         });
+
+        if (options.semiSelected)
+            options.selected = true;
+
+        options.class = options.class + ' standard-checkbox';
+        options.className_semi = 'semi-selected';
 
         //Bug fix: To avoid bsButton to add class 'active', selected is set to false in options for bsButton
         var bsButtonOptions = $.extend({}, options);
@@ -55831,8 +58592,30 @@ module.exports = g;
         if (options.icon.length > 2)
             icon.push( options.icon[2] );
 
-        return $.bsStandardCheckboxButton( $.extend({}, options, {square: true, icon: [icon]}) );
+        return $.bsStandardCheckboxButton( $.extend({}, options, {square: true, forceIcon: [icon]}) );
     };
+
+
+
+
+    /**********************************************************
+    _anyBsButton( options )
+    Create a specific variant of bs-buttons based on options.type
+    **********************************************************/
+    $._anyBsButton = function( options ){
+        var type = options.type || 'button',
+            constructor;
+
+        switch (type.toLowerCase()){
+            case 'button'                : constructor = $.bsButton; break;
+            case 'checkboxbutton'        : constructor = $.bsCheckboxButton; break;
+            case 'standardcheckboxbutton': constructor = $.bsStandardCheckboxButton; break;
+            case 'iconcheckboxbutton'    : constructor = $.bsIconCheckboxButton; break;
+            default                      : constructor = $.bsButton;
+        }
+        return constructor(options);
+    },
+
 
     /**********************************************************
     bsButtonGroup( options ) - create a Bootstrap-buttonGroup
@@ -55859,6 +58642,13 @@ module.exports = g;
         var result = $('<'+ options.tagName + '/>')
                         ._bsAddIdAndName( options )
                         ._bsAddBaseClassAndSize( options );
+
+        //Transfere generel button-options to buttonOptions
+        $.each(['square', 'bigSquare', 'bigIcon', 'extraLargeIcon'], function(index, id){
+            if ((options[id] !== undefined) && (options.buttonOptions[id] === undefined))
+                options.buttonOptions[id] = options[id];
+        });
+
 
         if (options.center)
             result.addClass( options.centerClass );
@@ -55888,8 +58678,9 @@ module.exports = g;
             result.attr( options.attr );
 
         $.each( options.list, function(index, buttonOptions ){
+
             if (buttonOptions.id)
-                $.bsButton( $.extend({}, options.buttonOptions, buttonOptions ) )
+                $._anyBsButton( $.extend({}, options.buttonOptions, buttonOptions ) )
                     .appendTo( result );
             else
                 $('<div/>')
@@ -55909,9 +58700,11 @@ module.exports = g;
 	    allowZeroSelected: boolean. If true it is allowed to des-select a selected radio-button.
 	                       If allowZeroSelected=true onChange will also be called on the un-selected radio-input
         buttons          : as bsButtonGroup
-
     **********************************************************/
     $.bsRadioButtonGroup = function( options ){
+        options.items = options.items || options.list;
+        options.list = options.list || options.items;
+
         //Set options for RadioGroup
         $.each( options.list, function(index, buttonOptions ){
             buttonOptions = $._bsAdjustOptions( buttonOptions );
@@ -55926,7 +58719,8 @@ module.exports = g;
                     $.extend({}, options, {
                         radioGroupId     : options.id,
                         className        : 'active',
-                        allowZeroSelected: false
+                        className_semi   : 'semi-selected',
+                        allowZeroSelected: false,
                     })
                 );
 
@@ -56184,8 +58978,8 @@ module.exports = g;
             //*********************************************
             default:
                 $container._bsAddHtml({ text: {
-                    da: 'Klik på <i class="far fa-window-maximize"/> for at se dokumentet i et nyt vindue<br>Klik på <i class="fas ' + $.bsExternalLinkIcon + '"/> for at se dokumentet i en ny fane',
-                    en: 'Click on <i class="far fa-window-maximize"/> to see the document in a new window<br>Click on <i class="fas ' + $.bsExternalLinkIcon + '"/> to see the document in a new Tab Page'
+                    da: 'Klik på <i class="'+$.FONTAWESOME_PREFIX + ' fa-window-maximize"/> for at se dokumentet i et nyt vindue<br>Klik på <i class="' + $.FONTAWESOME_PREFIX + ' ' + $.bsExternalLinkIcon + '"/> for at se dokumentet i en ny fane',
+                    en: 'Click on <i class="'+$.FONTAWESOME_PREFIX + ' fa-window-maximize"/> to see the document in a new window<br>Click on <i class="' + $.FONTAWESOME_PREFIX + ' ' + $.bsExternalLinkIcon + '"/> to see the document in a new Tab Page'
                 }});
         }
 
@@ -56194,7 +58988,7 @@ module.exports = g;
             .addClass('modal-footer')
             .css('justify-content',  'center')
             ._bsAppendContent([
-                $.bsButton( {icon:'far fa-window-maximize',  text: {da:'Vis',  en:'Show'},   onClick: function(){ showFileInModal( fileName, options.header ); } } ),
+                $.bsButton( {icon: $.FONTAWESOME_PREFIX + ' fa-window-maximize',  text: {da:'Vis',  en:'Show'},   onClick: function(){ showFileInModal( fileName, options.header ); } } ),
                 $.bsButton( {icon: $.bsExternalLinkIcon, text: {da: 'Åbne', en: 'Open'}, link: fileName } )
             ])
             .appendTo($result);
@@ -56243,7 +59037,7 @@ module.exports = g;
                 ' ';
         var result = [
             'fas ' + className + colorClassName,
-            'far ' + className + borderColorClassName
+            $.FONTAWESOME_PREFIX + ' ' + className + borderColorClassName
         ];
 
         return options.partOfList ? result : [result];
@@ -56286,6 +59080,9 @@ module.exports = g;
 
     //BsModalinput = internal object representing an input-element in the form
     function BsModalInput( options, modalForm ){
+        options.items = options.items || options.list;
+        options.list = options.list || options.items;
+
         this.options = options;
         this.modalForm = modalForm;
         this.options.userId = this.options.id;
@@ -56339,31 +59136,39 @@ module.exports = g;
         setValue
         *******************************************************/
         setValue: function(value, validate){
-            var $elem = this.getElement();
+            var $elem = this.getElement(),
+                isSemiSelected;
+
+            //Special case: If it is a element with possible semi-selected value and vaule is a string/array => the element get semi-selected mode (yellow background)
+            if (this.canBeSemiSelected){
+                var semiSelectedValue;
+
+                isSemiSelected = ($.type(value) == this.semiSelectedValueType);
+                if ((isSemiSelected && this.semiSelectedValueType == 'array')){
+                    semiSelectedValue = value[1];
+                    value             = value[0];
+                }
+                else
+                    semiSelectedValue = value;
+            }
+
             switch (this.options.type || 'input'){
-                case 'input'            : $elem.val( value );                      break;
-                case 'select'           : $elem.selectpicker('val', value );       break;
-                case 'checkbox'         :
-                    //Special case: If value is a string => the checkbox get semi-selected mode (yellow background)
-                    var isSemiSelected = (typeof value == 'string');
-                    $elem.toggleClass('semi-selected', isSemiSelected);
+                case 'input'   : $elem.val( value );                break;
+                case 'select'  : $elem.selectpicker('val', value ); break;
 
-                    //Update options for the checkbox
-                    var options = $elem.data('cbx_options');
-                    options.className_semi = isSemiSelected ? 'semi-selected' : '';
-                    options.semiSelectedValue = isSemiSelected ? value : '';
-                    $elem.data('cbx_options', options );
+                case 'checkbox': $elem.prop('checked', value );     break;
 
-                    $elem.prop('checked', value );
-                    break;
+                case 'checkboxbutton'        :
+                case 'standardcheckboxbutton':
+                case 'iconcheckboxbutton'    : $elem._cbxSet(value, true, isSemiSelected, semiSelectedValue); break;
 
-                case 'selectlist'       : this.getRadioGroup().setSelected(value); break;
-                case 'radiobuttongroup' : this.getRadioGroup().setSelected(value); break;
+                case 'selectlist'      : this.getRadioGroup().setSelected(value); break;
+                case 'radiobuttongroup': this.getRadioGroup().setSelected(value, false, isSemiSelected, semiSelectedValue); break;
 
-                case 'slider'           :
-                case 'timeslider'       : this.getSlider().setValue( value );      break;
-                case 'text'             :                                          break;
-                case 'hidden'           : $elem.val( value );                      break;
+                case 'slider'    :
+                case 'timeslider': this.getSlider().setValue( value );  break;
+                case 'text'      :                                      break;
+                case 'hidden'    : $elem.val( value );                  break;
             }
             this.onChanging();
             return validate ? this.validate() : this;
@@ -56373,18 +59178,26 @@ module.exports = g;
         getResetValue: function(){
         *******************************************************/
         getResetValue: function(){
-            var result = null;
+            var result;
             switch (this.options.type || 'input'){
                 case 'input'            : result = '';    break;
                 case 'select'           : result = null;  break;
-                case 'checkbox'         : result = false; break;
-                case 'selectlist'       : result = this.getRadioGroup().options.list[0].id; break;
+
+                case 'checkbox'              :
+                case 'checkboxbutton'        :
+                case 'standardcheckboxbutton':
+                case 'iconcheckboxbutton'    : result = false; break;
+
+                case 'selectlist'       :
                 case 'radiobuttongroup' : result = this.getRadioGroup().options.list[0].id; break;
 
                 case 'slider'           :
                 case 'timeslider'       : result = this.getSlider().result.min; break;
-                case 'text'             : result = '';                          break;
+
+                case 'text'             :
                 case 'hidden'           : result = '';                          break;
+
+                default                 : result = false;
             }
             return result;
         },
@@ -56411,26 +59224,27 @@ module.exports = g;
         getValue: function(){
             var $elem = this.getElement(),
                 result = null;
+
             switch (this.options.type || 'input'){
-                case 'input'            : result = $elem.val();               break;
-                case 'select'           : result = $elem.selectpicker('val'); break;
-                case 'checkbox'         :
-                    result = !!$elem.prop('checked');
+                case 'input'   : result = $elem.val();                    break;
+                case 'select'  : result = $elem.selectpicker('val');      break;
 
-                    //Special case: If $elem is semi-selected: return special value from option
-                    var options = $elem.data('cbx_options');
-                    if (result && options.semiSelectedValue && options.className_semi && $elem.hasClass(options.className_semi))
-                        result = options.semiSelectedValue;
+                case 'checkbox': result = !!$elem.prop('checked');        break;
 
-                    break;
+                case 'checkboxbutton'        :
+                case 'standardcheckboxbutton':
+                case 'iconcheckboxbutton'    : result = !!$elem._cbxGet();              break;
 
-                case 'selectlist'       : result = this.getRadioGroup().getSelected(); break;
-                case 'radiobuttongroup' : result = this.getRadioGroup().getSelected(); break;
-                case 'slider'           :
-                case 'timeslider'       : result = this._getSliderValue(); break;
-                case 'text'             : result = ' ';                    break;
-                case 'hidden'           : result = $elem.val();            break;
+                case 'selectlist'       : result = this.getRadioGroup().getSelected();  break;
+                case 'radiobuttongroup' : result = this.getRadioGroup().getSelected();  break;
+
+                case 'slider'    :
+                case 'timeslider': result = this._getSliderValue();              break;
+
+                case 'text'      : result = ' ';                                 break;
+                case 'hidden'    : result = $elem.val();                         break;
             }
+
             return result === null ? this.getResetValue() : result;
         },
 
@@ -56529,12 +59343,26 @@ module.exports = g;
         //this.input = simple object with all input-elements. Also convert element-id to unique id for input-element
         this.inputs = {};
 
-        var types = ['button', 'input', 'select', 'selectlist', 'radiobuttongroup', 'checkbox', 'radio', 'table', 'slider', 'timeslider', 'hidden', 'inputgroup'];
+        var typeList = ['button', 'checkboxbutton', 'standardcheckboxbutton', 'iconcheckboxbutton',
+                        'input', 'select', 'selectlist', 'radiobuttongroup', 'checkbox', 'radio', 'table', 'slider', 'timeslider', 'hidden', 'inputgroup'],
+
+            //semiSelectedValueTypes = {TYPE_ID:TYPE} TYPE_ID = the types that accept a semi-selected value. TYPE = the $.type result that detect if the value of a element is semi-selected
+            semiSelectedValueTypes = {
+                checkboxbutton          : {type: 'string' },
+                standardcheckboxbutton  : {type: 'string' },
+                checkbox                : {type: 'string' },
+                radiobuttongroup        : {type: 'array',   addSemiSelectedClassToChild: true }
+            };
 
         function setId( dummy, obj ){
-            if ($.isPlainObject(obj) && (obj.type !== undefined) && (types.indexOf(obj.type) >= 0) && obj.id){
+            if ($.isPlainObject(obj) && (obj.type !== undefined) && typeList.includes(obj.type) && obj.id){
                 var bsModalInput = new BsModalInput( obj, _this ),
-                    onChangingFunc = $.proxy( bsModalInput.onChanging, bsModalInput );
+                    onChangingFunc = $.proxy( bsModalInput.onChanging, bsModalInput ),
+                    ssvt = semiSelectedValueTypes[obj.type];
+
+                var canBeSemiSelected = bsModalInput.canBeSemiSelected = !!ssvt;
+                bsModalInput.semiSelectedValueType       = canBeSemiSelected ? ssvt.type                        : null;
+                bsModalInput.addSemiSelectedClassToChild = canBeSemiSelected ? ssvt.addSemiSelectedClassToChild : null;
 
                 //Set options to call onChanging
                 switch (obj.type){
@@ -56542,6 +59370,7 @@ module.exports = g;
                     case 'timeslider': obj.onChanging = onChangingFunc; break;
                     default          : obj.onChange = onChangingFunc;
                 }
+
                 //Add element to inputs
                 _this.inputs[obj.id] = bsModalInput;
             }
@@ -56628,13 +59457,13 @@ module.exports = g;
         /*******************************************************
         edit
         *******************************************************/
-        edit: function( values, tabIndexOrId ){
+        edit: function( values, tabIndexOrId, semiSelected ){
             this.$bsModal.show();
 
             if (tabIndexOrId !== undefined)
                 this.$bsModal.bsSelectTab(tabIndexOrId);
 
-            this.setValues( values, false, true );
+            this.setValues( values, false, true, semiSelected );
             this.originalValues = this.getValues();
 
             //Reset validation
@@ -56798,13 +59627,13 @@ module.exports = g;
         /*******************************************************
         setValues
         *******************************************************/
-        setValues: function(values, validate, restUndefined){
+        setValues: function(values, validate, resetUndefined){
             this._eachInput( function( input ){
                 var value = values[input.options.userId];
                 if ( value != undefined)
                     input.setValue(value, validate);
                 else
-                    if (restUndefined)
+                    if (resetUndefined)
                         input.resetValue();
             });
         },
@@ -56891,33 +59720,42 @@ module.exports = g;
 
     */
 
-    //$.bsHeaderIcons = class-names for the different icons on the header
-    $.bsHeaderIcons = {
-        back    : 'fa-chevron-left',
-        forward : 'fa-chevron-right',
+    //$.bsHeaderIcons = class-names for the different icons on the header. Set by function to allow updating $.FONTAWESOME_PREFIX_??
+    $.bsHeaderIcons = {};
+    $._set_bsHeaderIcons = function( forceOptions = {}){
 
-        pin     : ['fas fa-thumbtack fa-inside-circle', 'far fa-circle'],
-        unpin   : 'fa-thumbtack',
+        $.bsHeaderIcons = $.extend( $.bsHeaderIcons, {
+            back    : 'fa-circle-chevron-left',
+            forward : 'fa-circle-chevron-right',
 
-        extend  : 'fa-chevron-up',
-        diminish: 'fa-chevron-down',
+            pin     : ['fas fa-thumbtack fa-inside-circle', $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle'],
+            unpin   : 'fa-thumbtack',
 
-        new     : ['far fa-window-maximize fa-inside-circle2', 'far fa-circle'],
-
-        warning : [['fas fa-circle back text-warning', 'far fa-circle front'], 'fas fa-exclamation middle'],
-
-        info    : 'fa-info-circle',
+            extend  : 'fa-chevron-circle-up',
+            diminish: 'fa-chevron-circle-down',
 
 
-        help    : 'far fa-question-circle',
+            new     : [ $.FONTAWESOME_PREFIX_STANDARD + ' fa-window-maximize fa-inside-circle2',
+                        $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle'  ],
 
-        close   : ['fas fa-circle back', 'far fa-times-circle middle', 'far fa-circle front']
+            warning : [ 'fas fa-circle back text-warning',
+                        $.FONTAWESOME_PREFIX_STANDARD + ' fa-circle',
+                        'fas fa-exclamation fa-inside-circle-xmark'   ],
+
+            info    : 'fa-circle-info',
+            help    : 'fa-circle-question',
+
+            close   : [ 'fas fa-circle show-for-hover fa-hover-color-red',
+                        'fa-xmark fa-inside-circle-xmark fa-hover-color-white',
+                        $.FONTAWESOME_PREFIX_STANDARD+' fa-circle' ]
+
+        }, forceOptions );
     };
+    $._set_bsHeaderIcons();
 
     //mandatoryHeaderIconClass = mandatory class-names and title for the different icons on the header
     var mandatoryHeaderIconClassAndTitle = {
-        warning: {class:'header-icon-colored-background header-icon-warning', __title: {da:'Luk', en:'Close'}},
-        close  : {class:'header-icon-colored-background header-icon-close',   title: {da:'Luk', en:'Close'}},
+        close  : {/*class:'',*/ title: {da:'Luk', en:'Close'}},
     };
 
     /******************************************************
@@ -57043,23 +59881,25 @@ module.exports = g;
         $.bsText( options )
         Create a <div> with text inside a <label>
         ******************************************************/
+/* REMOVED. ALL TEXT-INPUTS ARE CREATED IN _bsAppendContent
         bsText: function( options ){
             return $('<div/>')
                        ._bsAddHtml( options )
                        .addClass('form-control-border form-control no-hover')
                        ._wrapLabel(options);
         },
-
+//*/
         /******************************************************
         $.bsTextArea( options )
         Create a <div> with text inside a <label>
         ******************************************************/
+/* REMOVED. ALL TEXT-INPUTS ARE CREATED IN _bsAppendContent
         bsTextArea: function( options ){
             var $result = $.bsText( options );
             $result.children('.form-control').css('height', 'auto');
             return $result;
         }
-
+//*/
     });
 
 
@@ -57602,8 +60442,8 @@ options
             fileNameExt = window.url('fileext', theFileName),
             $content,
             footer = {
-                da: 'Hvis filen ikke kan vises, klik på <i class="fas ' + $.bsExternalLinkIcon + '"></i> for at se dokumentet i en ny fane',
-                en: 'If the file doesn\'t show correctly click on <i class="fas ' + $.bsExternalLinkIcon + '"></i> to see the document in a new Tab Page'
+                da: 'Hvis filen ikke kan vises, klik på <i class="' +           $.FONTAWESOME_PREFIX + ' ' + $.bsExternalLinkIcon + '"></i> for at se dokumentet i en ny fane',
+                en: 'If the file doesn\'t show correctly click on <i class="' + $.FONTAWESOME_PREFIX + ' ' + $.bsExternalLinkIcon + '"></i> to see the document in a new Tab Page'
             },
             fullWidth       = true,
             noPadding       = true,
@@ -57618,8 +60458,8 @@ options
                 $('<div/>')
                     .addClass('text-center')
                     ._bsAddHtml({text: {
-                        da: 'Denne browser understøtter ikke visning<br>af pdf-filer i popup-vinduer<br>Klik på <i class="fas ' + $.bsExternalLinkIcon + '"/> for at se dokumentet i en ny fane',
-                        en: 'This browser does not support<br>pdf-files in popup windows<br>Click on <i class="fas ' + $.bsExternalLinkIcon + '"/> to see the document<br>in a new Tab page'
+                        da: 'Denne browser understøtter ikke visning<br>af pdf-filer i popup-vinduer<br>Klik på <i class="' + $.FONTAWESOME_PREFIX + ' ' + $.bsExternalLinkIcon + '"/> for at se dokumentet i en ny fane',
+                        en: 'This browser does not support<br>pdf-files in popup windows<br>Click on <i class="' +            $.FONTAWESOME_PREFIX + ' ' + $.bsExternalLinkIcon + '"/> to see the document<br>in a new Tab page'
                     }});
             fullWidth       = false;
             footer          = null;
@@ -57660,11 +60500,29 @@ options
 
                     //Add the images to the iframe when the iframe is loaded into the DOM
                     setTimeout( function(){
-                        var $iFrameBody = $iframe.contents().find('body');
-                        $iFrameBody.on('mousewheel', $.proxy( zoomControl.mousewheel, zoomControl ) );
-                        $iFrameBody.append($img);
-                    }, 200);
+                        var contents = $iframe.contents(),
+                            $iframeBody = contents.find('body')/*,
+                            $iframeHead = contents.find('head')*/;
 
+                        $iframeBody.on('mousewheel', $.proxy( zoomControl.mousewheel, zoomControl ) );
+                        $iframeBody.append($img);
+
+                        /* Try to adjust style of iframe - Not working
+                        var style = document.createElement('style');
+                        style.type = 'text/css';
+                        style.innerHTML =
+                            'body { scrollbar-width: thin; scrollbar-color: #cdcdcd white;; }; ' +
+                            'html ::-webkit-scrollbar-thumb {background-color: #cdcdcd; border-radius: 6px; border: 1px solid white; box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }';
+                        $iframeHead.append(style);
+
+                        //Or by css-file
+                        var cssLink = document.createElement("link");
+                        cssLink.href = "style.css";
+                        cssLink.rel = "stylesheet";
+                        cssLink.type = "text/css";
+                        $iframeHead.append(cssLink);
+                        */
+                    }, 200);
 
                     $content = [
                         $iframe,
@@ -57935,7 +60793,7 @@ jquery-bootstrap-modal-promise.js
     as expected/needed
     Instead a resize-event is added to update the max-height of
     elements with the current value of window.innerHeight
-    Sets both max-height and height to allow always-max-heigth options
+    Sets both max-height and height to allow always-max-height options
     **********************************************************/
     function adjustModalMaxHeight( $modalContent ){
         var $modalContents = $modalContent || $('.modal-content.modal-flex-height');
@@ -57996,7 +60854,9 @@ jquery-bootstrap-modal-promise.js
             flexWidth : !!options.flexWidth,
             extraWidth: !!options.extraWidth,
             megaWidth : !!options.megaWidth,
-            width     : options.width ? options.width+'px' : null
+            width     : options.width ?
+                        ( (typeof options.width == 'number') ? options.width+'px' : options.width)
+                        : null
         };
     }
 
@@ -58288,9 +61148,10 @@ jquery-bootstrap-modal-promise.js
                         .addClass(scrollbarClass)
                         .addScrollbar({
                             direction       : scrollDirection,
-                            contentClassName: options.noVerticalPadding ? '' : 'modal-body-with-vertical-padding'
+                            contentClassName: options.noVerticalPadding ? '' : 'modal-body-with-vertical-padding' + (window.getScrollbarWidth() ? '' :' modal-body-with-horizontal-padding')
                         }) :
                     $modalBody;
+
 
         //Add content. If the content is 'dynamic' ie options.dynamic == true and options.content is a function, AND it is a different size => save function
         if (options.dynamic && (typeof options.content == 'function') && (size != initSize)){
@@ -58638,7 +61499,7 @@ jquery-bootstrap-modal-promise.js
                 buttonOptions.class = buttonOptions.class || buttonOptions.className || '';
 
                 var $button =
-                    $.bsButton( $.extend({}, defaultButtonOptions, buttonOptions ) )
+                    $._anyBsButton( $.extend({}, defaultButtonOptions, buttonOptions ) )
                         .appendTo( $modalButtonContainer );
 
                 //Add onClick from icons (if any)
@@ -59390,6 +62251,38 @@ jquery-bootstrap-modal-promise.js
         }, options));
     };
 
+    /********************************************************************
+    *********************************************************************
+    notyConfirm( text, onOk) or notyConfirm( options ) = Noty-variation of window.confirm = a Noty with OK and Cancel-buttons
+    options = {
+        type  : STRING, default = 'alert'
+        header: OBJECT, default = ícon and name from $.bsNotyIcon and $.bsNotyName
+        text  : The text shown
+        onOk  : FUNCTION - called when the Ok-button is clicked
+    }
+    *********************************************************************
+    *********************************************************************/
+    window.notyConfirm = $.bsConfirm = function(){
+        var options = arguments.length == 1 ? arguments[0] : {text: arguments[0], onOk: arguments[1]};
+
+        options = $.extend({
+            type         : 'info',
+            defaultHeader: true,
+            textAlign    : 'center',
+            layout       : 'center',
+            modal        : true,
+            closeWith    : ['button'],
+            buttons      : [
+                {icon:'fa-times', text: {da:'Annullér', en:'Cancel'},          onClick: options.onCancel },
+                {icon:'fa-check', text: {da:'Ok', en:'Ok'}, class:'min-width', onClick: options.onOk     }
+            ]
+        }, options);
+
+
+        return window.noty( options );
+    };
+
+
 }(jQuery, this.Noty, this, document));
 ;
 /****************************************************************************
@@ -59798,7 +62691,7 @@ jquery-bootstrap-modal-promise.js
                     var $child = $(elemList[index]).children().first();
                     if ($child.length){
                         $child.empty();
-                        $child._bsAddHtml(options.items[itemIndex]);
+                        $child._bsAddHtml(options.list[itemIndex]);
                     }
 
                     itemIndex++;
@@ -59870,6 +62763,10 @@ jquery-bootstrap-modal-promise.js
     **********************************************************/
     var selectboxId = 0;
     $.bsSelectBox = $.bsSelectbox = function( options ){
+
+        options.items = options.items || options.list;
+        options.list = options.list || options.items;
+
         //Add size-class to button-class
         var buttonSizeClass = $._bsGetSizeClass({
                 baseClass   : 'btn',
@@ -59910,12 +62807,12 @@ jquery-bootstrap-modal-promise.js
                 $('<div class="form-control-with-label"></div>')
                     .append( $select );
 
-        //Convert options.items to select-option
+        //Convert options.list to select-option
         var selectedId = null,
             $currentParent = $select,
             itemOptionsList = [{}]; //{} = dummy for the title
 
-        $.each( options.items, function( index, itemOptions ){
+        $.each( options.list, function( index, itemOptions ){
             if (itemOptions.id){
                 itemOptionsList.push(itemOptions);
 
@@ -60937,790 +63834,6 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     };
 
 }(jQuery, this, document));
-;
-/****************************************************************************
-    jquery-bootstrap.js,
-
-    (c) 2017, FCOO
-
-    https://github.com/fcoo/jquery-bootstrap
-    https://github.com/fcoo
-
-****************************************************************************/
-
-(function ($, i18next, window, document, undefined) {
-    "use strict";
-
-    /*
-
-    Almost all elements comes in two sizes: normal and small set by options.small: false/true
-
-    In jquery-bootstrap.scss sizing class-postfix -xs is added (from Bootstrap 3)
-
-    Elements to click or touch has a special implementation:
-    For device with 'touch' the Bootstrap size 'normal' and 'small' are used
-    For desktop (only mouse) we using smaller version (large = Bootstrap normal, normal = Bootstrap small, small = Bootstrap x-small)
-
-    The variable window.bsIsTouch must be overwriten with the correct value in the application
-
-    */
-
-    //Create namespace
-    var ns = window;
-
-    /*
-    Create $.BSASMODAL = record with {className: asModal-function} where className is added to any $element that have a asModal-function
-    Ex.:
-    $.BSASMODAL['BSTABLE'] = function(){ //Create bsModal for this }
-    var myTable = $.bsTable({...}); //Add 'BSTABLE' to class-name for  result
-    myTable.asModal({...});
-    */
-    $.BSASMODAL = $.BSASMODAL || {};
-    $.fn.asModal = function(options){
-        var _this   = this,
-            asModal = null;
-
-        $.each($.BSASMODAL, function(id, asModalFunc){
-            if (_this.hasClass(id)){
-                asModal = asModalFunc;
-                return false;
-            }
-        });
-        return asModal ? $.proxy(asModal, this)( options ) : null;
-    };
-
-    //Allow test-pages to set bsIsTouch to fixed value
-    ns.bsIsTouch = typeof ns.bsIsTouch == "boolean" ? ns.bsIsTouch : true;
-
-    $.EMPTY_TEXT = '___***EMPTY***___';
-
-    //FONTAWESOME_PREFIX = the classname-prefix used when non is given. Fontawesome 4.X: 'fa', Fontawesome 5: Free: 'fas' Pro: 'far' or 'fal'
-    $.FONTAWESOME_PREFIX = $.FONTAWESOME_PREFIX || 'fa';
-
-    //ICONFONT_PREFIXES = STRING or []STRING with regexp to match class-name setting font-icon class-name. Fontawesome 5: 'fa.?' accepts 'fas', 'far', etc. as class-names => will not add $.FONTAWESOME_PREFIX
-    $.ICONFONT_PREFIXES = 'fa.?';
-
-    /******************************************************
-    $divXXGroup
-    ******************************************************/
-    function $divXXGroup( groupTypeClass, options ){
-        return $('<div/>')
-                   ._bsAddBaseClassAndSize( $.extend({}, options, {
-                       baseClass   : groupTypeClass,
-                       useTouchSize: true
-                   }));
-    }
-
-    //$._bsAdjustIconAndText: Adjust options to fit with {icon"...", text:{da:"", en:".."}
-    // options == {da:"..", en:".."} => return {text: options}
-    // options == array of ??        => array of $._bsAdjustIconAndText( ??? )
-    // options == STRING             => return {text: options}
-
-    $._bsAdjustIconAndText = function( options ){
-        if (!options)
-            return options;
-        if ($.isArray( options )){
-            var result = [];
-            $.each( options, function(index, content){
-                result.push( $._bsAdjustIconAndText(content) );
-            });
-            return result;
-        }
-
-        if ($.type( options ) == "object"){
-            if (!options.icon && !options.text)
-                return {text: options };
-            else
-                return options;
-        }
-        else
-            //options == simple type (string, number etc.)
-            return {text: options };
-
-    };
-
-    //$._bsAdjustText: Adjust options to fit with {da:"...", en:"..."}
-    // options == {da:"..", en:".."} => return options
-    // options == STRING             => return {da: options}
-    $._bsAdjustText = function( options ){
-        if (!options)
-            return options;
-        if ($.type( options ) == "string")
-            return {da: options, en:options};
-        return options;
-    };
-
-    //$._bsAdjustOptions: Adjust options to allow text/name/header etc.
-    $._bsAdjustOptions = function( options, defaultOptions, forceOptions ){
-        //*********************************************************************
-        //adjustContentOptions: Adjust options for the content of elements
-        function adjustContentAndContextOptions( options, context ){
-            options.iconClass = options.iconClass || options.iconClassName;
-            options.textClass = options.textClass || options.textClassName;
-
-            //If context is given => convert all function to proxy
-            if (context)
-                $.each( options, function( id, value ){
-                    if ($.isFunction( value ))
-                        options[id] = $.proxy( value, context );
-                });
-
-            return options;
-        }
-        //*********************************************************************
-
-        options = $.extend( true, {}, defaultOptions || {}, options, forceOptions || {} );
-
-        $.each(['selected', 'checked', 'active', 'open', 'isOpen'], function(index, id){
-            if (options[id] !== undefined){
-                options.selected = !!options[id];
-                return false;
-            }
-        });
-
-        options.list = options.list || options.buttons || options.items || options.children;
-
-        options = adjustContentAndContextOptions( options, options.context );
-
-        //Adjust options.content
-        if (options.content){
-            if ($.isArray( options.content ) )
-                //Adjust each record in options.content
-                for (var i=0; i<options.content.length; i++ )
-                    options.content[i] = adjustContentAndContextOptions( options.content[i], options.context );
-            else
-                if ($.type( options.content ) == "object")
-                    options.content = adjustContentAndContextOptions( options.content, options.context );
-        }
-
-        //Sert context = null to avoid "double" proxy
-        options.context = null;
-
-        return options;
-    };
-
-
-    /****************************************************************************************
-    _bsGetSizeClass
-    baseClass: "BASE" useTouchSize: false
-        small: false => sizeClass = ''
-        small: true  => sizeClass = "BASE-sm"
-
-    baseClass: "BASE" useTouchSize: true
-        small: false => sizeClass = 'BASE-sm'
-        small: true  => sizeClass = "BASE-xs"
-    ****************************************************************************************/
-    $._bsGetSizeClass = function( options ){
-        var sizeClassPostfix = '';
-
-        if (options.useTouchSize){
-            if (ns.bsIsTouch)
-                sizeClassPostfix = options.small ? 'sm' : '';
-            else
-                sizeClassPostfix = options.small ? 'xs' : 'sm';
-        }
-        else
-            sizeClassPostfix = options.small ? 'sm' : '';
-
-        return sizeClassPostfix && options.baseClass ? options.baseClass + '-' + sizeClassPostfix : '';
-    };
-
-
-    /****************************************************************************************
-    $._bsCreateElement = internal method to create $-element
-    ****************************************************************************************/
-    $._bsCreateElement = function( tagName, link, title, textStyle, className, data ){
-        var $result;
-        if (link){
-            $result = $('<a/>');
-            if ($.isFunction( link ))
-                $result
-                    .prop('href', 'javascript:undefined')
-                    .on('click', link );
-            else
-                $result
-                    .i18n(link, 'href')
-                    .prop('target', '_blank');
-        }
-        else
-            $result = $('<'+tagName+'/>');
-
-        if (title)
-            $result.i18n(title, 'title');
-
-        $result._bsAddStyleClasses( textStyle || '' );
-
-        if (className)
-            $result.addClass( className );
-
-        if (data)
-            $result.data( data );
-
-        return $result;
-    };
-
-    /****************************************************************************************
-    $._bsCreateIcon = internal method to create $-icon
-    ****************************************************************************************/
-    var iconfontPrefixRegExp = null;
-    $._bsCreateIcon = function( options, $appendTo, title, className/*, insideStack*/ ){
-        if (!iconfontPrefixRegExp){
-            var prefixes = $.isArray($.ICONFONT_PREFIXES) ? $.ICONFONT_PREFIXES : [$.ICONFONT_PREFIXES];
-            iconfontPrefixRegExp = new window.RegExp('(\\s|^)(' + prefixes.join('|') + ')(\\s|$)', 'g');
-        }
-
-        var $icon;
-
-        if ($.type(options) == 'string')
-            options = {class: options};
-
-        if ($.isArray( options)){
-            //Create a stacked icon
-             $icon = $._bsCreateElement( 'div', null, title, null, 'container-stacked-icons ' + (className || '')  );
-
-            $.each( options, function( index, opt ){
-                $._bsCreateIcon( opt, $icon, null, 'stacked-icon' );
-            });
-
-            //If any of the stacked icons have class fa-no-margin => set if on the container
-            if ($icon.find('.fa-no-margin').length)
-                $icon.addClass('fa-no-margin');
-        }
-        else {
-            var allClassNames = options.icon || options.class || '';
-
-            //Append $.FONTAWESOME_PREFIX if icon don't contain fontawesome prefix ("fa?")
-            if (allClassNames.search(iconfontPrefixRegExp) == -1)
-                allClassNames = $.FONTAWESOME_PREFIX + ' ' + allClassNames;
-
-            allClassNames = allClassNames + ' ' + (className || '');
-
-            $icon = $._bsCreateElement( 'i', null, title, null, allClassNames );
-
-        }
-        $icon.appendTo( $appendTo );
-        return $icon;
-    };
-
-    /****************************************************************************************
-    $._isEqual(obj1, obj2 OR array)
-    Check if two objects or arrays are equal
-    (c) 2017 Chris Ferdinandi, MIT License, https://gomakethings.com
-    @param  {Object|Array|String}  value  The first object or array to compare
-    @param  {Object|Array|String}  other  The second object or array to compare
-    @return {Boolean}              Returns true if they're equal
-    ****************************************************************************************/
-    $._isEqual = function (value, other) {
-        // Get the value type
-        var type = Object.prototype.toString.call(value);
-
-        // If the two objects are not the same type, return false
-        if (type !== Object.prototype.toString.call(other)) return false;
-
-        // Compare the length of the length of the two items
-        var valueLen = type === '[object Array]' ? value.length : Object.keys(value).length;
-        var otherLen = type === '[object Array]' ? other.length : Object.keys(other).length;
-        if (valueLen !== otherLen) return false;
-
-        // Compare two items
-        var compare = function (item1, item2) {
-            // Get the object type
-            var itemType = Object.prototype.toString.call(item1);
-
-            // If an object or array, compare recursively
-            if (['[object Array]', '[object Object]'].indexOf(itemType) >= 0) {
-                if (!$._isEqual(item1, item2)) return false;
-            }
-            // Otherwise, do a simple comparison
-            else {
-                // If the two items are not the same type, return false
-                if (itemType !== Object.prototype.toString.call(item2)) return false;
-
-                // Else if it's a function, convert to a string and compare
-                // Otherwise, just compare
-                if (itemType === '[object Function]') {
-                    if (item1.toString() !== item2.toString())
-                        return false;
-                }
-                else {
-                    if (item1 !== item2) return false;
-                }
-            }
-        };
-
-        // Compare properties
-          if (type === '[object Array]'){
-               for (var i=0; i<valueLen; i++){
-                if (compare(value[i], other[i]) === false)
-                    return false;
-            }
-        }
-        else
-            if (type === '[object Object]'){
-                for (var key in value){
-                    if ( (value.hasOwnProperty(key)) && (compare(value[key], other[key]) === false))
-                        return false;
-                }
-            }
-            else
-                // If nothing failed, return simple comparison
-                return value == other;
-
-        return true;
-    };
-
-
-    //$.parentOptionsToInherit = []ID = id of options that modal-content can inherit from the modal itself
-    $.parentOptionsToInherit = ['small'];
-
-    $.fn.extend({
-        //_bsAddIdAndName
-        _bsAddIdAndName: function( options ){
-            this.attr('id', options.id || '');
-            this.attr('name', options.name || options.id || '');
-            return this;
-        },
-
-        /****************************************************************************************
-        _bsAddBaseClassAndSize
-
-        Add classes
-
-        options:
-            baseClass           [string]
-            baseClassPostfix    [string]
-            styleClass          [string]
-            class               [string]
-            textStyle           [string] or [object]. see _bsAddStyleClasses
-        ****************************************************************************************/
-        _bsAddBaseClassAndSize: function( options ){
-            var classNames = options.baseClass ? [options.baseClass + (options.baseClassPostfix || '')] : [];
-
-            classNames.push( $._bsGetSizeClass(options) );
-
-            if (options.styleClass)
-                classNames.push( options.styleClass );
-
-            if (options.class)
-                classNames.push( options.class );
-
-            this.addClass( classNames.join(' ') );
-
-            this._bsAddStyleClasses( options.textStyle );
-
-            return this;
-        },
-
-        /****************************************************************************************
-        _bsAddStyleClasses
-        Add classes for text-styel
-
-        options [string] or [object]
-            Style for the contents. String or object with part of the following
-            "left right center lowercase uppercase capitalize normal bold italic" or
-            {left: true, right: true, center: true, lowercase: true, uppercase: true, capitalize: true, normal: true, bold: true, italic: true}
-        ****************************************************************************************/
-        _bsAddStyleClasses: function( options = {}){
-            var _this = this,
-
-                bsStyleClass = {
-                    //Text color
-                    "primary"     : "text-primary",
-                    "secondary"   : "text-secondary",
-                    "success"     : "text-success",
-                    "danger"      : "text-danger",
-                    "warning"     : "text-warning",
-                    "info"        : "text-info",
-                    "light"       : "text-light",
-                    "dark"        : "text-dark",
-
-                    //Align
-                    "left"        : "text-left",
-                    "right"       : "text-right",
-                    "center"      : "text-center",
-
-                    //Case
-                    "lowercase"   : "text-lowercase",
-                    "uppercase"   : "text-uppercase",
-                    "capitalize"  : "text-capitalize",
-
-                    //Weight
-                    "normal"      : "font-weight-normal",
-                    "bold"        : "font-weight-bold",
-                    "italic"      : "font-italic"
-                };
-
-            $.each( bsStyleClass, function( style, className ){
-                if (
-                      ( (typeof options == 'string') && (options.indexOf(style) > -1 )  ) ||
-                      ( (typeof options == 'object') && (options[style]) )
-                    )
-                    _this.addClass( className );
-            });
-            return this;
-        },
-
-        /****************************************************************************************
-        _bsAddHtml
-        Internal methods to add innerHTML to button or other element
-        options: array of textOptions or textOptions
-        textOptions: {
-            icon     : String / {class, data, attr} or array of String / {className, data, attr}
-            text     : String or array of String
-            vfFormat : String or array of String
-            vfValue  : any type or array of any-type
-            vfOptions: JSON-object or array of JSON-object
-            textStyle: String or array of String
-            link     : String or array of String
-            title    : String or array of String
-            iconClass: string or array of String
-            textClass: string or array of String
-            textData : obj or array of obj
-        }
-        checkForContent: [Boolean] If true AND options.content exists => use options.content instead
-        ****************************************************************************************/
-
-        _bsAddHtml:  function( options, htmlInDiv, ignoreLink, checkForContent ){
-            //**************************************************
-            function getArray( input ){
-                return input ? $.isArray( input ) ? input : [input] : [];
-            }
-            //**************************************************
-            function isHtmlString( str ){
-                if (!htmlInDiv || ($.type(str) != 'string')) return false;
-
-                var isHtml = false,
-                    $str = null;
-                try       { $str = $(str); }
-                catch (e) { $str = null;   }
-
-                if ($str && $str.length){
-                    isHtml = true;
-                    $str.each( function( index, elem ){
-                        if (!elem.nodeType || (elem.nodeType != 1)){
-                            isHtml = false;
-                            return false;
-                        }
-                    });
-                }
-                return isHtml;
-            }
-
-            //**************************************************
-            options = options || '';
-
-            if (options.content && checkForContent)
-                return this._bsAddHtml(options.content, htmlInDiv, ignoreLink);
-
-
-            var _this = this;
-
-            //options = array => add each
-            if ($.isArray( options )){
-                $.each( options, function( index, textOptions ){
-                    _this._bsAddHtml( textOptions, htmlInDiv, ignoreLink );
-                });
-                return this;
-            }
-
-            this.addClass('container-icon-and-text');
-
-            //If the options is a jQuery-object: append it and return
-            if (options.jquery){
-                this.append( options );
-                return this;
-            }
-
-            //If the content is a string containing html-code => append it and return
-            if (isHtmlString(options)){
-                this.append( $(options) );
-                return this;
-            }
-
-            //Adjust icon and/or text if it is not at format-options
-            if (!options.vfFormat)
-                options = $._bsAdjustIconAndText( options );
-
-            //options = simple textOptions
-            var iconArray       = getArray( options.icon ),
-                textArray       = getArray( options.text ),
-                vfFormatArray   = getArray( options.vfFormat ),
-                vfValueArray    = getArray( options.vfValue ),
-                i18nextArray    = getArray( options.i18next ),
-                vfOptionsArray  = getArray( options.vfOptions ),
-                textStyleArray  = getArray( options.textStyle ),
-                linkArray       = getArray( ignoreLink ? [] : options.link || options.onClick ),
-                titleArray      = getArray( options.title ),
-                iconClassArray  = getArray( options.iconClass ),
-                textClassArray  = getArray( options.textClass ),
-                textDataArray   = getArray( options.textData );
-
-            //Add icons (optional)
-            $.each( iconArray, function( index, icon ){
-                $._bsCreateIcon( icon, _this, titleArray[ index ], iconClassArray[index] );
-            });
-
-            //Add color (optional)
-            if (options.color)
-                _this.addClass('text-'+ options.color);
-
-            //Add text
-
-            $.each( textArray, function( index, text ){
-                //If text ={da,en} and both da and is html-stirng => build inside div
-                var tagName = 'span';
-                if ( (text.hasOwnProperty('da') && isHtmlString(text.da)) || (text.hasOwnProperty('en') && isHtmlString(text.en)) )
-                    tagName = 'div';
-
-                var $text = $._bsCreateElement( tagName, linkArray[ index ], titleArray[ index ], textStyleArray[ index ], textClassArray[index], textDataArray[index] );
-                if ($.isFunction( text ))
-                    text( $text );
-                else
-                    if (text == $.EMPTY_TEXT)
-                        $text.html( '&nbsp;');
-                    else
-                        if (text != ""){
-                            //If text is a string and not a key to i18next => just add the text
-                            if ( ($.type( text ) == "string") && !i18next.exists(text) )
-                                $text.html( text );
-                            else
-                                $text.i18n( text, 'html', i18nextArray[ index ] );
-                        }
-
-                if (index < textClassArray.length)
-                    $text.addClass( textClassArray[index] );
-
-                $text.appendTo( _this );
-            });
-
-            //Add value-format content
-            $.each( vfFormatArray, function( index ){
-                $._bsCreateElement( 'span', linkArray[ index ], titleArray[ index ], textStyleArray[ index ], textClassArray[index] )
-                    .vfValueFormat(
-                        vfValueArray[index] || '',
-                        vfFormatArray[index],
-                        vfOptionsArray[index]
-                    )
-                    .appendTo( _this );
-            });
-
-            return this;
-        },
-
-        //_bsButtonOnClick
-        _bsButtonOnClick: function(){
-            var options = this.data('bsButton_options');
-            $.proxy( options.onClick, options.context )( options.id, null, this );
-            return options.returnFromClick || false;
-        },
-
-        /****************************************************************************************
-        _bsAppendContent( options, context, arg, parentOptions )
-        Create and append any content to this.
-        options can be $-element, function, json-object or array of same
-
-        If parentOptions is given => some options from parentOptions is used if they are not given in options
-
-
-        The default bootstrap structure used for elements in a form is
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">               //optional
-                    <button class="btn btn-standard">..</buton> //optional 1-N times
-                </div>                                          //optional
-
-                <label class="has-float-label">
-                    <input class="form-control form-control-with-label" type="text" placeholder="The placeholder...">
-                    <span>The label</span>
-                </label>
-
-                <div class="input-group-append">                //optional
-                    <button class="btn btn-standard">..</buton> //optional 1-N times
-                </div>                                          //optional
-            </div>
-        </div>
-        ****************************************************************************************/
-        _bsAppendContent: function( options, context, arg, parentOptions = {} ){
-
-            //Internal functions to create baseSlider and timeSlider
-            function buildSlider(options, constructorName, $parent){
-                var $sliderInput = $('<input/>').appendTo( $parent ),
-                    slider = $sliderInput[constructorName]( options ).data(constructorName),
-                    $element = slider.cache.$outerContainer || slider.cache.$container;
-
-                $element
-                    .attr('id', options.id)
-                    .data('slider', slider );
-            }
-            function buildBaseSlider(options, $parent){ buildSlider(options, 'baseSlider', $parent); }
-            function buildTimeSlider(options, $parent){ buildSlider(options, 'timeSlider', $parent); }
-
-            function buildTextBox( options ){
-                return $('<div/>')
-                        ._bsAddHtml( options );
-            }
-
-            function buildHidden( options ){
-                return $.bsInput( options ).css('display', 'none');
-            }
-
-            function buildInputGroup( options, $parent ){
-                return $parent
-                           .attr('id', options.id)
-                           .addClass('flex-column')
-                           ._bsAppendContent(options.content, null, null, options);
-            }
-
-
-            if (!options)
-                return this;
-
-            //Array of $-element, function etc
-            if ($.isArray( options )){
-                var _this = this;
-                $.each(options, function( index, opt){
-                    _this._bsAppendContent(opt, context, null, parentOptions );
-                });
-                return this;
-            }
-
-            //Function: Include arg (if any) in call to method (=options)
-            if ($.isFunction( options )){
-                arg = arg ? $.isArray(arg) ? arg : [arg] : [];
-                arg.unshift(this);
-                options.apply( context, arg );
-                return this;
-            }
-
-            if (!$.isPlainObject(options)){
-                //Assume it is a $-element or other object that can be appended directly
-                this.append( options );
-                return this;
-            }
-
-            //json-object with options to create bs-elements
-            var buildFunc = $.fn._bsAddHtml,
-                insideFormGroup   = false,
-                addBorder         = false,
-                buildInsideParent = false,
-                noValidation      = false;
-
-
-            //Set values fro parentOptions into options
-            $.each($.parentOptionsToInherit, function(index, id){
-                if (parentOptions.hasOwnProperty(id) && !options.hasOwnProperty(id))
-                    options[id] = parentOptions[id];
-            });
-
-
-            if (options.type){
-                var type = options.type.toLowerCase();
-                switch (type){
-                    case 'input'            :   buildFunc = $.bsInput;              insideFormGroup = true; break;
-                    case 'button'           :   buildFunc = $.bsButton;             break;
-                    case 'buttongroup'      :   buildFunc = $.bsButtonGroup;        break;
-                    case 'menu'             :   buildFunc = $.bsMenu;               break;
-                    case 'select'           :   buildFunc = $.bsSelectBox;          insideFormGroup = true; break;
-                    case 'selectlist'       :   buildFunc = $.bsSelectList;         break;
-                    case 'radiobuttongroup' :   buildFunc = $.bsRadioButtonGroup;   addBorder = true; insideFormGroup = true; break;
-                    case 'checkbox'         :   buildFunc = $.bsCheckbox;           insideFormGroup = true; break;
-                    case 'tabs'             :   buildFunc = $.bsTabs;               break;
-                    case 'table'            :   buildFunc = $.bsTable;              break;
-                    case 'list'             :   buildFunc = $.bsList;               break;
-                    case 'accordion'        :   buildFunc = $.bsAccordion;          break;
-                    case 'slider'           :   buildFunc = buildBaseSlider;        insideFormGroup = true; addBorder = true; buildInsideParent = true; break;
-                    case 'timeslider'       :   buildFunc = buildTimeSlider;        insideFormGroup = true; addBorder = true; buildInsideParent = true; break;
-                    case 'text'             :   buildFunc = $.bsText;               insideFormGroup = true; break;
-                    case 'textarea'         :   buildFunc = $.bsTextArea;           insideFormGroup = true; break;
-                    case 'textbox'          :   buildFunc = buildTextBox;           insideFormGroup = true; addBorder = true; noValidation = true; break;
-                    case 'fileview'         :   buildFunc = $.bsFileView;           break;
-                    case 'hidden'           :   buildFunc = buildHidden;            noValidation = true; break;
-                    case 'inputgroup'       :   buildFunc = buildInputGroup;        addBorder = true; insideFormGroup = true; buildInsideParent = true; break;
-//                    case 'xx'               :   buildFunc = $.bsXx;               break;
-
-                    default                 :   buildFunc = $.fn._bsAddHtml;        buildInsideParent = true;
-                }
-            }
-
-            //Overwrite insideFormGroup if value given in options
-            if ( $.type( options.insideFormGroup ) == "boolean")
-                insideFormGroup = options.insideFormGroup;
-
-            //Set the parent-element where to append to created element(s)
-            var $parent = this,
-                insideInputGroup = false;
-
-            if (insideFormGroup){
-                //Create outer form-group
-                insideInputGroup = true;
-                $parent = $divXXGroup('form-group', options).appendTo( $parent );
-                if (options.smallBottomPadding)
-                    $parent.addClass('small-bottom-padding');
-
-                if (options.lineBefore)
-                    $('<hr/>')
-                        .addClass('before')
-                        .toggleClass('above-label', !!options.label)
-                        .appendTo( $parent );
-
-                if (noValidation || options.noValidation)
-                    $parent.addClass('no-validation');
-            }
-            var $originalParent = $parent;
-            if (insideInputGroup || options.prepend || options.before || options.append || options.after){
-                //Create element inside input-group
-                var $inputGroup = $divXXGroup('input-group', options);
-                if (addBorder && !options.noBorder){
-                    //Add border and label (if any)
-                    $inputGroup.addClass('input-group-border');
-
-                    if (options.darkBorderlabel)
-                        $inputGroup.addClass('input-group-border-dark');
-
-                    if (options.label){
-                        $inputGroup.addClass('input-group-border-with-label');
-                        $('<span/>')
-                            .addClass('has-fixed-label')
-                            ._bsAddHtml( options.label )
-                            .appendTo( $inputGroup );
-                    }
-                }
-                $parent = $inputGroup.appendTo( $parent );
-            }
-
-            //Build the element. Build inside $parent or add to $parent after
-            if (buildInsideParent)
-                buildFunc.call( this, options, $parent );
-            else
-                buildFunc.call( this, options ).appendTo( $parent );
-
-            if (options.center)
-                $parent.addClass('justify-content-center text-center');
-
-            var prepend = options.prepend || options.before;
-            if (prepend)
-                $('<div/>')
-                    .addClass('input-group-prepend')
-                    ._bsAppendContent( prepend, options.contentContext, null, options  )
-                    .prependTo( $parent );
-            var append = options.append || options.after;
-            if (append)
-                $('<div/>')
-                    .addClass('input-group-append')
-                    ._bsAppendContent( append, options.contentContext, null, options  )
-                    .appendTo( $parent );
-
-            if (options.lineAfter)
-                $('<hr/>')
-                    .addClass('after')
-                    .appendTo( $originalParent );
-
-            return this;
-        }   //end of _bsAppendContent
-    }); //$.fn.extend
-
-
-}(jQuery, this.i18next, this, document));
 ;
 /*!
     localForage -- Offline Storage, Improved
@@ -64543,7 +66656,7 @@ module.exports = localforage_js;
 /*!
  * URI.js - Mutating URLs
  *
- * Version: 1.19.7
+ * Version: 1.19.11
  *
  * Author: Rodney Rehm
  * Web: http://medialize.github.io/URI.js/
@@ -64623,7 +66736,7 @@ module.exports = localforage_js;
     return /^[0-9]+$/.test(value);
   }
 
-  URI.version = '1.19.7';
+  URI.version = '1.19.11';
 
   var p = URI.prototype;
   var hasOwn = Object.prototype.hasOwnProperty;
@@ -64781,6 +66894,9 @@ module.exports = localforage_js;
     // balanced parens inclusion (), [], {}, <>
     parens: /(\([^\)]*\)|\[[^\]]*\]|\{[^}]*\}|<[^>]*>)/g,
   };
+  URI.leading_whitespace_expression = /^[\x00-\x20\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+/
+  // https://infra.spec.whatwg.org/#ascii-tab-or-newline
+  URI.ascii_tab_whitespace = /[\u0009\u000A\u000D]+/g
   // http://www.iana.org/assignments/uri-schemes.html
   // http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports
   URI.defaultPorts = {
@@ -65036,6 +67152,11 @@ module.exports = localforage_js;
         preventInvalidHostname: URI.preventInvalidHostname
       };
     }
+
+    string = string.replace(URI.leading_whitespace_expression, '')
+    // https://infra.spec.whatwg.org/#ascii-tab-or-newline
+    string = string.replace(URI.ascii_tab_whitespace, '')
+
     // [protocol"://"[username[":"password]"@"]hostname[":"port]"/"?][path]["?"querystring]["#"fragment]
 
     // extract fragment
@@ -65055,7 +67176,9 @@ module.exports = localforage_js;
     }
 
     // slashes and backslashes have lost all meaning for the web protocols (https, http, wss, ws)
-    string = string.replace(/^(https?|ftp|wss?)?:[/\\]*/, '$1://');
+    string = string.replace(/^(https?|ftp|wss?)?:+[/\\]*/i, '$1://');
+    // slashes and backslashes have lost all meaning for scheme relative URLs
+    string = string.replace(/^[/\\]{2,}/i, '//');
 
     // extract protocol
     if (string.substring(0, 2) === '//') {

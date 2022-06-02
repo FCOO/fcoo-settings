@@ -10,7 +10,7 @@ Ex:
 @include setting-modernizr($setting-id: TEST, $value-list:(NONE ALL TEST));
 Create css to make it able to use classes "show-for-global-setting-TEST-ALL" and "hide-for-global-setting-TEST-NONE"
 *****************************************************************************************/
-@mixin setting-modernizr( $setting-group-id: global-setting, $setting-id: dummy, $value-list: () ){
+@mixin setting-modernizr( $setting-group-id: global-setting, $setting-id: dummy, $value-list: (), $incl-visibility: false ){
     $prefix: $setting-group-id + '-' + $setting-id;
 
     @if length($value-list) == 0 {
@@ -23,6 +23,21 @@ Create css to make it able to use classes "show-for-global-setting-TEST-ALL" and
             $only-direct-children: false
         );
 
+        @if $incl-visibility {
+            @include show-and-hide-for-modernizr-test(
+                $modernizr-test      : #{$prefix},
+                $parent-element-type : '',
+                $incl-no-selector    : false,
+                $incl-table-display  : false,
+                $only-direct-children: false,
+
+                $display-attr        : 'visibility',
+                $display-value       : 'visible',
+                $no-display-value    : 'hidden',
+                $class-postfix       : '-visibility'
+            );
+        }
+
     }
     @else {
         @each $value in $value-list {
@@ -34,6 +49,22 @@ Create css to make it able to use classes "show-for-global-setting-TEST-ALL" and
                 $incl-table-display  : false,
                 $only-direct-children: false
             );
+
+            @if $incl-visibility {
+                @include show-and-hide-for-modernizr-test(
+                    $modernizr-test      : #{$prefix + '-' + $value},
+                    $parent-element-type : '',
+                    $incl-no-selector    : false,
+                    $incl-table-display  : false,
+                    $only-direct-children: false,
+
+                    $display-attr        : 'visibility',
+                    $display-value       : 'visible',
+                    $no-display-value    : 'hidden',
+                    $class-postfix       : '-visibility'
+                );
+            }
         }
     }
 }
+
