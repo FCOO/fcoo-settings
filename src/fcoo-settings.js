@@ -75,15 +75,6 @@
         this.data = $.extend({}, this.options.data || {});
         this.settings = {};
 
-        //Adjust reset-options
-        if (this.options.reset)
-            this.options.reset = $.extend({
-                icon      : ns.icons.reset,
-                text      : ns.texts.reset,
-                promise   : function( resolve ){ resolve(); },
-                finally   : function(){}
-            }, this.options.reset === true ? {} : this.options.reset);
-
         //Calls this.beforeeunload when the page is unloaded
         $(window).on('beforeunload', $.proxy(this.beforeunload, this ));
 
@@ -325,6 +316,14 @@
                             footer : _this.modalFooter[accordInfo.id]
                         });
                 });
+
+
+                //Adjust reset-options
+                if (this.options.reset)
+                    this.options.reset = $.extend({
+                        icon      : ns.icons.reset,
+                        text      : ns.texts.reset,
+                    }, this.options.reset === true ? {} : this.options.reset);
 
                 this.modalForm = $.bsModalForm(
                     $.extend(
