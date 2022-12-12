@@ -31,6 +31,12 @@
         onChanging: function(newData, originalData) - called when the data are changed during editing
         onSubmit  : function(newData, originalData) - called after the data was edited. newData = all changed data, originalData = the original version of the data
 
+        reset : NULL, true, false or {
+            icon   : STRING
+            text   : STRING
+            promise: FUNCTION( resolve: function(clossAll:BOOLEAN) ) functions that calls resolve() if all options are to be reset
+        }
+
 *****************************************************************************************/
 
 (function ($, window, document, undefined) {
@@ -38,6 +44,15 @@
 
     //Create fcoo-namespace
     var ns = window.fcoo = window.fcoo || {};
+
+    //Global class-names for icons
+    ns.icons = ns.icons || {};
+    ns.icons.reset = 'fa fa-arrow-rotate-left';
+
+    //Global texts
+    ns.texts = ns.texts || {};
+    ns.texts.reset = {da:'Nulstil', en:'Reset'};
+
 
     /***********************************************
     SettingGroup( options )
@@ -59,6 +74,15 @@
         //this.data = All settings. Each part of this.data is managed by a Setting in this.settings
         this.data = $.extend({}, this.options.data || {});
         this.settings = {};
+
+        //Adjust reset-options
+        if (this.options.reset)
+            this.options.reset = $.extend({
+                icon      : ns.icons.reset,
+                text      : ns.texts.reset,
+                promise   : function( resolve ){ resolve(); },
+                finally   : function(){}
+            }, this.options.reset === true ? {} : this.options.reset);
 
         //Calls this.beforeeunload when the page is unloaded
         $(window).on('beforeunload', $.proxy(this.beforeunload, this ));
@@ -193,6 +217,21 @@
         },
 
         /***********************************************
+        reset()
+        ***********************************************/
+        reset: function(){
+            var _this = this;
+            if (this.options.simpleMode)
+                return;
+
+            $.each( this.settings, function( id, setting ){
+                if (setting.options.defaultValue !== undefined)
+                    _this.set(id, setting.options.defaultValue);
+            });
+
+        },
+
+        /***********************************************
         get( id )
         id [String]
         ***********************************************/
@@ -203,6 +242,38 @@
                 var setting = this.settings[id];
                 return setting ? setting.getValue() : undefined;
             }
+        },
+
+
+        /***********************************************
+        getDefault( id )
+        id [String]
+        ***********************************************/
+        getDefault: function( id ){
+            if (this.options.simpleMode)
+                //Simple mode => No default data gioven
+                return this.data[id];
+            else {
+                var setting = this.settings[id];
+                return setting ? setting._adjustValue(setting.options.defaultValue) : undefined;
+            }
+        },
+
+        /***********************************************
+        getDefaultData()
+        ***********************************************/
+        getDefaultData: function(){
+            var _this = this,
+                result = {};
+            if (this.options.simpleMode)
+                //Simple mode => No default data given
+                result = $.extend(true, {}, this.data);
+            else
+                $.each( this.settings, function(id){
+                    result[id] = _this.getDefault(id);
+                });
+
+            return result;
         },
 
         /***********************************************
@@ -265,10 +336,18 @@
                             flexWidth : this.options.flexWidth,
 
                             content   : {type: 'accordion', list: list },
+
+                            buttons   : this.options.reset && !this.options.simpleMode ? [{
+                                            icon: this.options.reset.icon,
+                                            text: this.options.reset.text,
+                                            onClick: $.proxy(this._resetInForm, this)
+                                        }] : undefined,
+
                             onChanging: $.proxy(this.onChanging, this),
                             onSubmit  : $.proxy(this.onSubmit,   this),
                             onCancel  : $.proxy(this.onCancel,   this),
-                            onClose   : $.proxy(this.onClose,    this)
+                            onClose   : $.proxy(this.onClose,    this),
+
                         }
                     )
                 );
@@ -292,6 +371,11 @@
         /*****************************************************/
         editData: function(data, preEdit){
             this.edit(null, data, preEdit);
+        },
+
+        _resetInForm: function(){
+            this.reset();
+            this.edit();
         },
 
         /*****************************************************
@@ -463,8 +547,13 @@
                 ns.events.fire( this.options.globalEvents, id, this.getValue() );
         },
 
+
+        _adjustValue: function( value ){
+            return this.options.getValue ? this.options.getValue(value, this) : value;
+        },
+
         getValue: function(){
-            return this.options.getValue ? this.options.getValue(this.value, this) : this.value;
+            return this._adjustValue( this.value );
         }
     };
 
@@ -476,6 +565,7 @@
         new SettingGroup({
             storeId        : 'GLOBAL',
             autoSave       : true,
+            reset          : true,
             flexWidth      : true,
             modernizrPrefix: 'global-setting-',
 

@@ -10910,7 +10910,7 @@ return jQuery;
 
 ;
 /*!
-  * Bootstrap v5.2.1 (https://getbootstrap.com/)
+  * Bootstrap v5.2.3 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -10922,7 +10922,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/index.js
+   * Bootstrap (v5.2.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11237,7 +11237,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/event-handler.js
+   * Bootstrap (v5.2.3): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11506,7 +11506,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/data.js
+   * Bootstrap (v5.2.3): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11558,7 +11558,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/manipulator.js
+   * Bootstrap (v5.2.3): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11628,7 +11628,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/config.js
+   * Bootstrap (v5.2.3): util/config.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11689,7 +11689,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): base-component.js
+   * Bootstrap (v5.2.3): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11697,7 +11697,7 @@ return jQuery;
    * Constants
    */
 
-  const VERSION = '5.2.1';
+  const VERSION = '5.2.3';
   /**
    * Class definition
    */
@@ -11768,7 +11768,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/component-functions.js
+   * Bootstrap (v5.2.3): util/component-functions.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11794,7 +11794,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): alert.js
+   * Bootstrap (v5.2.3): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11874,7 +11874,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): button.js
+   * Bootstrap (v5.2.3): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -11936,7 +11936,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/selector-engine.js
+   * Bootstrap (v5.2.3): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -12007,7 +12007,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/swipe.js
+   * Bootstrap (v5.2.3): util/swipe.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -12143,7 +12143,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): carousel.js
+   * Bootstrap (v5.2.3): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -12591,7 +12591,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): collapse.js
+   * Bootstrap (v5.2.3): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -14727,7 +14727,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dropdown.js
+   * Bootstrap (v5.2.3): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -14799,7 +14799,7 @@ return jQuery;
       this._parent = this._element.parentNode; // dropdown wrapper
       // todo: v6 revert #37011 & change markup https://getbootstrap.com/docs/5.2/forms/input-group/
 
-      this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0];
+      this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0] || SelectorEngine.findOne(SELECTOR_MENU, this._parent);
       this._inNavbar = this._detectNavbar();
     } // Getters
 
@@ -15117,7 +15117,7 @@ return jQuery;
 
       event.preventDefault(); // todo: v6 revert #37011 & change markup https://getbootstrap.com/docs/5.2/forms/input-group/
 
-      const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0];
+      const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.findOne(SELECTOR_DATA_TOGGLE$3, event.delegateTarget.parentNode);
       const instance = Dropdown.getOrCreateInstance(getToggleButton);
 
       if (isUpOrDownEvent) {
@@ -15159,7 +15159,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/scrollBar.js
+   * Bootstrap (v5.2.3): util/scrollBar.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -15278,7 +15278,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/backdrop.js
+   * Bootstrap (v5.2.3): util/backdrop.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -15424,7 +15424,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/focustrap.js
+   * Bootstrap (v5.2.3): util/focustrap.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -15533,7 +15533,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): modal.js
+   * Bootstrap (v5.2.3): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -15745,9 +15745,9 @@ return jQuery;
         }
       });
       EventHandler.on(this._element, EVENT_MOUSEDOWN_DISMISS, event => {
+        // a bad trick to segregate clicks that may start inside dialog but end outside, and avoid listen to scrollbar clicks
         EventHandler.one(this._element, EVENT_CLICK_DISMISS, event2 => {
-          // a bad trick to segregate clicks that may start inside dialog but end outside, and avoid listen to scrollbar clicks
-          if (this._dialog.contains(event.target) || this._dialog.contains(event2.target)) {
+          if (this._element !== event.target || this._element !== event2.target) {
             return;
           }
 
@@ -15909,7 +15909,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): offcanvas.js
+   * Bootstrap (v5.2.3): offcanvas.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -16183,7 +16183,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/sanitizer.js
+   * Bootstrap (v5.2.3): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -16288,7 +16288,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/template-factory.js
+   * Bootstrap (v5.2.3): util/template-factory.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -16446,7 +16446,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): tooltip.js
+   * Bootstrap (v5.2.3): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -16544,6 +16544,10 @@ return jQuery;
       this.tip = null;
 
       this._setListeners();
+
+      if (!this._config.selector) {
+        this._fixTitle();
+      }
     } // Getters
 
 
@@ -16572,24 +16576,12 @@ return jQuery;
       this._isEnabled = !this._isEnabled;
     }
 
-    toggle(event) {
+    toggle() {
       if (!this._isEnabled) {
         return;
       }
 
-      if (event) {
-        const context = this._initializeOnDelegatedTarget(event);
-
-        context._activeTrigger.click = !context._activeTrigger.click;
-
-        if (context._isWithActiveTrigger()) {
-          context._enter();
-        } else {
-          context._leave();
-        }
-
-        return;
-      }
+      this._activeTrigger.click = !this._activeTrigger.click;
 
       if (this._isShown()) {
         this._leave();
@@ -16604,12 +16596,8 @@ return jQuery;
       clearTimeout(this._timeout);
       EventHandler.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
 
-      if (this.tip) {
-        this.tip.remove();
-      }
-
-      if (this._config.originalTitle) {
-        this._element.setAttribute('title', this._config.originalTitle);
+      if (this._element.getAttribute('data-bs-original-title')) {
+        this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
       }
 
       this._disposePopper();
@@ -16636,10 +16624,7 @@ return jQuery;
       } // todo v6 remove this OR make it optional
 
 
-      if (this.tip) {
-        this.tip.remove();
-        this.tip = null;
-      }
+      this._disposePopper();
 
       const tip = this._getTipElement();
 
@@ -16654,12 +16639,7 @@ return jQuery;
         EventHandler.trigger(this._element, this.constructor.eventName(EVENT_INSERTED));
       }
 
-      if (this._popper) {
-        this._popper.update();
-      } else {
-        this._popper = this._createPopper(tip);
-      }
-
+      this._popper = this._createPopper(tip);
       tip.classList.add(CLASS_NAME_SHOW$2); // If this is a touch-enabled device we add extra
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
@@ -16717,14 +16697,12 @@ return jQuery;
         }
 
         if (!this._isHovered) {
-          tip.remove();
+          this._disposePopper();
         }
 
         this._element.removeAttribute('aria-describedby');
 
         EventHandler.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN$2));
-
-        this._disposePopper();
       };
 
       this._queueCallback(complete, this.tip, this._isAnimated());
@@ -16802,7 +16780,7 @@ return jQuery;
     }
 
     _getTitle() {
-      return this._resolvePossibleFunction(this._config.title) || this._config.originalTitle;
+      return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute('data-bs-original-title');
     } // Private
 
 
@@ -16888,7 +16866,11 @@ return jQuery;
 
       for (const trigger of triggers) {
         if (trigger === 'click') {
-          EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, event => this.toggle(event));
+          EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, event => {
+            const context = this._initializeOnDelegatedTarget(event);
+
+            context.toggle();
+          });
         } else if (trigger !== TRIGGER_MANUAL) {
           const eventIn = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSEENTER) : this.constructor.eventName(EVENT_FOCUSIN$1);
           const eventOut = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT$1);
@@ -16916,19 +16898,10 @@ return jQuery;
       };
 
       EventHandler.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-
-      if (this._config.selector) {
-        this._config = { ...this._config,
-          trigger: 'manual',
-          selector: ''
-        };
-      } else {
-        this._fixTitle();
-      }
     }
 
     _fixTitle() {
-      const title = this._config.originalTitle;
+      const title = this._element.getAttribute('title');
 
       if (!title) {
         return;
@@ -16937,6 +16910,9 @@ return jQuery;
       if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) {
         this._element.setAttribute('aria-label', title);
       }
+
+      this._element.setAttribute('data-bs-original-title', title); // DO NOT USE IT. Is only for backwards compatibility
+
 
       this._element.removeAttribute('title');
     }
@@ -17009,8 +16985,6 @@ return jQuery;
         };
       }
 
-      config.originalTitle = this._element.getAttribute('title') || '';
-
       if (typeof config.title === 'number') {
         config.title = config.title.toString();
       }
@@ -17029,10 +17003,12 @@ return jQuery;
         if (this.constructor.Default[key] !== this._config[key]) {
           config[key] = this._config[key];
         }
-      } // In the future can be replaced with:
+      }
+
+      config.selector = false;
+      config.trigger = 'manual'; // In the future can be replaced with:
       // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
       // `Object.fromEntries(keysWithDifferentValues)`
-
 
       return config;
     }
@@ -17042,6 +17018,11 @@ return jQuery;
         this._popper.destroy();
 
         this._popper = null;
+      }
+
+      if (this.tip) {
+        this.tip.remove();
+        this.tip = null;
       }
     } // Static
 
@@ -17072,7 +17053,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): popover.js
+   * Bootstrap (v5.2.3): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -17155,7 +17136,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): scrollspy.js
+   * Bootstrap (v5.2.3): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -17446,7 +17427,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): tab.js
+   * Bootstrap (v5.2.3): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -17474,7 +17455,6 @@ return jQuery;
   const CLASS_DROPDOWN = 'dropdown';
   const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
   const SELECTOR_DROPDOWN_MENU = '.dropdown-menu';
-  const SELECTOR_DROPDOWN_ITEM = '.dropdown-item';
   const NOT_SELECTOR_DROPDOWN_TOGGLE = ':not(.dropdown-toggle)';
   const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
   const SELECTOR_OUTER = '.nav-item, .list-group-item';
@@ -17553,7 +17533,6 @@ return jQuery;
           return;
         }
 
-        element.focus();
         element.removeAttribute('tabindex');
         element.setAttribute('aria-selected', true);
 
@@ -17609,6 +17588,9 @@ return jQuery;
       const nextActiveElement = getNextActiveElement(this._getChildren().filter(element => !isDisabled(element)), event.target, isNext, true);
 
       if (nextActiveElement) {
+        nextActiveElement.focus({
+          preventScroll: true
+        });
         Tab.getOrCreateInstance(nextActiveElement).show();
       }
     }
@@ -17684,7 +17666,6 @@ return jQuery;
 
       toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE);
       toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW$1);
-      toggle(SELECTOR_DROPDOWN_ITEM, CLASS_NAME_ACTIVE);
       outerElem.setAttribute('aria-expanded', open);
     }
 
@@ -17759,7 +17740,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): toast.js
+   * Bootstrap (v5.2.3): toast.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -17910,13 +17891,17 @@ return jQuery;
       switch (event.type) {
         case 'mouseover':
         case 'mouseout':
-          this._hasMouseInteraction = isInteracting;
-          break;
+          {
+            this._hasMouseInteraction = isInteracting;
+            break;
+          }
 
         case 'focusin':
         case 'focusout':
-          this._hasKeyboardInteraction = isInteracting;
-          break;
+          {
+            this._hasKeyboardInteraction = isInteracting;
+            break;
+          }
       }
 
       if (isInteracting) {
@@ -17976,7 +17961,7 @@ return jQuery;
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): index.umd.js
+   * Bootstrap (v5.2.3): index.umd.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -18418,7 +18403,7 @@ return jQuery;
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.i18next = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   function _typeof(obj) {
     "@babel/helpers - typeof";
@@ -18436,16 +18421,31 @@ return jQuery;
     }
   }
 
+  function _toPrimitive(input, hint) {
+    if (_typeof(input) !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+      var res = prim.call(input, hint || "default");
+      if (_typeof(res) !== "object") return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
+  }
+
+  function _toPropertyKey(arg) {
+    var key = _toPrimitive(arg, "string");
+    return _typeof(key) === "symbol" ? key : String(key);
+  }
+
   function _defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+      Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
     }
   }
-
   function _createClass(Constructor, protoProps, staticProps) {
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
@@ -18459,16 +18459,14 @@ return jQuery;
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
-
     return self;
   }
 
   function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
       o.__proto__ = p;
       return o;
     };
-
     return _setPrototypeOf(o, p);
   }
 
@@ -18476,7 +18474,6 @@ return jQuery;
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
-
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
         value: subClass,
@@ -18496,18 +18493,18 @@ return jQuery;
     } else if (call !== void 0) {
       throw new TypeError("Derived constructors may only return object or undefined");
     }
-
     return _assertThisInitialized(self);
   }
 
   function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
       return o.__proto__ || Object.getPrototypeOf(o);
     };
     return _getPrototypeOf(o);
   }
 
   function _defineProperty(obj, key, value) {
+    key = _toPropertyKey(key);
     if (key in obj) {
       Object.defineProperty(obj, key, {
         value: value,
@@ -18518,14 +18515,11 @@ return jQuery;
     } else {
       obj[key] = value;
     }
-
     return obj;
   }
 
-  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
+  function ownKeys$6(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$6(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
   var consoleLogger = {
     type: 'logger',
     log: function log(args) {
@@ -18541,16 +18535,12 @@ return jQuery;
       if (console && console[type]) console[type].apply(console, args);
     }
   };
-
   var Logger = function () {
     function Logger(concreteLogger) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
       _classCallCheck(this, Logger);
-
       this.init(concreteLogger, options);
     }
-
     _createClass(Logger, [{
       key: "init",
       value: function init(concreteLogger) {
@@ -18571,7 +18561,6 @@ return jQuery;
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
         }
-
         return this.forward(args, 'log', '', true);
       }
     }, {
@@ -18580,7 +18569,6 @@ return jQuery;
         for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
           args[_key2] = arguments[_key2];
         }
-
         return this.forward(args, 'warn', '', true);
       }
     }, {
@@ -18589,7 +18577,6 @@ return jQuery;
         for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
           args[_key3] = arguments[_key3];
         }
-
         return this.forward(args, 'error', '');
       }
     }, {
@@ -18598,7 +18585,6 @@ return jQuery;
         for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
           args[_key4] = arguments[_key4];
         }
-
         return this.forward(args, 'warn', 'WARNING DEPRECATED: ', true);
       }
     }, {
@@ -18611,32 +18597,33 @@ return jQuery;
     }, {
       key: "create",
       value: function create(moduleName) {
-        return new Logger(this.logger, _objectSpread(_objectSpread({}, {
+        return new Logger(this.logger, _objectSpread$6(_objectSpread$6({}, {
           prefix: "".concat(this.prefix, ":").concat(moduleName, ":")
         }), this.options));
       }
+    }, {
+      key: "clone",
+      value: function clone(options) {
+        options = options || this.options;
+        options.prefix = options.prefix || this.prefix;
+        return new Logger(this.logger, options);
+      }
     }]);
-
     return Logger;
   }();
-
   var baseLogger = new Logger();
 
   var EventEmitter = function () {
     function EventEmitter() {
       _classCallCheck(this, EventEmitter);
-
       this.observers = {};
     }
-
     _createClass(EventEmitter, [{
       key: "on",
       value: function on(events, listener) {
         var _this = this;
-
         events.split(' ').forEach(function (event) {
           _this.observers[event] = _this.observers[event] || [];
-
           _this.observers[event].push(listener);
         });
         return this;
@@ -18645,12 +18632,10 @@ return jQuery;
       key: "off",
       value: function off(event, listener) {
         if (!this.observers[event]) return;
-
         if (!listener) {
           delete this.observers[event];
           return;
         }
-
         this.observers[event] = this.observers[event].filter(function (l) {
           return l !== listener;
         });
@@ -18661,24 +18646,20 @@ return jQuery;
         for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
           args[_key - 1] = arguments[_key];
         }
-
         if (this.observers[event]) {
           var cloned = [].concat(this.observers[event]);
           cloned.forEach(function (observer) {
             observer.apply(void 0, args);
           });
         }
-
         if (this.observers['*']) {
           var _cloned = [].concat(this.observers['*']);
-
           _cloned.forEach(function (observer) {
             observer.apply(observer, [event].concat(args));
           });
         }
       }
     }]);
-
     return EventEmitter;
   }();
 
@@ -18702,68 +18683,56 @@ return jQuery;
       if (s[m]) t[m] = s[m];
     });
   }
-
   function getLastOfPath(object, path, Empty) {
     function cleanKey(key) {
       return key && key.indexOf('###') > -1 ? key.replace(/###/g, '.') : key;
     }
-
     function canNotTraverseDeeper() {
       return !object || typeof object === 'string';
     }
-
     var stack = typeof path !== 'string' ? [].concat(path) : path.split('.');
-
     while (stack.length > 1) {
       if (canNotTraverseDeeper()) return {};
       var key = cleanKey(stack.shift());
       if (!object[key] && Empty) object[key] = new Empty();
-
       if (Object.prototype.hasOwnProperty.call(object, key)) {
         object = object[key];
       } else {
         object = {};
       }
     }
-
     if (canNotTraverseDeeper()) return {};
     return {
       obj: object,
       k: cleanKey(stack.shift())
     };
   }
-
   function setPath(object, path, newValue) {
     var _getLastOfPath = getLastOfPath(object, path, Object),
-        obj = _getLastOfPath.obj,
-        k = _getLastOfPath.k;
-
+      obj = _getLastOfPath.obj,
+      k = _getLastOfPath.k;
     obj[k] = newValue;
   }
   function pushPath(object, path, newValue, concat) {
     var _getLastOfPath2 = getLastOfPath(object, path, Object),
-        obj = _getLastOfPath2.obj,
-        k = _getLastOfPath2.k;
-
+      obj = _getLastOfPath2.obj,
+      k = _getLastOfPath2.k;
     obj[k] = obj[k] || [];
     if (concat) obj[k] = obj[k].concat(newValue);
     if (!concat) obj[k].push(newValue);
   }
   function getPath(object, path) {
     var _getLastOfPath3 = getLastOfPath(object, path),
-        obj = _getLastOfPath3.obj,
-        k = _getLastOfPath3.k;
-
+      obj = _getLastOfPath3.obj,
+      k = _getLastOfPath3.k;
     if (!obj) return undefined;
     return obj[k];
   }
   function getPathWithDefaults(data, defaultData, key) {
     var value = getPath(data, key);
-
     if (value !== undefined) {
       return value;
     }
-
     return getPath(defaultData, key);
   }
   function deepExtend(target, source, overwrite) {
@@ -18780,7 +18749,6 @@ return jQuery;
         }
       }
     }
-
     return target;
   }
   function regexEscape(str) {
@@ -18800,7 +18768,6 @@ return jQuery;
         return _entityMap[s];
       });
     }
-
     return data;
   }
   var isIE10 = typeof window !== 'undefined' && window.navigator && typeof window.navigator.userAgentData === 'undefined' && window.navigator.userAgent && window.navigator.userAgent.indexOf('MSIE') > -1;
@@ -18816,105 +18783,77 @@ return jQuery;
       return c === '?' ? '\\?' : c;
     }).join('|'), ")"));
     var matched = !r.test(key);
-
     if (!matched) {
       var ki = key.indexOf(keySeparator);
-
       if (ki > 0 && !r.test(key.substring(0, ki))) {
         matched = true;
       }
     }
-
     return matched;
   }
 
-  function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
+  function ownKeys$5(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$5(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   function deepFind(obj, path) {
     var keySeparator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '.';
     if (!obj) return undefined;
     if (obj[path]) return obj[path];
     var paths = path.split(keySeparator);
     var current = obj;
-
     for (var i = 0; i < paths.length; ++i) {
       if (!current) return undefined;
-
       if (typeof current[paths[i]] === 'string' && i + 1 < paths.length) {
         return undefined;
       }
-
       if (current[paths[i]] === undefined) {
         var j = 2;
         var p = paths.slice(i, i + j).join(keySeparator);
         var mix = current[p];
-
         while (mix === undefined && paths.length > i + j) {
           j++;
           p = paths.slice(i, i + j).join(keySeparator);
           mix = current[p];
         }
-
         if (mix === undefined) return undefined;
         if (mix === null) return null;
-
         if (path.endsWith(p)) {
           if (typeof mix === 'string') return mix;
           if (p && typeof mix[p] === 'string') return mix[p];
         }
-
         var joinedPath = paths.slice(i + j).join(keySeparator);
         if (joinedPath) return deepFind(mix, joinedPath, keySeparator);
         return undefined;
       }
-
       current = current[paths[i]];
     }
-
     return current;
   }
-
   var ResourceStore = function (_EventEmitter) {
     _inherits(ResourceStore, _EventEmitter);
-
-    var _super = _createSuper(ResourceStore);
-
+    var _super = _createSuper$3(ResourceStore);
     function ResourceStore(data) {
       var _this;
-
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
         ns: ['translation'],
         defaultNS: 'translation'
       };
-
       _classCallCheck(this, ResourceStore);
-
       _this = _super.call(this);
-
       if (isIE10) {
         EventEmitter.call(_assertThisInitialized(_this));
       }
-
       _this.data = data || {};
       _this.options = options;
-
       if (_this.options.keySeparator === undefined) {
         _this.options.keySeparator = '.';
       }
-
       if (_this.options.ignoreJSONStructure === undefined) {
         _this.options.ignoreJSONStructure = true;
       }
-
       return _this;
     }
-
     _createClass(ResourceStore, [{
       key: "addNamespaces",
       value: function addNamespaces(ns) {
@@ -18926,7 +18865,6 @@ return jQuery;
       key: "removeNamespaces",
       value: function removeNamespaces(ns) {
         var index = this.options.ns.indexOf(ns);
-
         if (index > -1) {
           this.options.ns.splice(index, 1);
         }
@@ -18940,11 +18878,9 @@ return jQuery;
         var path = [lng, ns];
         if (key && typeof key !== 'string') path = path.concat(key);
         if (key && typeof key === 'string') path = path.concat(keySeparator ? key.split(keySeparator) : key);
-
         if (lng.indexOf('.') > -1) {
           path = lng.split('.');
         }
-
         var result = getPath(this.data, path);
         if (result || !ignoreJSONStructure || typeof key !== 'string') return result;
         return deepFind(this.data && this.data[lng] && this.data[lng][ns], key, keySeparator);
@@ -18959,13 +18895,11 @@ return jQuery;
         if (keySeparator === undefined) keySeparator = '.';
         var path = [lng, ns];
         if (key) path = path.concat(keySeparator ? key.split(keySeparator) : key);
-
         if (lng.indexOf('.') > -1) {
           path = lng.split('.');
           value = ns;
           ns = path[1];
         }
-
         this.addNamespaces(ns);
         setPath(this.data, path, value);
         if (!options.silent) this.emit('added', lng, ns, key, value);
@@ -18976,13 +18910,11 @@ return jQuery;
         var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
           silent: false
         };
-
         for (var m in resources) {
           if (typeof resources[m] === 'string' || Object.prototype.toString.apply(resources[m]) === '[object Array]') this.addResource(lng, ns, m, resources[m], {
             silent: true
           });
         }
-
         if (!options.silent) this.emit('added', lng, ns, resources);
       }
     }, {
@@ -18992,23 +18924,19 @@ return jQuery;
           silent: false
         };
         var path = [lng, ns];
-
         if (lng.indexOf('.') > -1) {
           path = lng.split('.');
           deep = resources;
           resources = ns;
           ns = path[1];
         }
-
         this.addNamespaces(ns);
         var pack = getPath(this.data, path) || {};
-
         if (deep) {
           deepExtend(pack, resources, overwrite);
         } else {
-          pack = _objectSpread$1(_objectSpread$1({}, pack), resources);
+          pack = _objectSpread$5(_objectSpread$5({}, pack), resources);
         }
-
         setPath(this.data, path, pack);
         if (!options.silent) this.emit('added', lng, ns, resources);
       }
@@ -19018,7 +18946,6 @@ return jQuery;
         if (this.hasResourceBundle(lng, ns)) {
           delete this.data[lng][ns];
         }
-
         this.removeNamespaces(ns);
         this.emit('removed', lng, ns);
       }
@@ -19031,7 +18958,7 @@ return jQuery;
       key: "getResourceBundle",
       value: function getResourceBundle(lng, ns) {
         if (!ns) ns = this.options.defaultNS;
-        if (this.options.compatibilityAPI === 'v1') return _objectSpread$1(_objectSpread$1({}, {}), this.getResource(lng, ns));
+        if (this.options.compatibilityAPI === 'v1') return _objectSpread$5(_objectSpread$5({}, {}), this.getResource(lng, ns));
         return this.getResource(lng, ns);
       }
     }, {
@@ -19054,7 +18981,6 @@ return jQuery;
         return this.data;
       }
     }]);
-
     return ResourceStore;
   }(EventEmitter);
 
@@ -19065,7 +18991,6 @@ return jQuery;
     },
     handle: function handle(processors, value, key, options, translator) {
       var _this = this;
-
       processors.forEach(function (processor) {
         if (_this.processors[processor]) value = _this.processors[processor].process(value, key, options, translator);
       });
@@ -19073,44 +18998,30 @@ return jQuery;
     }
   };
 
-  function ownKeys$2(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$2(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$2(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$4(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   var checkedLoadedFor = {};
-
   var Translator = function (_EventEmitter) {
     _inherits(Translator, _EventEmitter);
-
-    var _super = _createSuper$1(Translator);
-
+    var _super = _createSuper$2(Translator);
     function Translator(services) {
       var _this;
-
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
       _classCallCheck(this, Translator);
-
       _this = _super.call(this);
-
       if (isIE10) {
         EventEmitter.call(_assertThisInitialized(_this));
       }
-
       copy(['resourceStore', 'languageUtils', 'pluralResolver', 'interpolator', 'backendConnector', 'i18nFormat', 'utils'], services, _assertThisInitialized(_this));
       _this.options = options;
-
       if (_this.options.keySeparator === undefined) {
         _this.options.keySeparator = '.';
       }
-
       _this.logger = baseLogger.create('translator');
       return _this;
     }
-
     _createClass(Translator, [{
       key: "changeLanguage",
       value: function changeLanguage(lng) {
@@ -19122,11 +19033,9 @@ return jQuery;
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
           interpolation: {}
         };
-
         if (key === undefined || key === null) {
           return false;
         }
-
         var resolved = this.resolve(key, options);
         return resolved && resolved.res !== undefined;
       }
@@ -19139,22 +19048,18 @@ return jQuery;
         var namespaces = options.ns || this.options.defaultNS || [];
         var wouldCheckForNsInKey = nsSeparator && key.indexOf(nsSeparator) > -1;
         var seemsNaturalLanguage = !this.options.userDefinedKeySeparator && !options.keySeparator && !this.options.userDefinedNsSeparator && !options.nsSeparator && !looksLikeObjectPath(key, nsSeparator, keySeparator);
-
         if (wouldCheckForNsInKey && !seemsNaturalLanguage) {
           var m = key.match(this.interpolator.nestingRegexp);
-
           if (m && m.length > 0) {
             return {
               key: key,
               namespaces: namespaces
             };
           }
-
           var parts = key.split(nsSeparator);
           if (nsSeparator !== keySeparator || nsSeparator === keySeparator && this.options.ns.indexOf(parts[0]) > -1) namespaces = parts.shift();
           key = parts.join(keySeparator);
         }
-
         if (typeof namespaces === 'string') namespaces = [namespaces];
         return {
           key: key,
@@ -19165,45 +19070,35 @@ return jQuery;
       key: "translate",
       value: function translate(keys, options, lastKey) {
         var _this2 = this;
-
         if (_typeof(options) !== 'object' && this.options.overloadTranslationOptionHandler) {
           options = this.options.overloadTranslationOptionHandler(arguments);
         }
-
         if (!options) options = {};
         if (keys === undefined || keys === null) return '';
         if (!Array.isArray(keys)) keys = [String(keys)];
         var returnDetails = options.returnDetails !== undefined ? options.returnDetails : this.options.returnDetails;
         var keySeparator = options.keySeparator !== undefined ? options.keySeparator : this.options.keySeparator;
-
         var _this$extractFromKey = this.extractFromKey(keys[keys.length - 1], options),
-            key = _this$extractFromKey.key,
-            namespaces = _this$extractFromKey.namespaces;
-
+          key = _this$extractFromKey.key,
+          namespaces = _this$extractFromKey.namespaces;
         var namespace = namespaces[namespaces.length - 1];
         var lng = options.lng || this.language;
         var appendNamespaceToCIMode = options.appendNamespaceToCIMode || this.options.appendNamespaceToCIMode;
-
         if (lng && lng.toLowerCase() === 'cimode') {
           if (appendNamespaceToCIMode) {
             var nsSeparator = options.nsSeparator || this.options.nsSeparator;
-
             if (returnDetails) {
               resolved.res = "".concat(namespace).concat(nsSeparator).concat(key);
               return resolved;
             }
-
             return "".concat(namespace).concat(nsSeparator).concat(key);
           }
-
           if (returnDetails) {
             resolved.res = key;
             return resolved;
           }
-
           return key;
         }
-
         var resolved = this.resolve(keys, options);
         var res = resolved && resolved.res;
         var resUsedKey = resolved && resolved.usedKey || key;
@@ -19213,41 +19108,34 @@ return jQuery;
         var joinArrays = options.joinArrays !== undefined ? options.joinArrays : this.options.joinArrays;
         var handleAsObjectInI18nFormat = !this.i18nFormat || this.i18nFormat.handleAsObject;
         var handleAsObject = typeof res !== 'string' && typeof res !== 'boolean' && typeof res !== 'number';
-
         if (handleAsObjectInI18nFormat && res && handleAsObject && noObject.indexOf(resType) < 0 && !(typeof joinArrays === 'string' && resType === '[object Array]')) {
           if (!options.returnObjects && !this.options.returnObjects) {
             if (!this.options.returnedObjectHandler) {
               this.logger.warn('accessing an object - but returnObjects options is not enabled!');
             }
-
-            var r = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, res, _objectSpread$2(_objectSpread$2({}, options), {}, {
+            var r = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(resUsedKey, res, _objectSpread$4(_objectSpread$4({}, options), {}, {
               ns: namespaces
             })) : "key '".concat(key, " (").concat(this.language, ")' returned an object instead of string.");
-
             if (returnDetails) {
               resolved.res = r;
               return resolved;
             }
-
             return r;
           }
-
           if (keySeparator) {
             var resTypeIsArray = resType === '[object Array]';
             var copy = resTypeIsArray ? [] : {};
             var newKeyToUse = resTypeIsArray ? resExactUsedKey : resUsedKey;
-
             for (var m in res) {
               if (Object.prototype.hasOwnProperty.call(res, m)) {
                 var deepKey = "".concat(newKeyToUse).concat(keySeparator).concat(m);
-                copy[m] = this.translate(deepKey, _objectSpread$2(_objectSpread$2({}, options), {
+                copy[m] = this.translate(deepKey, _objectSpread$4(_objectSpread$4({}, options), {
                   joinArrays: false,
                   ns: namespaces
                 }));
                 if (copy[m] === deepKey) copy[m] = res[m];
               }
             }
-
             res = copy;
           }
         } else if (handleAsObjectInI18nFormat && typeof joinArrays === 'string' && resType === '[object Array]') {
@@ -19260,34 +19148,27 @@ return jQuery;
           var hasDefaultValue = Translator.hasDefaultValue(options);
           var defaultValueSuffix = needsPluralHandling ? this.pluralResolver.getSuffix(lng, options.count, options) : '';
           var defaultValue = options["defaultValue".concat(defaultValueSuffix)] || options.defaultValue;
-
           if (!this.isValidLookup(res) && hasDefaultValue) {
             usedDefault = true;
             res = defaultValue;
           }
-
           if (!this.isValidLookup(res)) {
             usedKey = true;
             res = key;
           }
-
           var missingKeyNoValueFallbackToKey = options.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey;
           var resForMissing = missingKeyNoValueFallbackToKey && usedKey ? undefined : res;
           var updateMissing = hasDefaultValue && defaultValue !== res && this.options.updateMissing;
-
           if (usedKey || usedDefault || updateMissing) {
             this.logger.log(updateMissing ? 'updateKey' : 'missingKey', lng, namespace, key, updateMissing ? defaultValue : res);
-
             if (keySeparator) {
-              var fk = this.resolve(key, _objectSpread$2(_objectSpread$2({}, options), {}, {
+              var fk = this.resolve(key, _objectSpread$4(_objectSpread$4({}, options), {}, {
                 keySeparator: false
               }));
               if (fk && fk.res) this.logger.warn('Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.');
             }
-
             var lngs = [];
             var fallbackLngs = this.languageUtils.getFallbackCodes(this.options.fallbackLng, options.lng || this.language);
-
             if (this.options.saveMissingTo === 'fallback' && fallbackLngs && fallbackLngs[0]) {
               for (var i = 0; i < fallbackLngs.length; i++) {
                 lngs.push(fallbackLngs[i]);
@@ -19297,19 +19178,15 @@ return jQuery;
             } else {
               lngs.push(options.lng || this.language);
             }
-
             var send = function send(l, k, specificDefaultValue) {
               var defaultForMissing = hasDefaultValue && specificDefaultValue !== res ? specificDefaultValue : resForMissing;
-
               if (_this2.options.missingKeyHandler) {
                 _this2.options.missingKeyHandler(l, namespace, k, defaultForMissing, updateMissing, options);
               } else if (_this2.backendConnector && _this2.backendConnector.saveMissing) {
                 _this2.backendConnector.saveMissing(l, namespace, k, defaultForMissing, updateMissing, options);
               }
-
               _this2.emit('missingKey', l, namespace, k, res);
             };
-
             if (this.options.saveMissing) {
               if (this.options.saveMissingPlurals && needsPluralHandling) {
                 lngs.forEach(function (language) {
@@ -19322,10 +19199,8 @@ return jQuery;
               }
             }
           }
-
           res = this.extendTranslation(res, keys, options, resolved, lastKey);
           if (usedKey && res === key && this.options.appendNamespaceToMissingKey) res = "".concat(namespace, ":").concat(key);
-
           if ((usedKey || usedDefault) && this.options.parseMissingKeyHandler) {
             if (this.options.compatibilityAPI !== 'v1') {
               res = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? "".concat(namespace, ":").concat(key) : key, usedDefault ? res : undefined);
@@ -19334,77 +19209,63 @@ return jQuery;
             }
           }
         }
-
         if (returnDetails) {
           resolved.res = res;
           return resolved;
         }
-
         return res;
       }
     }, {
       key: "extendTranslation",
       value: function extendTranslation(res, key, options, resolved, lastKey) {
         var _this3 = this;
-
         if (this.i18nFormat && this.i18nFormat.parse) {
-          res = this.i18nFormat.parse(res, _objectSpread$2(_objectSpread$2({}, this.options.interpolation.defaultVariables), options), resolved.usedLng, resolved.usedNS, resolved.usedKey, {
+          res = this.i18nFormat.parse(res, _objectSpread$4(_objectSpread$4({}, this.options.interpolation.defaultVariables), options), resolved.usedLng, resolved.usedNS, resolved.usedKey, {
             resolved: resolved
           });
         } else if (!options.skipInterpolation) {
-          if (options.interpolation) this.interpolator.init(_objectSpread$2(_objectSpread$2({}, options), {
-            interpolation: _objectSpread$2(_objectSpread$2({}, this.options.interpolation), options.interpolation)
+          if (options.interpolation) this.interpolator.init(_objectSpread$4(_objectSpread$4({}, options), {
+            interpolation: _objectSpread$4(_objectSpread$4({}, this.options.interpolation), options.interpolation)
           }));
           var skipOnVariables = typeof res === 'string' && (options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
           var nestBef;
-
           if (skipOnVariables) {
             var nb = res.match(this.interpolator.nestingRegexp);
             nestBef = nb && nb.length;
           }
-
           var data = options.replace && typeof options.replace !== 'string' ? options.replace : options;
-          if (this.options.interpolation.defaultVariables) data = _objectSpread$2(_objectSpread$2({}, this.options.interpolation.defaultVariables), data);
+          if (this.options.interpolation.defaultVariables) data = _objectSpread$4(_objectSpread$4({}, this.options.interpolation.defaultVariables), data);
           res = this.interpolator.interpolate(res, data, options.lng || this.language, options);
-
           if (skipOnVariables) {
             var na = res.match(this.interpolator.nestingRegexp);
             var nestAft = na && na.length;
             if (nestBef < nestAft) options.nest = false;
           }
-
           if (options.nest !== false) res = this.interpolator.nest(res, function () {
             for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
               args[_key] = arguments[_key];
             }
-
             if (lastKey && lastKey[0] === args[0] && !options.context) {
               _this3.logger.warn("It seems you are nesting recursively key: ".concat(args[0], " in key: ").concat(key[0]));
-
               return null;
             }
-
             return _this3.translate.apply(_this3, args.concat([key]));
           }, options);
           if (options.interpolation) this.interpolator.reset();
         }
-
         var postProcess = options.postProcess || this.options.postProcess;
         var postProcessorNames = typeof postProcess === 'string' ? [postProcess] : postProcess;
-
         if (res !== undefined && res !== null && postProcessorNames && postProcessorNames.length && options.applyPostProcessor !== false) {
-          res = postProcessor.handle(postProcessorNames, res, key, this.options && this.options.postProcessPassResolved ? _objectSpread$2({
+          res = postProcessor.handle(postProcessorNames, res, key, this.options && this.options.postProcessPassResolved ? _objectSpread$4({
             i18nResolved: resolved
           }, options) : options, this);
         }
-
         return res;
       }
     }, {
       key: "resolve",
       value: function resolve(keys) {
         var _this4 = this;
-
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var found;
         var usedKey;
@@ -19414,65 +19275,50 @@ return jQuery;
         if (typeof keys === 'string') keys = [keys];
         keys.forEach(function (k) {
           if (_this4.isValidLookup(found)) return;
-
           var extracted = _this4.extractFromKey(k, options);
-
           var key = extracted.key;
           usedKey = key;
           var namespaces = extracted.namespaces;
           if (_this4.options.fallbackNS) namespaces = namespaces.concat(_this4.options.fallbackNS);
           var needsPluralHandling = options.count !== undefined && typeof options.count !== 'string';
-
           var needsZeroSuffixLookup = needsPluralHandling && !options.ordinal && options.count === 0 && _this4.pluralResolver.shouldUseIntlApi();
-
           var needsContextHandling = options.context !== undefined && (typeof options.context === 'string' || typeof options.context === 'number') && options.context !== '';
           var codes = options.lngs ? options.lngs : _this4.languageUtils.toResolveHierarchy(options.lng || _this4.language, options.fallbackLng);
           namespaces.forEach(function (ns) {
             if (_this4.isValidLookup(found)) return;
             usedNS = ns;
-
             if (!checkedLoadedFor["".concat(codes[0], "-").concat(ns)] && _this4.utils && _this4.utils.hasLoadedNamespace && !_this4.utils.hasLoadedNamespace(usedNS)) {
               checkedLoadedFor["".concat(codes[0], "-").concat(ns)] = true;
-
               _this4.logger.warn("key \"".concat(usedKey, "\" for languages \"").concat(codes.join(', '), "\" won't get resolved as namespace \"").concat(usedNS, "\" was not yet loaded"), 'This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
             }
-
             codes.forEach(function (code) {
               if (_this4.isValidLookup(found)) return;
               usedLng = code;
               var finalKeys = [key];
-
               if (_this4.i18nFormat && _this4.i18nFormat.addLookupKeys) {
                 _this4.i18nFormat.addLookupKeys(finalKeys, key, code, ns, options);
               } else {
                 var pluralSuffix;
                 if (needsPluralHandling) pluralSuffix = _this4.pluralResolver.getSuffix(code, options.count, options);
                 var zeroSuffix = "".concat(_this4.options.pluralSeparator, "zero");
-
                 if (needsPluralHandling) {
                   finalKeys.push(key + pluralSuffix);
-
                   if (needsZeroSuffixLookup) {
                     finalKeys.push(key + zeroSuffix);
                   }
                 }
-
                 if (needsContextHandling) {
                   var contextKey = "".concat(key).concat(_this4.options.contextSeparator).concat(options.context);
                   finalKeys.push(contextKey);
-
                   if (needsPluralHandling) {
                     finalKeys.push(contextKey + pluralSuffix);
-
                     if (needsZeroSuffixLookup) {
                       finalKeys.push(contextKey + zeroSuffix);
                     }
                   }
                 }
               }
-
               var possibleKey;
-
               while (possibleKey = finalKeys.pop()) {
                 if (!_this4.isValidLookup(found)) {
                   exactUsedKey = possibleKey;
@@ -19506,33 +19352,27 @@ return jQuery;
       key: "hasDefaultValue",
       value: function hasDefaultValue(options) {
         var prefix = 'defaultValue';
-
         for (var option in options) {
           if (Object.prototype.hasOwnProperty.call(options, option) && prefix === option.substring(0, prefix.length) && undefined !== options[option]) {
             return true;
           }
         }
-
         return false;
       }
     }]);
-
     return Translator;
   }(EventEmitter);
 
   function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
   var LanguageUtil = function () {
     function LanguageUtil(options) {
       _classCallCheck(this, LanguageUtil);
-
       this.options = options;
       this.supportedLngs = this.options.supportedLngs || false;
       this.logger = baseLogger.create('languageUtils');
     }
-
     _createClass(LanguageUtil, [{
       key: "getScriptPartFromCode",
       value: function getScriptPartFromCode(code) {
@@ -19556,7 +19396,6 @@ return jQuery;
         if (typeof code === 'string' && code.indexOf('-') > -1) {
           var specialCases = ['hans', 'hant', 'latn', 'cyrl', 'cans', 'mong', 'arab'];
           var p = code.split('-');
-
           if (this.options.lowerCaseLng) {
             p = p.map(function (part) {
               return part.toLowerCase();
@@ -19572,10 +19411,8 @@ return jQuery;
             if (specialCases.indexOf(p[1].toLowerCase()) > -1) p[1] = capitalize(p[1].toLowerCase());
             if (specialCases.indexOf(p[2].toLowerCase()) > -1) p[2] = capitalize(p[2].toLowerCase());
           }
-
           return p.join('-');
         }
-
         return this.options.cleanCode || this.options.lowerCaseLng ? code.toLowerCase() : code;
       }
     }, {
@@ -19584,37 +19421,29 @@ return jQuery;
         if (this.options.load === 'languageOnly' || this.options.nonExplicitSupportedLngs) {
           code = this.getLanguagePartFromCode(code);
         }
-
         return !this.supportedLngs || !this.supportedLngs.length || this.supportedLngs.indexOf(code) > -1;
       }
     }, {
       key: "getBestMatchFromCodes",
       value: function getBestMatchFromCodes(codes) {
         var _this = this;
-
         if (!codes) return null;
         var found;
         codes.forEach(function (code) {
           if (found) return;
-
           var cleanedLng = _this.formatLanguageCode(code);
-
           if (!_this.options.supportedLngs || _this.isSupportedCode(cleanedLng)) found = cleanedLng;
         });
-
         if (!found && this.options.supportedLngs) {
           codes.forEach(function (code) {
             if (found) return;
-
             var lngOnly = _this.getLanguagePartFromCode(code);
-
             if (_this.isSupportedCode(lngOnly)) return found = lngOnly;
             found = _this.options.supportedLngs.find(function (supportedLng) {
               if (supportedLng.indexOf(lngOnly) === 0) return supportedLng;
             });
           });
         }
-
         if (!found) found = this.getFallbackCodes(this.options.fallbackLng)[0];
         return found;
       }
@@ -19637,20 +19466,16 @@ return jQuery;
       key: "toResolveHierarchy",
       value: function toResolveHierarchy(code, fallbackCode) {
         var _this2 = this;
-
         var fallbackCodes = this.getFallbackCodes(fallbackCode || this.options.fallbackLng || [], code);
         var codes = [];
-
         var addCode = function addCode(c) {
           if (!c) return;
-
           if (_this2.isSupportedCode(c)) {
             codes.push(c);
           } else {
             _this2.logger.warn("rejecting language code not found in supportedLngs: ".concat(c));
           }
         };
-
         if (typeof code === 'string' && code.indexOf('-') > -1) {
           if (this.options.load !== 'languageOnly') addCode(this.formatLanguageCode(code));
           if (this.options.load !== 'languageOnly' && this.options.load !== 'currentOnly') addCode(this.getScriptPartFromCode(code));
@@ -19658,14 +19483,12 @@ return jQuery;
         } else if (typeof code === 'string') {
           addCode(this.formatLanguageCode(code));
         }
-
         fallbackCodes.forEach(function (fc) {
           if (codes.indexOf(fc) < 0) addCode(_this2.formatLanguageCode(fc));
         });
         return codes;
       }
     }]);
-
     return LanguageUtil;
   }();
 
@@ -19839,7 +19662,6 @@ return jQuery;
     many: 4,
     other: 5
   };
-
   function createRules() {
     var rules = {};
     sets.forEach(function (set) {
@@ -19852,25 +19674,19 @@ return jQuery;
     });
     return rules;
   }
-
   var PluralResolver = function () {
     function PluralResolver(languageUtils) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
       _classCallCheck(this, PluralResolver);
-
       this.languageUtils = languageUtils;
       this.options = options;
       this.logger = baseLogger.create('pluralResolver');
-
       if ((!this.options.compatibilityJSON || this.options.compatibilityJSON === 'v4') && (typeof Intl === 'undefined' || !Intl.PluralRules)) {
         this.options.compatibilityJSON = 'v3';
         this.logger.error('Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.');
       }
-
       this.rules = createRules();
     }
-
     _createClass(PluralResolver, [{
       key: "addRule",
       value: function addRule(lng, obj) {
@@ -19880,7 +19696,6 @@ return jQuery;
       key: "getRule",
       value: function getRule(code) {
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
         if (this.shouldUseIntlApi()) {
           try {
             return new Intl.PluralRules(code, {
@@ -19890,7 +19705,6 @@ return jQuery;
             return;
           }
         }
-
         return this.rules[code] || this.rules[this.languageUtils.getLanguagePartFromCode(code)];
       }
     }, {
@@ -19898,11 +19712,9 @@ return jQuery;
       value: function needsPlural(code) {
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var rule = this.getRule(code, options);
-
         if (this.shouldUseIntlApi()) {
           return rule && rule.resolvedOptions().pluralCategories.length > 1;
         }
-
         return rule && rule.numbers.length > 1;
       }
     }, {
@@ -19917,14 +19729,11 @@ return jQuery;
       key: "getSuffixes",
       value: function getSuffixes(code) {
         var _this = this;
-
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var rule = this.getRule(code, options);
-
         if (!rule) {
           return [];
         }
-
         if (this.shouldUseIntlApi()) {
           return rule.resolvedOptions().pluralCategories.sort(function (pluralCategory1, pluralCategory2) {
             return suffixesOrder[pluralCategory1] - suffixesOrder[pluralCategory2];
@@ -19932,7 +19741,6 @@ return jQuery;
             return "".concat(_this.options.prepend).concat(pluralCategory);
           });
         }
-
         return rule.numbers.map(function (number) {
           return _this.getSuffix(code, number, options);
         });
@@ -19942,15 +19750,12 @@ return jQuery;
       value: function getSuffix(code, count) {
         var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var rule = this.getRule(code, options);
-
         if (rule) {
           if (this.shouldUseIntlApi()) {
             return "".concat(this.options.prepend).concat(rule.select(count));
           }
-
           return this.getSuffixRetroCompatible(rule, count);
         }
-
         this.logger.warn("no plural rule found for: ".concat(code));
         return '';
       }
@@ -19958,10 +19763,8 @@ return jQuery;
       key: "getSuffixRetroCompatible",
       value: function getSuffixRetroCompatible(rule, count) {
         var _this2 = this;
-
         var idx = rule.noAbs ? rule.plurals(count) : rule.plurals(Math.abs(count));
         var suffix = rule.numbers[idx];
-
         if (this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
           if (suffix === 2) {
             suffix = 'plural';
@@ -19969,11 +19772,9 @@ return jQuery;
             suffix = '';
           }
         }
-
         var returnSuffix = function returnSuffix() {
           return _this2.options.prepend && suffix.toString() ? _this2.options.prepend + suffix.toString() : suffix.toString();
         };
-
         if (this.options.compatibilityJSON === 'v1') {
           if (suffix === 1) return '';
           if (typeof suffix === 'number') return "_plural_".concat(suffix.toString());
@@ -19983,7 +19784,6 @@ return jQuery;
         } else if (this.options.simplifyPluralSuffix && rule.numbers.length === 2 && rule.numbers[0] === 1) {
           return returnSuffix();
         }
-
         return this.options.prepend && idx.toString() ? this.options.prepend + idx.toString() : idx.toString();
       }
     }, {
@@ -19992,30 +19792,22 @@ return jQuery;
         return !deprecatedJsonVersions.includes(this.options.compatibilityJSON);
       }
     }]);
-
     return PluralResolver;
   }();
 
-  function ownKeys$3(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread$3(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$3(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$3(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
+  function ownKeys$3(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread$3(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$3(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$3(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
   var Interpolator = function () {
     function Interpolator() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
       _classCallCheck(this, Interpolator);
-
       this.logger = baseLogger.create('interpolator');
       this.options = options;
-
       this.format = options.interpolation && options.interpolation.format || function (value) {
         return value;
       };
-
       this.init(options);
     }
-
     _createClass(Interpolator, [{
       key: "init",
       value: function init() {
@@ -20058,16 +19850,13 @@ return jQuery;
       key: "interpolate",
       value: function interpolate(str, data, lng, options) {
         var _this = this;
-
         var match;
         var value;
         var replaces;
         var defaultData = this.options && this.options.interpolation && this.options.interpolation.defaultVariables || {};
-
         function regexSafe(val) {
           return val.replace(/\$/g, '$$$$');
         }
-
         var handleFormat = function handleFormat(key) {
           if (key.indexOf(_this.formatSeparator) < 0) {
             var path = getPathWithDefaults(data, defaultData, key);
@@ -20075,7 +19864,6 @@ return jQuery;
               interpolationkey: key
             })) : path;
           }
-
           var p = key.split(_this.formatSeparator);
           var k = p.shift().trim();
           var f = p.join(_this.formatSeparator).trim();
@@ -20083,7 +19871,6 @@ return jQuery;
             interpolationkey: k
           }));
         };
-
         this.resetRegExp();
         var missingInterpolationHandler = options && options.missingInterpolationHandler || this.options.missingInterpolationHandler;
         var skipOnVariables = options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables;
@@ -20100,11 +19887,9 @@ return jQuery;
         }];
         todos.forEach(function (todo) {
           replaces = 0;
-
           while (match = todo.regex.exec(str)) {
             var matchedVar = match[1].trim();
             value = handleFormat(matchedVar);
-
             if (value === undefined) {
               if (typeof missingInterpolationHandler === 'function') {
                 var temp = missingInterpolationHandler(str, match, options);
@@ -20116,25 +19901,20 @@ return jQuery;
                 continue;
               } else {
                 _this.logger.warn("missed to pass in variable ".concat(matchedVar, " for interpolating ").concat(str));
-
                 value = '';
               }
             } else if (typeof value !== 'string' && !_this.useRawValueToEscape) {
               value = makeString(value);
             }
-
             var safeValue = todo.safeValue(value);
             str = str.replace(match[0], safeValue);
-
             if (skipOnVariables) {
               todo.regex.lastIndex += value.length;
               todo.regex.lastIndex -= match[0].length;
             } else {
               todo.regex.lastIndex = 0;
             }
-
             replaces++;
-
             if (replaces >= _this.maxReplaces) {
               break;
             }
@@ -20146,16 +19926,10 @@ return jQuery;
       key: "nest",
       value: function nest(str, fc) {
         var _this2 = this;
-
         var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var match;
         var value;
-
-        var clonedOptions = _objectSpread$3({}, options);
-
-        clonedOptions.applyPostProcessor = false;
-        delete clonedOptions.defaultValue;
-
+        var clonedOptions;
         function handleHasOptions(key, inheritedOptions) {
           var sep = this.nestingOptionsSeparator;
           if (key.indexOf(sep) < 0) return key;
@@ -20163,8 +19937,11 @@ return jQuery;
           var optionsString = "{".concat(c[1]);
           key = c[0];
           optionsString = this.interpolate(optionsString, clonedOptions);
-          optionsString = optionsString.replace(/'/g, '"');
-
+          var matchedSingleQuotes = optionsString.match(/'/g);
+          var matchedDoubleQuotes = optionsString.match(/"/g);
+          if (matchedSingleQuotes && matchedSingleQuotes.length % 2 === 0 && !matchedDoubleQuotes || matchedDoubleQuotes.length % 2 !== 0) {
+            optionsString = optionsString.replace(/'/g, '"');
+          }
           try {
             clonedOptions = JSON.parse(optionsString);
             if (inheritedOptions) clonedOptions = _objectSpread$3(_objectSpread$3({}, inheritedOptions), clonedOptions);
@@ -20172,15 +19949,15 @@ return jQuery;
             this.logger.warn("failed parsing options string in nesting for key ".concat(key), e);
             return "".concat(key).concat(sep).concat(optionsString);
           }
-
           delete clonedOptions.defaultValue;
           return key;
         }
-
         while (match = this.nestingRegexp.exec(str)) {
           var formatters = [];
+          clonedOptions = _objectSpread$3({}, options);
+          clonedOptions.applyPostProcessor = false;
+          delete clonedOptions.defaultValue;
           var doReduce = false;
-
           if (match[0].indexOf(this.formatSeparator) !== -1 && !/{.*}/.test(match[1])) {
             var r = match[1].split(this.formatSeparator).map(function (elem) {
               return elem.trim();
@@ -20189,16 +19966,13 @@ return jQuery;
             formatters = r;
             doReduce = true;
           }
-
           value = fc(handleHasOptions.call(this, match[1].trim(), clonedOptions), clonedOptions);
           if (value && match[0] === str && typeof value !== 'string') return value;
           if (typeof value !== 'string') value = makeString(value);
-
           if (!value) {
             this.logger.warn("missed to resolve ".concat(match[1], " for nesting ").concat(str));
             value = '';
           }
-
           if (doReduce) {
             value = formatters.reduce(function (v, f) {
               return _this2.format(v, f, options.lng, _objectSpread$3(_objectSpread$3({}, options), {}, {
@@ -20206,15 +19980,12 @@ return jQuery;
               }));
             }, value.trim());
           }
-
           str = str.replace(match[0], value);
           this.regexp.lastIndex = 0;
         }
-
         return str;
       }
     }]);
-
     return Interpolator;
   }();
 
@@ -20228,11 +19999,9 @@ return jQuery;
 
   function _arrayLikeToArray(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
-
     for (var i = 0, arr2 = new Array(len); i < len; i++) {
       arr2[i] = arr[i];
     }
-
     return arr2;
   }
 
@@ -20253,19 +20022,15 @@ return jQuery;
     return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
   }
 
-  function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$4(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
+  function ownKeys$2(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$2(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$2(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
   function parseFormatStr(formatStr) {
     var formatName = formatStr.toLowerCase().trim();
     var formatOptions = {};
-
     if (formatStr.indexOf('(') > -1) {
       var p = formatStr.split('(');
       formatName = p[0].toLowerCase().trim();
       var optStr = p[1].substring(0, p[1].length - 1);
-
       if (formatName === 'currency' && optStr.indexOf(':') < 0) {
         if (!formatOptions.currency) formatOptions.currency = optStr.trim();
       } else if (formatName === 'relativetime' && optStr.indexOf(':') < 0) {
@@ -20274,12 +20039,10 @@ return jQuery;
         var opts = optStr.split(';');
         opts.forEach(function (opt) {
           if (!opt) return;
-
           var _opt$split = opt.split(':'),
-              _opt$split2 = _toArray(_opt$split),
-              key = _opt$split2[0],
-              rest = _opt$split2.slice(1);
-
+            _opt$split2 = _toArray(_opt$split),
+            key = _opt$split2[0],
+            rest = _opt$split2.slice(1);
           var val = rest.join(':').trim().replace(/^'+|'+$/g, '');
           if (!formatOptions[key.trim()]) formatOptions[key.trim()] = val;
           if (val === 'false') formatOptions[key.trim()] = false;
@@ -20288,43 +20051,65 @@ return jQuery;
         });
       }
     }
-
     return {
       formatName: formatName,
       formatOptions: formatOptions
     };
   }
-
+  function createCachedFormatter(fn) {
+    var cache = {};
+    return function invokeFormatter(val, lng, options) {
+      var key = lng + JSON.stringify(options);
+      var formatter = cache[key];
+      if (!formatter) {
+        formatter = fn(lng, options);
+        cache[key] = formatter;
+      }
+      return formatter(val);
+    };
+  }
   var Formatter = function () {
     function Formatter() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
       _classCallCheck(this, Formatter);
-
       this.logger = baseLogger.create('formatter');
       this.options = options;
       this.formats = {
-        number: function number(val, lng, options) {
-          return new Intl.NumberFormat(lng, options).format(val);
-        },
-        currency: function currency(val, lng, options) {
-          return new Intl.NumberFormat(lng, _objectSpread$4(_objectSpread$4({}, options), {}, {
+        number: createCachedFormatter(function (lng, options) {
+          var formatter = new Intl.NumberFormat(lng, options);
+          return function (val) {
+            return formatter.format(val);
+          };
+        }),
+        currency: createCachedFormatter(function (lng, options) {
+          var formatter = new Intl.NumberFormat(lng, _objectSpread$2(_objectSpread$2({}, options), {}, {
             style: 'currency'
-          })).format(val);
-        },
-        datetime: function datetime(val, lng, options) {
-          return new Intl.DateTimeFormat(lng, _objectSpread$4({}, options)).format(val);
-        },
-        relativetime: function relativetime(val, lng, options) {
-          return new Intl.RelativeTimeFormat(lng, _objectSpread$4({}, options)).format(val, options.range || 'day');
-        },
-        list: function list(val, lng, options) {
-          return new Intl.ListFormat(lng, _objectSpread$4({}, options)).format(val);
-        }
+          }));
+          return function (val) {
+            return formatter.format(val);
+          };
+        }),
+        datetime: createCachedFormatter(function (lng, options) {
+          var formatter = new Intl.DateTimeFormat(lng, _objectSpread$2({}, options));
+          return function (val) {
+            return formatter.format(val);
+          };
+        }),
+        relativetime: createCachedFormatter(function (lng, options) {
+          var formatter = new Intl.RelativeTimeFormat(lng, _objectSpread$2({}, options));
+          return function (val) {
+            return formatter.format(val, options.range || 'day');
+          };
+        }),
+        list: createCachedFormatter(function (lng, options) {
+          var formatter = new Intl.ListFormat(lng, _objectSpread$2({}, options));
+          return function (val) {
+            return formatter.format(val);
+          };
+        })
       };
       this.init(options);
     }
-
     _createClass(Formatter, [{
       key: "init",
       value: function init(services) {
@@ -20340,75 +20125,61 @@ return jQuery;
         this.formats[name.toLowerCase().trim()] = fc;
       }
     }, {
+      key: "addCached",
+      value: function addCached(name, fc) {
+        this.formats[name.toLowerCase().trim()] = createCachedFormatter(fc);
+      }
+    }, {
       key: "format",
       value: function format(value, _format, lng, options) {
         var _this = this;
-
         var formats = _format.split(this.formatSeparator);
-
         var result = formats.reduce(function (mem, f) {
           var _parseFormatStr = parseFormatStr(f),
-              formatName = _parseFormatStr.formatName,
-              formatOptions = _parseFormatStr.formatOptions;
-
+            formatName = _parseFormatStr.formatName,
+            formatOptions = _parseFormatStr.formatOptions;
           if (_this.formats[formatName]) {
             var formatted = mem;
-
             try {
               var valOptions = options && options.formatParams && options.formatParams[options.interpolationkey] || {};
               var l = valOptions.locale || valOptions.lng || options.locale || options.lng || lng;
-              formatted = _this.formats[formatName](mem, l, _objectSpread$4(_objectSpread$4(_objectSpread$4({}, formatOptions), options), valOptions));
+              formatted = _this.formats[formatName](mem, l, _objectSpread$2(_objectSpread$2(_objectSpread$2({}, formatOptions), options), valOptions));
             } catch (error) {
               _this.logger.warn(error);
             }
-
             return formatted;
           } else {
             _this.logger.warn("there was no format function for ".concat(formatName));
           }
-
           return mem;
         }, value);
         return result;
       }
     }]);
-
     return Formatter;
   }();
 
-  function ownKeys$5(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$5(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
+  function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   function removePending(q, name) {
     if (q.pending[name] !== undefined) {
       delete q.pending[name];
       q.pendingCount--;
     }
   }
-
   var Connector = function (_EventEmitter) {
     _inherits(Connector, _EventEmitter);
-
-    var _super = _createSuper$2(Connector);
-
+    var _super = _createSuper$1(Connector);
     function Connector(backend, store, services) {
       var _this;
-
       var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
       _classCallCheck(this, Connector);
-
       _this = _super.call(this);
-
       if (isIE10) {
         EventEmitter.call(_assertThisInitialized(_this));
       }
-
       _this.backend = backend;
       _this.store = store;
       _this.services = services;
@@ -20422,19 +20193,15 @@ return jQuery;
       _this.retryTimeout = options.retryTimeout >= 1 ? options.retryTimeout : 350;
       _this.state = {};
       _this.queue = [];
-
       if (_this.backend && _this.backend.init) {
         _this.backend.init(services, options.backend, options);
       }
-
       return _this;
     }
-
     _createClass(Connector, [{
       key: "queueLoad",
       value: function queueLoad(languages, namespaces, options, callback) {
         var _this2 = this;
-
         var toLoad = {};
         var pending = {};
         var toLoadLanguages = {};
@@ -20443,7 +20210,6 @@ return jQuery;
           var hasAllNamespaces = true;
           namespaces.forEach(function (ns) {
             var name = "".concat(lng, "|").concat(ns);
-
             if (!options.reload && _this2.store.hasResourceBundle(lng, ns)) {
               _this2.state[name] = 2;
             } else if (_this2.state[name] < 0) ; else if (_this2.state[name] === 1) {
@@ -20458,7 +20224,6 @@ return jQuery;
           });
           if (!hasAllNamespaces) toLoadLanguages[lng] = true;
         });
-
         if (Object.keys(toLoad).length || Object.keys(pending).length) {
           this.queue.push({
             pending: pending,
@@ -20468,7 +20233,6 @@ return jQuery;
             callback: callback
           });
         }
-
         return {
           toLoad: Object.keys(toLoad),
           pending: Object.keys(pending),
@@ -20483,23 +20247,19 @@ return jQuery;
         var lng = s[0];
         var ns = s[1];
         if (err) this.emit('failedLoading', lng, ns, err);
-
         if (data) {
           this.store.addResourceBundle(lng, ns, data);
         }
-
         this.state[name] = err ? -1 : 2;
         var loaded = {};
         this.queue.forEach(function (q) {
           pushPath(q.loaded, [lng], ns);
           removePending(q, name);
           if (err) q.errors.push(err);
-
           if (q.pendingCount === 0 && !q.done) {
             Object.keys(q.loaded).forEach(function (l) {
               if (!loaded[l]) loaded[l] = {};
               var loadedKeys = q.loaded[l];
-
               if (loadedKeys.length) {
                 loadedKeys.forEach(function (ns) {
                   if (loaded[l][ns] === undefined) loaded[l][ns] = true;
@@ -20507,7 +20267,6 @@ return jQuery;
               }
             });
             q.done = true;
-
             if (q.errors.length) {
               q.callback(q.errors);
             } else {
@@ -20524,12 +20283,10 @@ return jQuery;
       key: "read",
       value: function read(lng, ns, fcName) {
         var _this3 = this;
-
         var tried = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
         var wait = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : this.retryTimeout;
         var callback = arguments.length > 5 ? arguments[5] : undefined;
         if (!lng.length) return callback(null, {});
-
         if (this.readingCalls >= this.maxParallelReads) {
           this.waitingReads.push({
             lng: lng,
@@ -20541,49 +20298,56 @@ return jQuery;
           });
           return;
         }
-
         this.readingCalls++;
-        return this.backend[fcName](lng, ns, function (err, data) {
+        var resolver = function resolver(err, data) {
           _this3.readingCalls--;
-
           if (_this3.waitingReads.length > 0) {
             var next = _this3.waitingReads.shift();
-
             _this3.read(next.lng, next.ns, next.fcName, next.tried, next.wait, next.callback);
           }
-
           if (err && data && tried < _this3.maxRetries) {
             setTimeout(function () {
               _this3.read.call(_this3, lng, ns, fcName, tried + 1, wait * 2, callback);
             }, wait);
             return;
           }
-
           callback(err, data);
-        });
+        };
+        var fc = this.backend[fcName].bind(this.backend);
+        if (fc.length === 2) {
+          try {
+            var r = fc(lng, ns);
+            if (r && typeof r.then === 'function') {
+              r.then(function (data) {
+                return resolver(null, data);
+              })["catch"](resolver);
+            } else {
+              resolver(null, r);
+            }
+          } catch (err) {
+            resolver(err);
+          }
+          return;
+        }
+        return fc(lng, ns, resolver);
       }
     }, {
       key: "prepareLoading",
       value: function prepareLoading(languages, namespaces) {
         var _this4 = this;
-
         var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var callback = arguments.length > 3 ? arguments[3] : undefined;
-
         if (!this.backend) {
           this.logger.warn('No backend was added via i18next.use. Will not load resources.');
           return callback && callback();
         }
-
         if (typeof languages === 'string') languages = this.languageUtils.toResolveHierarchy(languages);
         if (typeof namespaces === 'string') namespaces = [namespaces];
         var toLoad = this.queueLoad(languages, namespaces, options, callback);
-
         if (!toLoad.toLoad.length) {
           if (!toLoad.pending.length) callback();
           return null;
         }
-
         toLoad.toLoad.forEach(function (name) {
           _this4.loadOne(name);
         });
@@ -20604,7 +20368,6 @@ return jQuery;
       key: "loadOne",
       value: function loadOne(name) {
         var _this5 = this;
-
         var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
         var s = name.split('|');
         var lng = s[0];
@@ -20612,7 +20375,6 @@ return jQuery;
         this.read(lng, ns, 'read', undefined, undefined, function (err, data) {
           if (err) _this5.logger.warn("".concat(prefix, "loading namespace ").concat(ns, " for language ").concat(lng, " failed"), err);
           if (!err && data) _this5.logger.log("".concat(prefix, "loaded namespace ").concat(ns, " for language ").concat(lng), data);
-
           _this5.loaded(name, err, data);
         });
       }
@@ -20620,25 +20382,43 @@ return jQuery;
       key: "saveMissing",
       value: function saveMissing(languages, namespace, key, fallbackValue, isUpdate) {
         var options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
-
+        var clb = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : function () {};
         if (this.services.utils && this.services.utils.hasLoadedNamespace && !this.services.utils.hasLoadedNamespace(namespace)) {
           this.logger.warn("did not save key \"".concat(key, "\" as the namespace \"").concat(namespace, "\" was not yet loaded"), 'This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!');
           return;
         }
-
         if (key === undefined || key === null || key === '') return;
-
         if (this.backend && this.backend.create) {
-          this.backend.create(languages, namespace, key, fallbackValue, null, _objectSpread$5(_objectSpread$5({}, options), {}, {
+          var opts = _objectSpread$1(_objectSpread$1({}, options), {}, {
             isUpdate: isUpdate
-          }));
+          });
+          var fc = this.backend.create.bind(this.backend);
+          if (fc.length < 6) {
+            try {
+              var r;
+              if (fc.length === 5) {
+                r = fc(languages, namespace, key, fallbackValue, opts);
+              } else {
+                r = fc(languages, namespace, key, fallbackValue);
+              }
+              if (r && typeof r.then === 'function') {
+                r.then(function (data) {
+                  return clb(null, data);
+                })["catch"](clb);
+              } else {
+                clb(null, r);
+              }
+            } catch (err) {
+              clb(err);
+            }
+          } else {
+            fc(languages, namespace, key, fallbackValue, clb, opts);
+          }
         }
-
         if (!languages || !languages[0]) return;
         this.store.addResource(languages[0], namespace, key, fallbackValue);
       }
     }]);
-
     return Connector;
   }(EventEmitter);
 
@@ -20681,14 +20461,12 @@ return jQuery;
         if (_typeof(args[1]) === 'object') ret = args[1];
         if (typeof args[1] === 'string') ret.defaultValue = args[1];
         if (typeof args[2] === 'string') ret.tDescription = args[2];
-
         if (_typeof(args[2]) === 'object' || _typeof(args[3]) === 'object') {
           var options = args[3] || args[2];
           Object.keys(options).forEach(function (key) {
             ret[key] = options[key];
           });
         }
-
         return ret;
       },
       interpolation: {
@@ -20712,24 +20490,17 @@ return jQuery;
     if (typeof options.ns === 'string') options.ns = [options.ns];
     if (typeof options.fallbackLng === 'string') options.fallbackLng = [options.fallbackLng];
     if (typeof options.fallbackNS === 'string') options.fallbackNS = [options.fallbackNS];
-
     if (options.supportedLngs && options.supportedLngs.indexOf('cimode') < 0) {
       options.supportedLngs = options.supportedLngs.concat(['cimode']);
     }
-
     return options;
   }
 
-  function ownKeys$6(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$6(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
+  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   function noop() {}
-
   function bindMemberFunctions(inst) {
     var mems = Object.getOwnPropertyNames(Object.getPrototypeOf(inst));
     mems.forEach(function (mem) {
@@ -20738,26 +20509,18 @@ return jQuery;
       }
     });
   }
-
   var I18n = function (_EventEmitter) {
     _inherits(I18n, _EventEmitter);
-
-    var _super = _createSuper$3(I18n);
-
+    var _super = _createSuper(I18n);
     function I18n() {
       var _this;
-
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var callback = arguments.length > 1 ? arguments[1] : undefined;
-
       _classCallCheck(this, I18n);
-
       _this = _super.call(this);
-
       if (isIE10) {
         EventEmitter.call(_assertThisInitialized(_this));
       }
-
       _this.options = transformOptions(options);
       _this.services = {};
       _this.logger = baseLogger;
@@ -20765,35 +20528,27 @@ return jQuery;
         external: []
       };
       bindMemberFunctions(_assertThisInitialized(_this));
-
       if (callback && !_this.isInitialized && !options.isClone) {
         if (!_this.options.initImmediate) {
           _this.init(options, callback);
-
           return _possibleConstructorReturn(_this, _assertThisInitialized(_this));
         }
-
         setTimeout(function () {
           _this.init(options, callback);
         }, 0);
       }
-
       return _this;
     }
-
     _createClass(I18n, [{
       key: "init",
       value: function init() {
         var _this2 = this;
-
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var callback = arguments.length > 1 ? arguments[1] : undefined;
-
         if (typeof options === 'function') {
           callback = options;
           options = {};
         }
-
         if (!options.defaultNS && options.defaultNS !== false && options.ns) {
           if (typeof options.ns === 'string') {
             options.defaultNS = options.ns;
@@ -20801,43 +20556,34 @@ return jQuery;
             options.defaultNS = options.ns[0];
           }
         }
-
         var defOpts = get();
-        this.options = _objectSpread$6(_objectSpread$6(_objectSpread$6({}, defOpts), this.options), transformOptions(options));
-
+        this.options = _objectSpread(_objectSpread(_objectSpread({}, defOpts), this.options), transformOptions(options));
         if (this.options.compatibilityAPI !== 'v1') {
-          this.options.interpolation = _objectSpread$6(_objectSpread$6({}, defOpts.interpolation), this.options.interpolation);
+          this.options.interpolation = _objectSpread(_objectSpread({}, defOpts.interpolation), this.options.interpolation);
         }
-
         if (options.keySeparator !== undefined) {
           this.options.userDefinedKeySeparator = options.keySeparator;
         }
-
         if (options.nsSeparator !== undefined) {
           this.options.userDefinedNsSeparator = options.nsSeparator;
         }
-
         function createClassOnDemand(ClassOrObject) {
           if (!ClassOrObject) return null;
           if (typeof ClassOrObject === 'function') return new ClassOrObject();
           return ClassOrObject;
         }
-
         if (!this.options.isClone) {
           if (this.modules.logger) {
             baseLogger.init(createClassOnDemand(this.modules.logger), this.options);
           } else {
             baseLogger.init(null, this.options);
           }
-
           var formatter;
-
           if (this.modules.formatter) {
             formatter = this.modules.formatter;
           } else if (typeof Intl !== 'undefined') {
             formatter = Formatter;
           }
-
           var lu = new LanguageUtil(this.options);
           this.store = new ResourceStore(this.options.resources, this.options);
           var s = this.services;
@@ -20849,13 +20595,11 @@ return jQuery;
             compatibilityJSON: this.options.compatibilityJSON,
             simplifyPluralSuffix: this.options.simplifyPluralSuffix
           });
-
           if (formatter && (!this.options.interpolation.format || this.options.interpolation.format === defOpts.interpolation.format)) {
             s.formatter = createClassOnDemand(formatter);
             s.formatter.init(s, this.options);
             this.options.interpolation.format = s.formatter.format.bind(s.formatter);
           }
-
           s.interpolator = new Interpolator(this.options);
           s.utils = {
             hasLoadedNamespace: this.hasLoadedNamespace.bind(this)
@@ -20865,50 +20609,40 @@ return jQuery;
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
               args[_key - 1] = arguments[_key];
             }
-
             _this2.emit.apply(_this2, [event].concat(args));
           });
-
           if (this.modules.languageDetector) {
             s.languageDetector = createClassOnDemand(this.modules.languageDetector);
-            s.languageDetector.init(s, this.options.detection, this.options);
+            if (s.languageDetector.init) s.languageDetector.init(s, this.options.detection, this.options);
           }
-
           if (this.modules.i18nFormat) {
             s.i18nFormat = createClassOnDemand(this.modules.i18nFormat);
             if (s.i18nFormat.init) s.i18nFormat.init(this);
           }
-
           this.translator = new Translator(this.services, this.options);
           this.translator.on('*', function (event) {
             for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
               args[_key2 - 1] = arguments[_key2];
             }
-
             _this2.emit.apply(_this2, [event].concat(args));
           });
           this.modules.external.forEach(function (m) {
             if (m.init) m.init(_this2);
           });
         }
-
         this.format = this.options.interpolation.format;
         if (!callback) callback = noop;
-
         if (this.options.fallbackLng && !this.services.languageDetector && !this.options.lng) {
           var codes = this.services.languageUtils.getFallbackCodes(this.options.fallbackLng);
           if (codes.length > 0 && codes[0] !== 'dev') this.options.lng = codes[0];
         }
-
         if (!this.services.languageDetector && !this.options.lng) {
           this.logger.warn('init: no languageDetector is used and no lng is defined');
         }
-
         var storeApi = ['getResource', 'hasResourceBundle', 'getResourceBundle', 'getDataByLanguage'];
         storeApi.forEach(function (fcName) {
           _this2[fcName] = function () {
             var _this2$store;
-
             return (_this2$store = _this2.store)[fcName].apply(_this2$store, arguments);
           };
         });
@@ -20916,63 +20650,48 @@ return jQuery;
         storeApiChained.forEach(function (fcName) {
           _this2[fcName] = function () {
             var _this2$store2;
-
             (_this2$store2 = _this2.store)[fcName].apply(_this2$store2, arguments);
-
             return _this2;
           };
         });
         var deferred = defer();
-
         var load = function load() {
           var finish = function finish(err, t) {
             if (_this2.isInitialized && !_this2.initializedStoreOnce) _this2.logger.warn('init: i18next is already initialized. You should call init just once!');
             _this2.isInitialized = true;
             if (!_this2.options.isClone) _this2.logger.log('initialized', _this2.options);
-
             _this2.emit('initialized', _this2.options);
-
             deferred.resolve(t);
             callback(err, t);
           };
-
           if (_this2.languages && _this2.options.compatibilityAPI !== 'v1' && !_this2.isInitialized) return finish(null, _this2.t.bind(_this2));
-
           _this2.changeLanguage(_this2.options.lng, finish);
         };
-
         if (this.options.resources || !this.options.initImmediate) {
           load();
         } else {
           setTimeout(load, 0);
         }
-
         return deferred;
       }
     }, {
       key: "loadResources",
       value: function loadResources(language) {
         var _this3 = this;
-
         var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
         var usedCallback = callback;
         var usedLng = typeof language === 'string' ? language : this.language;
         if (typeof language === 'function') usedCallback = language;
-
         if (!this.options.resources || this.options.partialBundledLanguages) {
           if (usedLng && usedLng.toLowerCase() === 'cimode') return usedCallback();
           var toLoad = [];
-
           var append = function append(lng) {
             if (!lng) return;
-
             var lngs = _this3.services.languageUtils.toResolveHierarchy(lng);
-
             lngs.forEach(function (l) {
               if (toLoad.indexOf(l) < 0) toLoad.push(l);
             });
           };
-
           if (!usedLng) {
             var fallbacks = this.services.languageUtils.getFallbackCodes(this.options.fallbackLng);
             fallbacks.forEach(function (l) {
@@ -20981,13 +20700,11 @@ return jQuery;
           } else {
             append(usedLng);
           }
-
           if (this.options.preload) {
             this.options.preload.forEach(function (l) {
               return append(l);
             });
           }
-
           this.services.backendConnector.load(toLoad, this.options.ns, function (e) {
             if (!e && !_this3.resolvedLanguage && _this3.language) _this3.setResolvedLanguage(_this3.language);
             usedCallback(e);
@@ -21014,35 +20731,27 @@ return jQuery;
       value: function use(module) {
         if (!module) throw new Error('You are passing an undefined module! Please check the object you are passing to i18next.use()');
         if (!module.type) throw new Error('You are passing a wrong module! Please check the object you are passing to i18next.use()');
-
         if (module.type === 'backend') {
           this.modules.backend = module;
         }
-
         if (module.type === 'logger' || module.log && module.warn && module.error) {
           this.modules.logger = module;
         }
-
         if (module.type === 'languageDetector') {
           this.modules.languageDetector = module;
         }
-
         if (module.type === 'i18nFormat') {
           this.modules.i18nFormat = module;
         }
-
         if (module.type === 'postProcessor') {
           postProcessor.addPostProcessor(module);
         }
-
         if (module.type === 'formatter') {
           this.modules.formatter = module;
         }
-
         if (module.type === '3rdParty') {
           this.modules.external.push(module);
         }
-
         return this;
       }
     }, {
@@ -21050,11 +20759,9 @@ return jQuery;
       value: function setResolvedLanguage(l) {
         if (!l || !this.languages) return;
         if (['cimode', 'dev'].indexOf(l) > -1) return;
-
         for (var li = 0; li < this.languages.length; li++) {
           var lngInLngs = this.languages[li];
           if (['cimode', 'dev'].indexOf(lngInLngs) > -1) continue;
-
           if (this.store.hasLanguageSomeTranslations(lngInLngs)) {
             this.resolvedLanguage = lngInLngs;
             break;
@@ -21065,34 +20772,25 @@ return jQuery;
       key: "changeLanguage",
       value: function changeLanguage(lng, callback) {
         var _this4 = this;
-
         this.isLanguageChangingTo = lng;
         var deferred = defer();
         this.emit('languageChanging', lng);
-
         var setLngProps = function setLngProps(l) {
           _this4.language = l;
           _this4.languages = _this4.services.languageUtils.toResolveHierarchy(l);
           _this4.resolvedLanguage = undefined;
-
           _this4.setResolvedLanguage(l);
         };
-
         var done = function done(err, l) {
           if (l) {
             setLngProps(l);
-
             _this4.translator.changeLanguage(l);
-
             _this4.isLanguageChangingTo = undefined;
-
             _this4.emit('languageChanged', l);
-
             _this4.logger.log('languageChanged', l);
           } else {
             _this4.isLanguageChangingTo = undefined;
           }
-
           deferred.resolve(function () {
             return _this4.t.apply(_this4, arguments);
           });
@@ -21100,53 +20798,47 @@ return jQuery;
             return _this4.t.apply(_this4, arguments);
           });
         };
-
         var setLng = function setLng(lngs) {
           if (!lng && !lngs && _this4.services.languageDetector) lngs = [];
           var l = typeof lngs === 'string' ? lngs : _this4.services.languageUtils.getBestMatchFromCodes(lngs);
-
           if (l) {
             if (!_this4.language) {
               setLngProps(l);
             }
-
             if (!_this4.translator.language) _this4.translator.changeLanguage(l);
-            if (_this4.services.languageDetector) _this4.services.languageDetector.cacheUserLanguage(l);
+            if (_this4.services.languageDetector && _this4.services.languageDetector.cacheUserLanguage) _this4.services.languageDetector.cacheUserLanguage(l);
           }
-
           _this4.loadResources(l, function (err) {
             done(err, l);
           });
         };
-
         if (!lng && this.services.languageDetector && !this.services.languageDetector.async) {
           setLng(this.services.languageDetector.detect());
         } else if (!lng && this.services.languageDetector && this.services.languageDetector.async) {
-          this.services.languageDetector.detect(setLng);
+          if (this.services.languageDetector.detect.length === 0) {
+            this.services.languageDetector.detect().then(setLng);
+          } else {
+            this.services.languageDetector.detect(setLng);
+          }
         } else {
           setLng(lng);
         }
-
         return deferred;
       }
     }, {
       key: "getFixedT",
       value: function getFixedT(lng, ns, keyPrefix) {
         var _this5 = this;
-
         var fixedT = function fixedT(key, opts) {
           var options;
-
           if (_typeof(opts) !== 'object') {
             for (var _len3 = arguments.length, rest = new Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
               rest[_key3 - 2] = arguments[_key3];
             }
-
             options = _this5.options.overloadTranslationOptionHandler([key, opts].concat(rest));
           } else {
-            options = _objectSpread$6({}, opts);
+            options = _objectSpread({}, opts);
           }
-
           options.lng = options.lng || fixedT.lng;
           options.lngs = options.lngs || fixedT.lngs;
           options.ns = options.ns || fixedT.ns;
@@ -21155,13 +20847,11 @@ return jQuery;
           var resultKey = options.keyPrefix ? "".concat(options.keyPrefix).concat(keySeparator).concat(key) : key;
           return _this5.t(resultKey, options);
         };
-
         if (typeof lng === 'string') {
           fixedT.lng = lng;
         } else {
           fixedT.lngs = lng;
         }
-
         fixedT.ns = ns;
         fixedT.keyPrefix = keyPrefix;
         return fixedT;
@@ -21170,14 +20860,12 @@ return jQuery;
       key: "t",
       value: function t() {
         var _this$translator;
-
         return this.translator && (_this$translator = this.translator).translate.apply(_this$translator, arguments);
       }
     }, {
       key: "exists",
       value: function exists() {
         var _this$translator2;
-
         return this.translator && (_this$translator2 = this.translator).exists.apply(_this$translator2, arguments);
       }
     }, {
@@ -21189,35 +20877,27 @@ return jQuery;
       key: "hasLoadedNamespace",
       value: function hasLoadedNamespace(ns) {
         var _this6 = this;
-
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
         if (!this.isInitialized) {
           this.logger.warn('hasLoadedNamespace: i18next was not initialized', this.languages);
           return false;
         }
-
         if (!this.languages || !this.languages.length) {
           this.logger.warn('hasLoadedNamespace: i18n.languages were undefined or empty', this.languages);
           return false;
         }
-
         var lng = this.resolvedLanguage || this.languages[0];
         var fallbackLng = this.options ? this.options.fallbackLng : false;
         var lastLng = this.languages[this.languages.length - 1];
         if (lng.toLowerCase() === 'cimode') return true;
-
         var loadNotPending = function loadNotPending(l, n) {
           var loadState = _this6.services.backendConnector.state["".concat(l, "|").concat(n)];
-
           return loadState === -1 || loadState === 2;
         };
-
         if (options.precheck) {
           var preResult = options.precheck(this, loadNotPending);
           if (preResult !== undefined) return preResult;
         }
-
         if (this.hasResourceBundle(lng, ns)) return true;
         if (!this.services.backendConnector.backend || this.options.resources && !this.options.partialBundledLanguages) return true;
         if (loadNotPending(lng, ns) && (!fallbackLng || loadNotPending(lastLng, ns))) return true;
@@ -21227,14 +20907,11 @@ return jQuery;
       key: "loadNamespaces",
       value: function loadNamespaces(ns, callback) {
         var _this7 = this;
-
         var deferred = defer();
-
         if (!this.options.ns) {
           callback && callback();
           return Promise.resolve();
         }
-
         if (typeof ns === 'string') ns = [ns];
         ns.forEach(function (n) {
           if (_this7.options.ns.indexOf(n) < 0) _this7.options.ns.push(n);
@@ -21254,12 +20931,10 @@ return jQuery;
         var newLngs = lngs.filter(function (lng) {
           return preloaded.indexOf(lng) < 0;
         });
-
         if (!newLngs.length) {
           if (callback) callback();
           return Promise.resolve();
         }
-
         this.options.preload = preloaded.concat(newLngs);
         this.loadResources(function (err) {
           deferred.resolve();
@@ -21273,26 +20948,27 @@ return jQuery;
         if (!lng) lng = this.resolvedLanguage || (this.languages && this.languages.length > 0 ? this.languages[0] : this.language);
         if (!lng) return 'rtl';
         var rtlLngs = ['ar', 'shu', 'sqr', 'ssh', 'xaa', 'yhd', 'yud', 'aao', 'abh', 'abv', 'acm', 'acq', 'acw', 'acx', 'acy', 'adf', 'ads', 'aeb', 'aec', 'afb', 'ajp', 'apc', 'apd', 'arb', 'arq', 'ars', 'ary', 'arz', 'auz', 'avl', 'ayh', 'ayl', 'ayn', 'ayp', 'bbz', 'pga', 'he', 'iw', 'ps', 'pbt', 'pbu', 'pst', 'prp', 'prd', 'ug', 'ur', 'ydd', 'yds', 'yih', 'ji', 'yi', 'hbo', 'men', 'xmn', 'fa', 'jpr', 'peo', 'pes', 'prs', 'dv', 'sam', 'ckb'];
-        return rtlLngs.indexOf(this.services.languageUtils.getLanguagePartFromCode(lng)) > -1 || lng.toLowerCase().indexOf('-arab') > 1 ? 'rtl' : 'ltr';
+        var languageUtils = this.services && this.services.languageUtils || new LanguageUtil(get());
+        return rtlLngs.indexOf(languageUtils.getLanguagePartFromCode(lng)) > -1 || lng.toLowerCase().indexOf('-arab') > 1 ? 'rtl' : 'ltr';
       }
     }, {
       key: "cloneInstance",
       value: function cloneInstance() {
         var _this8 = this;
-
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-
-        var mergedOptions = _objectSpread$6(_objectSpread$6(_objectSpread$6({}, this.options), options), {
+        var mergedOptions = _objectSpread(_objectSpread(_objectSpread({}, this.options), options), {
           isClone: true
         });
-
         var clone = new I18n(mergedOptions);
+        if (options.debug !== undefined || options.prefix !== undefined) {
+          clone.logger = clone.logger.clone(options);
+        }
         var membersToCopy = ['store', 'services', 'language'];
         membersToCopy.forEach(function (m) {
           clone[m] = _this8[m];
         });
-        clone.services = _objectSpread$6({}, this.services);
+        clone.services = _objectSpread({}, this.services);
         clone.services.utils = {
           hasLoadedNamespace: clone.hasLoadedNamespace.bind(clone)
         };
@@ -21301,7 +20977,6 @@ return jQuery;
           for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
             args[_key4 - 1] = arguments[_key4];
           }
-
           clone.emit.apply(clone, [event].concat(args));
         });
         clone.init(mergedOptions, callback);
@@ -21323,22 +20998,19 @@ return jQuery;
         };
       }
     }]);
-
     return I18n;
   }(EventEmitter);
-
   _defineProperty(I18n, "createInstance", function () {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var callback = arguments.length > 1 ? arguments[1] : undefined;
     return new I18n(options, callback);
   });
-
   var instance = I18n.createInstance();
   instance.createInstance = I18n.createInstance;
 
   return instance;
 
-})));
+}));
 
 ;
 /*!
@@ -28541,357 +28213,6 @@ if (typeof define === 'function' && define.amd) {
 }(jQuery, this, document));
 ;
 /****************************************************************************
-    jquery-base-slider-handle,
-
-    (c) 2015, FCOO
-
-    https://github.com/fcoo/jquery-base-slider
-    https://github.com/fcoo
-
-****************************************************************************/
-(function (window/*, document, undefined*/) {
-    "use strict";
-
-    //Create baseSlider-namespace
-	window._baseSlider = window._baseSlider || {};
-	var ns = window._baseSlider;
-
-    /*******************************************************************
-    elementsOverlapping
-    Return true if $element1 and $element2 is overlapping horizontal
-    *******************************************************************/
-    function elementsOverlapping( $element1, $element2 ){
-        if ($element1 && $element2){
-            var rect1 = $element1.get(0).getBoundingClientRect(),
-                rect2 = $element2.get(0).getBoundingClientRect();
-            return ((rect1.left >= rect2.left) && (rect1.left <= rect2.right)) ||
-                    ((rect2.left >= rect1.left) && (rect2.left <= rect1.right));
-        }
-        return false;
-    }
-
-    /*******************************************************************
-    SliderHandle
-    Object to reprecent a 'handle' on the slider
-    The handle don't need to have a actual DOM-handle. The min and max-value of the slider
-    is also reprecented as a SliderHandle
-    The object contains the following items:
-        value   : A SliderValue-object reprecenting the value
-        $handle : $-object = the DOM handle (optional)
-        marker  : Object containing of tree $-object: $outer and $text (optional)
-
-    options
-        marker: [string] = class-name of the marker
-    *******************************************************************/
-    var SliderHandle = function( options ){
-        this.id      = options.id;
-        this.slider  = options.slider || options.value.slider;
-        options.value.slider = this.slider;
-        this.value   = ns.sliderValue( options.value );
-        this.$handle = !!options.$handle; //Set to boolean. Created in this.append
-        this.handleClassName = options.handleClassName || '';
-        this.handleCSS = options.handleCSS || {};
-        this.appended = false,
-
-        this.markerData = options.markerData || {};
-
-        this.markerClassName = options.marker;
-        this.marker  = !!this.markerClassName;
-
-        //overlappingHandleList = list of SliderHandle. If any of the marker in overlappingHandleList[xx] is overlapping this => this is hidden
-        this.overlappingHandleList = [];
-
-        //overlapHandleList = list of SliderHandle. this is overlapping all the marker in overlapHandleList[xx]
-        this.overlapHandleList = [];
-
-
-        this.draggingClassName = options.draggingClassName; //Classname for handler when it is being dragged MANGLER
-        this.lastLeftPercent = '';
-    };
-
-    SliderHandle.prototype = {
-        //addOverlap( handle ) - Set this to overlap handle
-        addOverlap: function( handle ){
-            if (this.marker && handle && handle.marker ){
-                this.overlapHandleList.push( handle );
-                handle.overlappingHandleList.push( this );
-            }
-        },
-
-        //append() - Create and append this.$handle and $.marker
-        append: function( $container ){
-            //Append handle
-            if (this.$handle)
-                this.$handle =
-                    $('<span/>')
-                        .addClass('handle '+this.id)
-                        .addClass(this.handleClassName)
-                        .css( this.handleCSS )
-                        .appendTo( $container );
-
-            //Append marker
-            if (this.marker){
-                this.marker = {};
-                //Outer div
-                this.marker.$outer =
-                    $('<div/>')
-                        .addClass('marker-outer')
-                        .addClass(this.markerClassName)
-                        .appendTo($container);
-                //Inner div
-                this.marker.$inner =
-                        $('<div/>')
-                            .addClass('marker')
-                            .appendTo(this.marker.$outer);
-                this.marker.$text =
-                        $('<span/>')
-                            .addClass('marker-text')
-                            .attr( this.markerData )
-                            .appendTo(this.marker.$inner);
-            }
-            this.appended = true;
-            return this;
-        },
-
-        //remove
-        remove: function(){
-            if (!this.appended) return;
-            if (this.$handle){
-                this.$handle.remove();
-                this.$handle = true;
-            }
-            if (this.marker.$outer){
-                this.marker.$outer.remove();
-                this.marker = true;
-            }
-            this.appended = false;
-        },
-
-        //update()
-        //Set the position of $handle and $marker and update the content of $marker
-        update: function( force ){
-            if (!this.appended) return;
-            var leftPercent = this.getLeftPosition() + '%';
-
-            if (force || (leftPercent != this.lastLeftPercent)){
-                this.lastLeftPercent = leftPercent;
-                if (this.$handle){
-                    this.$handle.css('left', leftPercent);
-                }
-                if (this.marker){
-                    //Set marker content
-                    this.marker.$text.html( this.getMarkerText() );
-
-                    //Set marker position
-                    this.marker.$outer.css('left', leftPercent);
-
-                    //Force all handles overlapped by this to update
-                    if (!force)
-                        $.each( this.overlapHandleList, function( index, handle ){
-                            handle.update( true );
-                        });
-
-                    //Set marker visibility
-                    this.marker.$outer.css('visibility', this.markerIsHidden() ? 'hidden' : 'visible');
-                }
-            }
-            return this;
-        },
-
-        //onFocus - overwriten for individual handle-types
-        onFocus: function(){
-            if (!this.appended) return;
-            this.$handle.addClass('hover');
-            if (this.marker && this.marker.$outer)
-                this.marker.$outer.addClass('hover');
-
-        },
-
-        //onBlur - overwriten for individual handle-types
-        onBlur: function(){
-            if (!this.appended) return;
-            this.$handle.removeClass('hover');
-            if (this.marker && this.marker.$outer)
-                this.marker.$outer.removeClass('hover');
-        },
-
-        //getMarkerText
-        getLeftPosition: function(){
-            return this.value.getPercent();
-        },
-
-        //getMarkerText
-        getMarkerText: function(){
-            return this.slider.decorate( this.slider._prettify( this.value.getValue() ) );
-        },
-
-        //markerIsHidden: return true if the marker is overlapping any of the markers in YYY
-        markerIsHidden: function(){
-            var thisMarker$text = this.marker.$text,
-                result = false;
-            $.each( this.overlappingHandleList, function( index, handle ){
-                result = result || elementsOverlapping( thisMarker$text, handle.marker.$text );
-            });
-            return result;
-        }
-
-    };
-
-
-    ns.SliderHandle = SliderHandle;
-    ns.sliderHandle = function( options ){
-        return new ns.SliderHandle( options );
-    };
-
-}(this/*, document*/));
-
-;
-/****************************************************************************
-    jquery-base-slider-value,
-
-    (c) 2015, FCOO
-
-    https://github.com/fcoo/jquery-base-slider
-    https://github.com/fcoo
-
-****************************************************************************/
-(function (window/*, document, undefined*/) {
-    "use strict";
-
-    //Create baseSlider-namespace
-	window._baseSlider = window._baseSlider || {};
-	var ns = window._baseSlider;
-
-    /*******************************************************************
-    toFixed
-    Round num to 5 digits
-    *******************************************************************/
-    function toFixed( num ) {
-        return +num.toFixed(5);
-    }
-
-
-    /*******************************************************************
-    SliderValue
-    Object to store and alter "value" releated to the slider
-    The object contains the following items:
-        value   : The actual value ,
-        percent : The value as percent of the total slider width
-        rem     : The value converted to rem
-    *******************************************************************/
-    var SliderValue = function( options ){
-        this.slider = options.slider;
-        this.valueOffset = this.slider.options.min;
-        this.valueRange = this.slider.options.max - this.valueOffset;
-        this.percentOffset = 0;
-        this.percentRange = 100;
-        this.adjustToStep = !!options.adjustToStep;
-        this.fixed = !!options.fixed;
-        this.fixedValue = options.value;
-        this.value   = 0;
-        this.rem     = 0;
-        this.percent = 0;
-        this.minList = [];
-        this.maxList = [];
-
-        var _this = this;
-        $.each( options.minList || [], function( index, sliderValueMin ){ _this.addMin( sliderValueMin ); });
-        $.each( options.maxList || [], function( index, sliderValueMax ){ _this.addMax( sliderValueMax ); });
-
-        this.setValue( options.value );
-    };
-
-    SliderValue.prototype = {
-        //addMin( sliderValue, minDistance )
-        //Add sliderValue to list of SliderValue that this must allways be greater than or equal to
-        addMin: function( sliderValue, minDistance ){
-            if (sliderValue === null) return this;
-            if ($.isNumeric(sliderValue))
-                sliderValue = new SliderValue({ value: sliderValue, slider: this.slider });
-            this.minList.push( {sliderValue: sliderValue, minDistance: minDistance || 0} );
-            this.update();
-            return this;
-        },
-
-        //addMax( sliderValue, minDistance )
-        //Add sliderValue to list of SliderValue that this must allways be less than or equal to
-        addMax: function( sliderValue, minDistance ){
-            if (sliderValue === null) return this;
-            if ($.isNumeric(sliderValue))
-                sliderValue = new SliderValue({ value: sliderValue, slider: this.slider });
-            this.maxList.push( {sliderValue: sliderValue, minDistance: minDistance || 0} );
-            this.update();
-            return this;
-        },
-
-        setValue: function( newValue, isFixed ){
-            this.value = newValue;
-            if (isFixed && this.fixed)
-                this.fixedValue = newValue;
-            this.update();
-            return this;
-        },
-
-        setPercent: function( newPercent ){
-            this.setValue( this.valueRange*(newPercent - this.percentOffset)/this.percentRange + this.valueOffset );
-        },
-
-        update: function(){
-
-            if (this.fixed)
-                this.value = this.fixedValue;
-            else {
-                //Adjust this.value with respect to {sliderValue,minDistance} in this.minList
-                var _this = this;
-                $.each( this.minList, function( index, rec ){
-                    if (rec.sliderValue)
-                        _this.value = Math.max( _this.value, rec.sliderValue.value + rec.minDistance );
-                });
-                //Adjust this.value with respect to {sliderValue,minDistance} in this.maxList
-                $.each( this.maxList, function( index, rec ){
-                    if (rec.sliderValue)
-                        _this.value = Math.min( _this.value, rec.sliderValue.value - rec.minDistance );
-                });
-
-                //Adjust this.value with respect to step and stepOffset
-                if (this.adjustToStep){
-                    var offset = this.slider.options.min + this.slider.options.stepOffset;
-                    this.value -= offset;
-                    this.value = this.slider.options.step * Math.round( this.value/this.slider.options.step );
-                    this.value += offset;
-                }
-            }
-
-            //Calculate precent
-            this.percent = this.percentRange*(this.value - this.valueOffset)/this.valueRange + this.percentOffset;
-
-            return this;
-        },
-
-        getValue: function(){
-            return toFixed( this.value );
-        },
-
-        getPercent: function( inclUnit ){
-            return toFixed( this.percent ) + (inclUnit ? '%' : 0);
-        },
-
-        getRem: function( inclUnit ){
-            return toFixed( this.rem ) + (inclUnit ? 'rem' : 0);
-        }
-
-    };
-
-
-    ns.SliderValue = SliderValue;
-    ns.sliderValue = function( options ){
-        return new ns.SliderValue( options );
-    };
-
-}(this/*, document*/));
-
-;
-/****************************************************************************
     jquery-base-slider, Description from README.md
 
     (c) 2015, FCOO
@@ -28924,8 +28245,8 @@ if (typeof define === 'function' && define.amd) {
         resizable   : false,    //If true the container of the slider can be resized and the grid will automatic redraw to adjust number of ticks and labels to the new width
 
         //Dimensions (only for options.handleFixed: true)
-        width         : 0,  // The total width of the slider (in px for 1rem = 16px)
-        valueDistances: 3,  // The distance between each value on the slider (in px for 1rem = 16px). Width will be valueDistances*( max - min )
+        width         : 0,  // The total width of the slider (px)
+        valueDistances: 3,  // The distance between each value on the slider (px). Width will be valueDistances*( max - min )
 
         //Ranges and value
         min  : 0,           // Set slider minimum value
@@ -28949,6 +28270,11 @@ if (typeof define === 'function' && define.amd) {
         pinColor: 'black',          // The color of the pin. Use  setPin( value , color )  to change the color dynamical
         pinIcon : 'fa-map-marker',  // The class-name from Fontawasome setting the icon used as pin
 
+
+        //Ticks and labels
+        majorColor  : '#000000',
+        minorColor  : '#555555',
+
         //Steps
         step        : 1,    // Set sliders step. Always > 0. Could be fractional.
         stepOffset  : 0,    // When  step  > 1: Offset for the allowed values. Eq. Min=0, max=100, step=5, stepOffset=3 => allowed values=3,8,13,...,92,97 (3+N*5). Only tested for options.single: true
@@ -28968,6 +28294,24 @@ if (typeof define === 'function' && define.amd) {
         impactLineColors      : {green: "green", yellow: "yellow", red: "red"}, //The line colors used when showImpactLineColor: true
         reverseImpactLineColor: false, // The line on a double slider is colored as red-[handle]-yellow-[handle]-green. Must have showImpactLineColor: true
 
+        //Size
+        sizeFactor: 1, //Factor to re-size default sizes
+        fixedSize: {
+            borderWidth: 1,
+        },
+        size: {
+            fontSize        : 10,
+            majorTickLength : 9,
+            minorTickLength : 6,
+
+            lineHeight      : 6,
+
+
+            lineBorderRadius: 2,
+            textPadding     : 2,
+
+            labelInnerHeight: 10,
+        },
 
         //Grid (ticks and label)
         grid            : false,                      // Enables grid of values.
@@ -28981,10 +28325,9 @@ if (typeof define === 'function' && define.amd) {
         gridColors      : null, //Array of { [fromValue, ]value, color } to set colors on the line. If no fromValue is given the the previous value is used.
                                 //If value == null or < min => A triangle is added to the left indicating 'below min'.
                                 //If value > max            =>  A triangle is added to the right indicating 'above max'.
-        labelColors     : null, //Array of {value, className, color, backgroundColor} to set frame around and className, color, backgroundColor for the label and with value
+        labelColors     : null, //Array of {value, color, backgroundColor} to set frame around and color, backgroundColor for the label and with value
 
         labelClickable         : true, //Allows click on labels to select value of label. If false a click on a label is equal to a click on the line (e.q. find nearest value
-        labelClickableFullWidth: true, //If true and options.labelClickable: true and the value of the label is selectable (with respect to options.step and options.stepOffset) the clickable width of the label is expanded to half the distance to the neighbour labels
 
         //Marker above handle
         showMinMax : false,    // Show min and max markers
@@ -29009,47 +28352,7 @@ if (typeof define === 'function' && define.amd) {
         onChangeOnDragging: true, // If false onChange-function is only called when dragging the sliding is finish.
         onChangeDelay     : 500,  // If onChangeOnDragging == false the callback-function is called when the slider has been on the same tick for onChangeDelay milliseconds
 
-
-        //Buttons
-        buttons      : {value:{}, from:{}, to:{} },
-        /*
-        JSON-record with id or buttons for first, previousPage, previousShift, previous, (now,) next, nextShift, nextPage and last value
-            options.buttons = {
-                value: {buttonList},
-                from : {buttonList},
-                to   : {buttonList}
-            }
-            {buttonList} = {
-                firstBtn        : element or string,
-                previousPageBtn : element or string,
-                previousShiftBtn: element or string,
-                previousBtn     : element or string,
-                nowBtn          : element or string,
-                nextBtn         : element or string,
-                nextShiftBtn    : element or string,
-                nextPageBtn     : element or string,
-                lastBtn         : element or string
-            }
-        */
-
-
-        /****************************************
-        Internal options
-        ****************************************/
-        //The standard button-ids are firstBtn, previousBtn, nowBtn, nextBtn, lastBtn with the following steps
-        buttonOptions: {
-            'firstBtn'        : { sign: -1, delta: 99 },
-            'previousPageBtn' : { sign: -1, delta:  3 },
-            'previousShiftBtn': { sign: -1, delta:  2 },
-            'previousBtn'     : { sign: -1, delta:  1 },
-            'nowBtn'          : { sign: +1, delta:  0 },
-            'nextBtn'         : { sign: +1, delta:  1 },
-            'nextShiftBtn'    : { sign: +1, delta:  2 },
-            'nextPageBtn'     : { sign: +1, delta:  3 },
-            'lastBtn'         : { sign: +1, delta: 99 }
-        },
-
-        minDistanceRem: 4/16 //Minimum distance between ticks and between labels
+        minDistance: 4 //Minimum distance between ticks and between labels
 
     };
 
@@ -29060,68 +28363,12 @@ if (typeof define === 'function' && define.amd) {
     *******************************************************************/
 
     /*******************************************************************
-    Get font-size for the html
-    *******************************************************************/
-    var htmlFontSize = parseFloat( $('html').css('font-size') || $('body').css('font-size') || $.DEFAULT_BROWSER_FONT_SIZE || '16px' );
-
-    function onFontSizeChange( event, fontSize ){
-        htmlFontSize = parseFloat( fontSize.fontSizePx ) || htmlFontSize;
-    }
-
-    $.onFontSizeChanged( onFontSizeChange );
-
-    /*******************************************************************
     toFixed
     Round num to 5 digits
     *******************************************************************/
     function toFixed( num ) {
         return +num.toFixed(5);
     }
-
-    /*******************************************************************
-    pxToRem
-    *******************************************************************/
-    function pxToRem( valuePx, inclUnit ){
-        return valuePx / htmlFontSize + (inclUnit ? 'rem' : 0);
-    }
-
-    /*******************************************************************
-    getEventLeft
-    Return the left (= x) position of an event
-    *******************************************************************/
-    function getEventLeft( event ){
-        return  event.gesture && event.gesture.center ? event.gesture.center.x :
-                event.pageX ? event.pageX :
-                event.originalEvent && event.originalEvent.touches && event.originalEvent.touches.length ? event.originalEvent.touches[0].pageX :
-                event.touches && event.touches.length ? event.touches[0].pageX :
-                0;
-    }
-
-    /*******************************************************************
-    objectsAreDifferent
-    Return true if obj1 and obj2 are not equal
-    *******************************************************************/
-    function objectsAreDifferent( obj1, obj2 ){
-        var result = false,
-            props = Object.getOwnPropertyNames(obj1).concat( Object.getOwnPropertyNames(obj2) );
-
-        $.each( props, function( index, id ){
-            var type1 = $.type(obj1[id]),
-                type2 = $.type(obj2[id]);
-
-            result =
-                result ||
-                (   ((type1 == 'number') || (type2 == 'number')) && //One or both are number AND
-                    ((type1 != type2) || (obj1[id] != obj2[id]))    //type are different OR value are different
-                );
-        });
-        return result;
-    }
-
-    //'Global' text-element to be used by getTextWidth
-    var $outerTextElement = null,
-        textElement       = null;
-
 
     /*******************************************************************
     ********************************************************************
@@ -29135,29 +28382,9 @@ if (typeof define === 'function' && define.amd) {
         this.input          = input;
         this.pluginCount   = pluginCount;
 
-        this.htmlFontSize = htmlFontSize;
-
         this.initializing     = true;
         this.currentHandle    = null;
         this.isRepeatingClick = false;
-
-
-        //Create element outside DOM used to calc width of text-elements
-        this.$outerTextElement =
-            $outerTextElement ||
-            $('<div/>')
-                .addClass('grid')
-                .css({ position: 'absolute', top: -10000, left: -10000 })
-                .appendTo( $('body') );
-        $outerTextElement = this.$outerTextElement;
-
-        this.textElement =
-            textElement ||
-            $('<span/>')
-                .addClass('grid-label')
-                .appendTo( this.$outerTextElement )
-                .get(0);
-        textElement = this.textElement;
 
         /*******************************************************************
         Set and adjust options that can't be changed by this.update(options)
@@ -29167,7 +28394,7 @@ if (typeof define === 'function' && define.amd) {
 
         if (this.options.handleFixed){
             this.options.double = false;
-            this.options.handle = 'fixed';
+            this.options.handle = options.handle || 'fixed';
         }
 
         this.options.isSingle = !this.options.double;
@@ -29176,7 +28403,6 @@ if (typeof define === 'function' && define.amd) {
 
         this.options.singleHandleId =
             this.options.isSingle ? (this.options.handleFixed ? 'fixed' : 'single') : 'from-to';
-
 
         /*******************************************************************
         this.events contains event-functions and options
@@ -29192,8 +28418,23 @@ if (typeof define === 'function' && define.amd) {
             //Add resize-event to window
             $(window).on('resize', this.events.containerOnResize );
 
-        //Update slider when browser font-size is changed
-        $.onFontSizeChanged( this.onFontSizeChange, this );
+        /*******************************************************************
+        Adjust different sizes
+        *******************************************************************/
+        var size       = this.options.size,
+            sizeFactor = this.options.sizeFactor;
+
+        $.each(size, function(index, id){
+            if ( size[id] && $.isNumeric(size[id]) )
+                size[id] = sizeFactor * parseFloat( size[id] );
+        });
+
+        $.each(this.options.fixedSize, function(id, value){
+            size[id] = value;
+        });
+
+        //Calc sizes
+        size.labelHeight = size.borderWidth + size.textPadding + size.fontSize + size.textPadding + size.borderWidth;
 
         /*******************************************************************
         this.result = record with the current result from the slider
@@ -29223,7 +28464,6 @@ if (typeof define === 'function' && define.amd) {
         *******************************************************************/
         this.cache = {
             $input : $(this.input),
-            buttons: { value:{}, from:{}, to:{} }
         };
 
         //Hide the input
@@ -29296,9 +28536,8 @@ if (typeof define === 'function' && define.amd) {
             this.dimentions_old is the last values
             *******************************************************************/
             this.dimentions = {
-                containerWidth          :  0,   //Width of the container [px]
-                containerWidthRem       :  0,   //Width of the container [rem]
-                outerContainerWidthRem  :  0    //Width of outer container [rem]
+                containerWidth     :  0, //Width of the container [px]
+                outerContainerWidth:  0  //Width of outer container [px]
             };
 
             this.dimentions_old = $.extend({}, this.dimentions );
@@ -29551,7 +28790,7 @@ if (typeof define === 'function' && define.amd) {
                 //Sets the width of the container with full width
                 var width = this.options.width || this.options.valueDistances*(this.options.max - this.options.min);
 
-                this.cache.$fullWidthContainer.width( Math.ceil(pxToRem(width))+'rem' );
+                this.cache.$fullWidthContainer.width( width +'px' );
 
                 this.cache.$fullWidthContainer.wrap('<div/>');
                 this.cache.$outerContainer = this.cache.$fullWidthContainer.parent();
@@ -29655,14 +28894,11 @@ if (typeof define === 'function' && define.amd) {
 
 
             //Update the height of the slider
-            this.cache.$container.css('height', pxToRem( this.cache.$lineBackground.height(), true) );
+            this.cache.$container.css('height', this.cache.$lineBackground.height()+'px' );
 
             /****************************************************
             Append grid with ticks and optional labels
             ****************************************************/
-            if (this.options.grid)
-                this.cache.$grid = $span('grid', this.cache.$container);
-
             //Adjust top-position if no marker is displayed
             if (!this.options.showMinMax && !this.options.showFromTo)
                 this.cache.$container.addClass("no-marker");
@@ -29675,21 +28911,8 @@ if (typeof define === 'function' && define.amd) {
             if (this.options.hasPin)
                 this.cache.$container.addClass("has-pin");
 
-            //Append buttons
-            function getButton( id ){
-                return $.type( id ) === 'string' ? $('#' +  id ) : id;
-            }
-            this.options.buttons.value = this.options.buttons.value || {};
-            this.options.buttons.from = this.options.buttons.from || {};
-            this.options.buttons.to   = this.options.buttons.to   || {};
-            $.each( this.options.buttonOptions, function( id ){
-                _this.cache.buttons.value[ id ] = getButton( _this.options.buttons.value[ id ] );
-                _this.cache.buttons.from[ id ]  = getButton( _this.options.buttons.from[ id ] );
-                _this.cache.buttons.to[ id ]    = getButton( _this.options.buttons.to  [ id ] );
-            });
-
             //Append grid(s)
-            this.$currentGridContainer = null;
+            this.$currentGrid = null;
             if (this.options.grid)
                 this.appendGrid();
 
@@ -29716,16 +28939,6 @@ if (typeof define === 'function' && define.amd) {
         remove
         *******************************************************************/
         remove: function () {
-            var _this = this;
-            //************************************************
-            function offEvents( $elem, eventNames ){
-                if (!$elem) return;
-                $.each( eventNames.split(' '), function( index, eventName ){
-                    $elem.off( eventName + ".irs_" + _this.pluginCount );
-                });
-            }
-            //************************************************
-
             if (this.cache.$outerContainer){
                 this.cache.$outerContainer.remove();
                 this.cache.$outerContainer = null;
@@ -29736,16 +28949,561 @@ if (typeof define === 'function' && define.amd) {
             }
 
             this.eachHandle('remove');
+        },
 
-            //Unbind click on buttons
-            $.each( this.cache.buttons, function( valueOrToOrFrom, buttonRecord ){
-                $.each( buttonRecord, function( id, $btn ){
-                    offEvents( $btn, 'mousedown mouseup mouseleave click' );
-                });
-            });
+        /*******************************************************************
+        ********************************************************************
+        ADJUST ELEMENTS
+        ********************************************************************
+        *******************************************************************/
+
+        /*******************************************************************
+        setImpactLineColors
+        Sets the color of the line when line colors are impact (green-yellow-red)
+        *******************************************************************/
+        setImpactLineColors: function(){
+            this.cache.$leftLineColor.css  ( 'background-color', this.options.impactLineColors[ this.options.reverseImpactLineColor ? 'red' : 'green' ] );
+            this.cache.$centerLineColor.css( 'background-color', this.options.impactLineColors.yellow );
+            this.cache.$rightLineColor.css ( 'background-color', this.options.impactLineColors[ this.options.reverseImpactLineColor ? 'green' : 'red' ] );
+        },
+
+        /*******************************************************************
+        currentHandleBlur
+        *******************************************************************/
+        currentHandleBlur: function () {
+            if (this.currentHandle)
+                this.currentHandle.onBlur();
+            this.currentHandle = null;
         },
 
 
+        /*******************************************************************
+        updateHandlesAndLines
+        *******************************************************************/
+        updateHandlesAndLines: function () {
+            //***********************************************
+            function setLeftAndWidth( $elem, left, width ){
+                if (!$elem) return;
+                var css = {};
+                if (left !== null)
+                    css.left = toFixed(left) + (left ? '%' : '');
+                if (width !== null)
+                    css.width = toFixed(width) + (width ? '%' : '');
+                $elem.css( css );
+            }
+            //***********************************************
+
+            /*****************************************************
+            Adjust left-position and width of all lineColor-elements (if any)
+            *****************************************************/
+            if (this.options.isSingle) {
+                var singlePercent = this.handles[this.options.singleHandleId].value.getPercent();
+                setLeftAndWidth( this.cache.$leftLineColor,  null,          singlePercent       );
+                setLeftAndWidth( this.cache.$rightLineColor, singlePercent, 100 - singlePercent );
+            }
+            else {
+                var fromPercent = this.handles.from.value.getPercent(),
+                    toPercent   = this.handles.to.value.getPercent();
+                setLeftAndWidth( this.cache.$leftLineColor,   null,        fromPercent             );
+                setLeftAndWidth( this.cache.$centerLineColor, fromPercent, toPercent - fromPercent );
+                setLeftAndWidth( this.cache.$rightLineColor,  toPercent,   100 - toPercent         );
+            }
+
+            /*****************************************************
+            Set position of all handles
+            *****************************************************/
+            this.eachHandle('update');
+
+            //Special case for fixed-mode: Keep the handle centered in container
+            if (this.options.isFixed){
+                var containerLeft =
+                        -1.0 * this.dimentions.containerWidth * this.handles.fixed.value.percent/100 +
+                         0.5 * this.dimentions.outerContainerWidth;
+
+                this.cache.$container.css('left', toFixed(containerLeft) + 'px');
+            }
+
+            /*****************************************************
+            Callback and reset
+            *****************************************************/
+            this.onChanging();
+
+        },
+
+        /*******************************************************************
+        ********************************************************************
+        SERVICE METHODS
+        ********************************************************************
+        *******************************************************************/
+
+        /*******************************************************************
+        _prettify
+        *******************************************************************/
+        _prettify: function (num) {
+            return $.isFunction(this.options.prettify) ? this.options.prettify(num) : num;
+        },
+
+        /*******************************************************************
+        PrettifyLabel
+        *******************************************************************/
+        _prettifyLabel: function(text) {
+            return $.isFunction(this.options.prettifyLabel) ? this.options.prettifyLabel(text) : text;
+        },
+
+        /*******************************************************************
+        decorate
+        *******************************************************************/
+        decorate: function ( content ) {
+            return this.options.prefix + content + this.options.postfix;
+        },
+
+        /*******************************************************************
+        ********************************************************************
+        GRID
+        Use appendGridContainer to create new grids. Use appendLabel(text, left[, value]) to add a grid-label
+        ********************************************************************
+        *******************************************************************/
+
+        /*******************************************************************
+        getTextWidth
+        Get width of value as text OR max width of all values in array of value
+        *******************************************************************/
+        getTextWidth: function( value, options = {} ){
+            var _this = this,
+                ctx = this.cache.ctx,
+                ctx_font = ctx.font,
+                valueList = $.isArray( value ) ? value : [value],
+                result = 0;
+
+            if (options.italic)
+                ctx.font = 'italic ' + ctx.font;
+            if (options.bold)
+                ctx.font = 'bold ' + ctx.font;
+
+            valueList.forEach( function(txt){
+                result = Math.max( result, ctx.measureText( _this._valueToText(txt) ).width );
+            });
+
+            ctx.font = ctx_font;
+
+            return result;
+        },
+
+        /*******************************************************************
+        appendGridContainer
+        *******************************************************************/
+        appendGridContainer: function( options = {} ){
+            //options.labelBetweenTicks = true => special version where the labels are placed up and between the ticks
+            this.options.labelBetweenTicks = !!options.labelBetweenTicks;
+
+            var $newGrid = $('<span class="grid"></span>'),
+                $newCanvas =
+                    $('<canvas/>')
+                        .addClass('grid-canvas')
+                        .appendTo($newGrid),
+                size = this.options.size,
+                ctx = this.cache.ctx = $newCanvas.get(0).getContext("2d"),
+                canvasMargin = this.cache.canvasMargin = Math.ceil( this.getTextWidth([this._valueToText(this.options.min), this._valueToText(this.options.max)] ) ),
+                canvasWidth = this.dimentions.containerWidth + 2 * canvasMargin,
+                canvasHeight = this.options.labelBetweenTicks ?
+                                Math.max(size.majorTickLength, size.fontSize) :
+                                size.majorTickLength + size.labelHeight;
+
+            $newCanvas
+                .css('left', '-'+canvasMargin+'px')
+                .attr('width', canvasWidth)
+                .attr('height', canvasHeight);
+
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.translate(0.5, 0.5);
+            ctx.lineWidth    = 1;
+            ctx.textAlign    = "center";
+            ctx.textBaseline = "top";       //"bottom" or "middle" or "alphabetic" or "hanging"
+
+            ctx.strokeStyle = this.options.majorColor;
+            ctx.font = size.fontSize + 'px Arial';
+
+            if (this.options.labelClickable && !this.options.disable && !this.options.readOnly){
+                this.canvasId = this.canvasId || 0;
+                this.canvasId++;
+                $newCanvas.data('canvasId', this.canvasId);
+                this.canvasLabels = this.canvasLabels || {};
+                this.canvasLabels[this.canvasId] = [];
+            }
+
+            if (this.$currentGrid){
+                this.nextGridTop += this.$currentGrid.height();
+                this.$currentGrid = $newGrid.insertAfter( this.$currentGrid );
+                this.$currentGrid.css('top', this.nextGridTop+'px' );
+            }
+            else {
+                this.$currentGrid = $newGrid.appendTo(this.cache.$container);
+                this.nextGridTop = this.$currentGrid.position().top;
+            }
+
+            this.cache.$grid = this.cache.$container.find(".grid");
+
+            //Special case: If the labels for the current grid shall be placed between the ticks instead of under..
+            if (this.options.labelBetweenTicks){
+                this.$currentGrid.addClass("label-between-ticks");
+            }
+        },
+
+
+        /*******************************************************************
+        appendTick
+        *******************************************************************/
+        appendTick: function( leftPercent, options ){
+            if (!this.$currentGrid) return;
+
+            options = $.extend( {minor: false, color: ''}, options );
+
+            var left = this.cache.canvasMargin + (this.dimentions.containerWidth * leftPercent / 100),
+                ctx  = this.cache.ctx,
+                size = this.options.size,
+                length = options.minor ? size.minorTickLength : size.majorTickLength;
+
+
+            ctx.beginPath();
+
+            ctx.shadowColor   = 'rgba(255, 255, 255, .75)';
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 0;
+            ctx.lineWidth     = 1;
+            ctx.strokeStyle   = options.minor ? this.options.minorColor : this.options.majorColor;
+            ctx.moveTo(left, 0);
+            ctx.lineTo(left, length );
+            ctx.stroke();
+
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+      },
+
+        /*******************************************************************
+        _valueToText
+        *******************************************************************/
+        _valueToText: function( value ){
+            var result = this._prettifyLabel( value );
+            return this.options.decorateLabel ? this.decorate(result) : result;
+        },
+
+        /*******************************************************************
+        appendLabel
+        *******************************************************************/
+        appendLabel: function( leftPercent, value, options ){
+            if (!this.$currentGrid) return;
+
+            options = $.extend( {color: ''}, options );
+
+            //Check if the value for the label is a selectable one
+            options.labelClickable = options.labelClickable &&  ((value - this.options.stepOffset) % this.options.step) === 0;
+
+            var text = this._valueToText( value ),
+                size   = this.options.size,
+                ctx    = this.cache.ctx,
+                left   = this.cache.canvasMargin + (this.dimentions.containerWidth * leftPercent / 100),
+                textWidth = this.getTextWidth(text),
+                top, width, height, boxLeft, textTop;
+
+            if (this.options.labelBetweenTicks){
+                //Special case where the labels are placed up between the ticks
+                top     = 0;
+                textTop = 0;
+                width   = textWidth;
+                height  = size.fontSize;
+            }
+            else {
+                top     = size.majorTickLength;
+                textTop = top + size.borderWidth + size.textPadding;
+                width   = size.borderWidth + size.textPadding + textWidth + size.textPadding + size.borderWidth,
+                height  = size.labelHeight;
+            }
+            boxLeft = left - width/2;
+
+            //Find bg-color and text-color
+            var color = options.minor ? this.options.minorColor : this.options.majorColor,
+                textColor = color,
+                labelColorRec = this.options.labelColorRec[value],
+                canvasLabels = this.canvasLabels[this.canvasId];
+
+            if (labelColorRec){
+                //Label with individual background- and text-color
+                var bgColor   = labelColorRec.backgroundColor;
+                textColor = labelColorRec.color;
+
+                //Draw border and background (if any)
+                ctx.fillStyle = color;
+                ctx.fillRect(boxLeft, top, width, height);
+                ctx.fillStyle = bgColor;
+
+                ctx.beginPath();
+                ctx.fillRect(boxLeft + size.borderWidth, top + size.borderWidth, width - 2*size.borderWidth, height - 2*size.borderWidth);
+                ctx.stroke();
+            }
+
+            //ctx.fillStyle = 'pink';                     //Only test
+            //ctx.fillRect(boxLeft, top, width, height);  //Only test
+
+            if (options.labelClickable && !this.options.disable && !this.options.readOnly)
+                canvasLabels.push( {top: top, left: boxLeft, right: boxLeft+width, bottom: top+height, percent: leftPercent} );
+
+            //Draw the text
+            var ctx_font = ctx.font;
+            if (!options.minor)
+                ctx.font = 'bold ' + ctx.font;
+            if (options.italic)
+                ctx.font = 'italic ' + ctx.font;
+            ctx.fillStyle = textColor;
+
+            ctx.beginPath();
+            ctx.fillText(text, left, textTop);
+            ctx.stroke();
+
+            ctx.font = ctx_font;
+        },
+
+
+        /*******************************************************************
+        appendGrid
+        *******************************************************************/
+        appendGrid: function () {
+            if (!this.options.grid) return;
+            this.appendStandardGrid();
+        },
+
+        /*******************************************************************
+        appendStandardGrid
+        Simple call _appendStandardGrid. Can be overwriten in decending classes
+        *******************************************************************/
+        appendStandardGrid: function ( textOptions ) {
+            this._appendStandardGrid( textOptions );
+        },
+
+
+        /*******************************************************************
+        preAppendGrid and postAppendGrid
+        must be called as first and last when creating a grid - used if a new appendStandardGrid is used
+        *******************************************************************/
+        preAppendGrid: function( options = {} ){
+            this.appendGridContainer( options );
+        },
+
+        postAppendGrid: function(){
+            //Update the height of the slider
+            this.cache.$container.css('height', (this.nextGridTop + this.$currentGrid.height())+'px' );
+        },
+
+
+        /*******************************************************************
+        getGridOptions
+        Get options needed for building the grid
+        *******************************************************************/
+        getGridOptions: function(){
+            var o = this.options,
+                result = {},
+                gridDistanceIndex = 0;
+
+            result.gridContainerWidth = this.cache.$grid.outerWidth(false);
+            result.gridDistanceStep = o.gridDistances[gridDistanceIndex]; // = number of steps between each tick
+            result.stepPx = o.step * result.gridContainerWidth / o.range / o.majorTicksFactor;
+
+            //Increse grid-distance until the space between two ticks are more than 4px
+            while ( (result.stepPx*result.gridDistanceStep) <= o.minDistance){
+                gridDistanceIndex++;
+                if (gridDistanceIndex < o.gridDistances.length)
+                    result.gridDistanceStep = o.gridDistances[gridDistanceIndex];
+                else
+                    result.gridDistanceStep = result.gridDistanceStep*2;
+            }
+
+            result.tickDistanceNum = result.gridDistanceStep * o.step;          //The numerical distance between each ticks
+            result.tickDistancePx  = result.gridDistanceStep * result.stepPx;   //The px distance between each ticks
+
+            if (o.maxLabelWidth)
+                result.maxLabelWidth = o.maxLabelWidth;
+            else {
+                //Find widest label
+                var value = o.min,
+                    valueList = [],
+                    step = 1;
+
+                while (value <= o.max){
+                    //if value corrected by o.majorTicksOffset and o.majorTicksFactor is a DIV of the tick distance => calculate the width of the tick
+                    if ((value - o.majorTicksOffset)*o.majorTicksFactor % result.tickDistanceNum === 0){
+                        valueList.push( value );
+                        step = result.tickDistanceNum;
+                    }
+                    value += step;
+                }
+                result.maxLabelWidth = this.getTextWidth() + o.minDistance; //Adding min space between text/labels
+            }
+
+            //Calculate automatic distances between major ticks
+            var majorTicks = o.majorTicks;
+            if (!majorTicks){
+                //Find ticks between each major tick
+                gridDistanceIndex = 0;
+                majorTicks = o.gridDistances[gridDistanceIndex];
+                while (majorTicks * result.tickDistancePx < result.maxLabelWidth){
+                    gridDistanceIndex++;
+                    if (gridDistanceIndex < o.gridDistances.length)
+                        majorTicks = o.gridDistances[gridDistanceIndex];
+                    else
+                        majorTicks = majorTicks*2;
+                }
+            }
+
+            result.majorTickDistanceNum = result.tickDistanceNum * majorTicks;
+            result.majorTickDistancePx  = result.tickDistancePx  * majorTicks;
+
+            return result;
+        },
+
+
+        /*******************************************************************
+        _appendStandardGrid
+        *******************************************************************/
+        _appendStandardGrid: function ( textOptions, tickOptions ) {
+            this.preAppendGrid();
+
+            textOptions = $.extend( {labelClickable: this.options.labelClickable}, textOptions || {}  );
+            tickOptions = tickOptions || {};
+
+            //Get all options regarding the grid
+            this.gridOptions = this.getGridOptions();
+            $.extend( this.options, this.gridOptions );
+
+            //Add all the minor and major ticks
+            var o     = this.options,
+                value = o.min,
+                step  = 1,
+                valueP, valueOffset;
+
+            while (value <= o.max){
+                valueOffset = (value - o.majorTicksOffset)*o.majorTicksFactor;
+                if (valueOffset % o.tickDistanceNum === 0){
+                    valueP = (value-o.min)*o.percentProValue;
+                    if (valueOffset % o.majorTickDistanceNum === 0){
+                        //add major tick and text/label
+                        this.appendTick( valueP, tickOptions );
+                        this.appendLabel( valueP, value, textOptions );
+                    }
+                    else
+                        if (o.showMinorTicks)
+                            //Add minor tick
+                            this.appendTick( valueP, { minor:true } );
+                    step = o.tickDistanceNum;
+                }
+                value += step;
+            }
+
+            //Append colors on the grid
+            if (this.options.gridColors)
+                this.appendGridColors( this.options.gridColors );
+
+            this.postAppendGrid();
+        },
+
+        /*******************************************************************
+        addGridColor
+        *******************************************************************/
+        appendGridColors: function( gridColors ){
+            var fromValue,
+                toValue  = this.options.min,
+                i,
+                gridColor,
+                percentFactor = 100 / (this.options.max - this.options.min);
+
+
+            for (i=0; i<gridColors.length; i++ ){
+                gridColor = gridColors[i];
+                if ( (gridColor.value === null) || (gridColor.value < this.options.min) || (gridColor.value > this.options.max) ){
+                    //add triangle to the left or right
+                    var $span = $('<span/>')
+                                    .addClass( 'grid-color')
+                                    .appendTo( this.$currentGrid );
+                    if (gridColor.value > this.options.max)
+                        $span
+                            .addClass('gt-max')
+                            .css('border-left-color', gridColor.color);
+                    else
+                        $span
+                            .addClass('lt-min')
+                            .css('border-right-color', gridColor.color);
+                }
+                else {
+                    fromValue = gridColor.fromValue !== undefined ? gridColor.fromValue : toValue;
+                    toValue = gridColor.value;
+
+                    $('<span/>')
+                        .addClass('grid-color' + (i%2?' to':' from'))
+                        .css({
+                            'left'            : percentFactor*(fromValue - this.options.min) + '%',
+                            'width'           : percentFactor*(toValue-fromValue) + '%',
+                            'background-color': gridColor.color
+                           })
+                        .appendTo( this.$currentGrid );
+                }
+            }
+        },
+    }; //end of BaseSlider.prototype
+
+
+    $.fn.baseSlider = function (options) {
+        return this.each(function() {
+            if (!$.data(this, "baseSlider")) {
+                $.data(this, "baseSlider", new window.BaseSlider(this, options, pluginCount++));
+            }
+        });
+    };
+
+
+}(jQuery, this, document));
+
+;
+/****************************************************************************
+jquery-base-slider-events
+****************************************************************************/
+(function ($, window/*, document, undefined*/) {
+    "use strict";
+
+    /*******************************************************************
+    getEventLeft
+    Return the left (= x) position of an event
+    *******************************************************************/
+    function getEventLeft( event ){
+        return  event.gesture && event.gesture.center ? event.gesture.center.x :
+                event.pageX ? event.pageX :
+                event.originalEvent && event.originalEvent.touches && event.originalEvent.touches.length ? event.originalEvent.touches[0].pageX :
+                event.touches && event.touches.length ? event.touches[0].pageX :
+                0;
+    }
+
+
+    /*******************************************************************
+    objectsAreDifferent
+    Return true if obj1 and obj2 are not equal
+    *******************************************************************/
+    function objectsAreDifferent( obj1, obj2 ){
+        var result = false,
+            props = Object.getOwnPropertyNames(obj1).concat( Object.getOwnPropertyNames(obj2) );
+
+        $.each( props, function( index, id ){
+            var type1 = $.type(obj1[id]),
+                type2 = $.type(obj2[id]);
+
+            result =
+                result ||
+                (   ((type1 == 'number') || (type2 == 'number')) && //One or both are number AND
+                    ((type1 != type2) || (obj1[id] != obj2[id]))    //type are different OR value are different
+                );
+        });
+        return result;
+    }
+
+
+
+    $.extend(window.BaseSlider.prototype, {
         /*******************************************************************
         bindEvents
         *******************************************************************/
@@ -29804,23 +29562,6 @@ if (typeof define === 'function' && define.amd) {
 
             //Add keyboard events to the line
             addEvents( this.cache.$line, "keydown", this.key );
-
-            //Bind click on buttons
-            $.each( this.cache.buttons, function( fromOrTo, buttonRecord ){
-                $.each( buttonRecord, function( id, $btn ){
-                    var options = $.extend({handleId: fromOrTo}, _this.options.buttonOptions[id]);
-                    addEvents( $btn, 'mousedown',  _this.startRepeatingClick                         );
-                    addEvents( $btn, 'mouseup',    _this.endRepeatingClick                           );
-                    addEvents( $btn, 'mouseleave', _this.endRepeatingClick,                  true    );
-                    addEvents( $btn, 'click',      _this.moveByButtonOrKeyboardOrMouseWheel, options );
-
-                    if ( $btn && $btn.autoclickWhilePressed && options.delta && (options.delta != 99) && (!$btn.data('auto-click-when-pressed-added')) ){
-                        $btn.data('auto-click-when-pressed-added', true);
-                        $btn.autoclickWhilePressed();
-                    }
-
-                });
-            });
         },
 
 
@@ -29837,10 +29578,8 @@ if (typeof define === 'function' && define.amd) {
         containerOnResize: function(){
             if (this.initializing || !this.isBuild)
                 return;
-
             this.parentOnResize();
         },
-
 
         /*******************************************************************
         parentOnResize
@@ -29867,9 +29606,8 @@ if (typeof define === 'function' && define.amd) {
         getDimentions: function(){
             var result = {};
             result.containerWidth    = Math.max(0, this.cache.$container.innerWidth()) || this.dimentions.containerWidth;
-            result.containerWidthRem = pxToRem(result.containerWidth);
             if (this.options.isFixed)
-                result.outerContainerWidthRem = pxToRem( this.cache.$outerContainer.innerWidth() );
+                result.outerContainerWidth = this.cache.$outerContainer.innerWidth();
             return result;
         },
 
@@ -29885,25 +29623,13 @@ if (typeof define === 'function' && define.amd) {
 
             if (!this.initializing && this.isBuild){
                 //Update the slider if the width has changed
-                if (this.dimentions.containerWidthRem && objectsAreDifferent( this.dimentions, this.dimentions_old))
+                if (this.dimentions.containerWidth && objectsAreDifferent( this.dimentions, this.dimentions_old)){
                     updateSlider = true;
 
-                    //Check if the grid of a resizable slider has changed
-                    if (this.options.resizable){
-                        var _this = this,
-                            rebuild = false,
-                            newGridOptions = this.getGridOptions(),
-                            idList = ['gridDistanceStep', 'majorTickDistanceNum']; //List of options-id to compare for changes
-
-                        $.each( idList, function( index, id ){
-                            rebuild = rebuild || (newGridOptions[id] != _this.gridOptions[id]);
-                        });
-
-                        if (rebuild){
-                            this.update();
-                            return;
-                        }
-                    }
+                    //If it is a resizable slider :  Update it
+                    if (this.options.resizable)
+                        this.update();
+                }
             }
             else {
                 //Reset timeout and try to build the slider
@@ -29912,7 +29638,7 @@ if (typeof define === 'function' && define.amd) {
                     this.checkContainerDimentions_TimeoutId = null;
                 }
 
-                if (this.dimentions.containerWidthRem){
+                if (this.dimentions.containerWidth){
                     this.build();
                     updateSlider = true;
                 }
@@ -29939,39 +29665,10 @@ if (typeof define === 'function' && define.amd) {
             }
         },
 
-        /*******************************************************************
-        onFontSizeChange
-        Called when the font-size of the browser is changed
-        *******************************************************************/
-        onFontSizeChange: function( event, fontSize ){
-            onFontSizeChange( event, fontSize );
-            if (this.htmlFontSize != htmlFontSize){
-                this.htmlFontSize = htmlFontSize;
-                if (this.options.resizable)
-                    this.update();
-                else
-                    this.dimentions = this.getDimentions();
-            }
-        },
 
         /*******************************************************************
         KEY, WHEEL AND BUTTON EVENTS
         *******************************************************************/
-        /*******************************************************************
-        startRepeatingClick
-        *******************************************************************/
-        startRepeatingClick: function () {
-            this.isRepeatingClick = true;
-        },
-
-        /*******************************************************************
-        endRepeatingClick
-        *******************************************************************/
-        endRepeatingClick: function (callOnChange) {
-            this.isRepeatingClick = false;
-            if (callOnChange)
-                this.onChange();
-        },
 
         /*******************************************************************
         key
@@ -30143,9 +29840,14 @@ if (typeof define === 'function' && define.amd) {
         Called when tap and press/pressup on the slider (line and grid)
         *******************************************************************/
         onTap: function(event) {
+
+
+
             var _this = this,
                 percent = NaN, // = the percent to set this.currentHandle
                 elem    = event.gesture.target;
+
+
 
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -30167,11 +29869,22 @@ if (typeof define === 'function' && define.amd) {
                 });
 
             //If not on a handle: Test if the tap was on a label
-            if (window.isNaN(percent))
-                while (window.isNaN(percent) && !!elem && elem.getAttribute){
-                    percent = parseFloat( elem.getAttribute('data-base-slider-percent') );
-                    elem = elem.parentNode;
+            if (window.isNaN(percent)){
+                //Check if the tap was on a canvas
+                var canvasId = $(elem).data('canvasId');
+                if (canvasId){
+                    var originalEvent = event.gesture.srcEvent,
+                        canvasX       = originalEvent.offsetX,
+                        canvasY       = originalEvent.offsetY;
+
+                    $.each(_this.canvasLabels[canvasId] || [], function(index, rec){
+                        if ( (canvasX >= rec.left) && (canvasX <= rec.right) && (canvasY >= rec.top) && (canvasY <= rec.bottom) ){
+                            percent = rec.percent;
+                            return false;
+                        }
+                    });
                 }
+            }
 
             //If not on a handle and not on a label: Find percent according to mouse-position
             if (window.isNaN(percent)){
@@ -30290,134 +30003,6 @@ if (typeof define === 'function' && define.amd) {
 
         /*******************************************************************
         ********************************************************************
-        ADJUST ELEMENTS
-        ********************************************************************
-        *******************************************************************/
-
-        /*******************************************************************
-        setImpactLineColors
-        Sets the color of the line when line colors are impact (green-yellow-red)
-        *******************************************************************/
-        setImpactLineColors: function(){
-            this.cache.$leftLineColor.css  ( 'background-color', this.options.impactLineColors[ this.options.reverseImpactLineColor ? 'red' : 'green' ] );
-            this.cache.$centerLineColor.css( 'background-color', this.options.impactLineColors.yellow );
-            this.cache.$rightLineColor.css ( 'background-color', this.options.impactLineColors[ this.options.reverseImpactLineColor ? 'green' : 'red' ] );
-        },
-
-        /*******************************************************************
-        currentHandleBlur
-        *******************************************************************/
-        currentHandleBlur: function () {
-            if (this.currentHandle)
-                this.currentHandle.onBlur();
-            this.currentHandle = null;
-        },
-
-
-        /*******************************************************************
-        updateHandlesAndLines
-        *******************************************************************/
-        updateHandlesAndLines: function () {
-            //***********************************************
-            function setLeftAndWidth( $elem, left, width ){
-                if (!$elem) return;
-                var css = {};
-                if (left !== null)
-                    css.left = toFixed(left) + (left ? '%' : '');
-                if (width !== null)
-                    css.width = toFixed(width) + (width ? '%' : '');
-                $elem.css( css );
-            }
-            //***********************************************
-
-            /*****************************************************
-            Adjust left-position and width of all lineColor-elements (if any)
-            *****************************************************/
-            if (this.options.isSingle) {
-                var singlePercent = this.handles[this.options.singleHandleId].value.getPercent();
-                setLeftAndWidth( this.cache.$leftLineColor,  null,          singlePercent       );
-                setLeftAndWidth( this.cache.$rightLineColor, singlePercent, 100 - singlePercent );
-            }
-            else {
-                var fromPercent = this.handles.from.value.getPercent(),
-                    toPercent   = this.handles.to.value.getPercent();
-                setLeftAndWidth( this.cache.$leftLineColor,   null,        fromPercent             );
-                setLeftAndWidth( this.cache.$centerLineColor, fromPercent, toPercent - fromPercent );
-                setLeftAndWidth( this.cache.$rightLineColor,  toPercent,   100 - toPercent         );
-            }
-
-            /*****************************************************
-            Set position of all handles
-            *****************************************************/
-            this.eachHandle('update');
-
-            //Special case for fixed-mode: Keep the handle centered in container
-            if (this.options.isFixed){
-                var containerLeft =
-                        -1.0 * this.dimentions.containerWidthRem * this.handles.fixed.value.percent/100 +
-                         0.5 * this.dimentions.outerContainerWidthRem;
-
-                this.cache.$container.css('left', toFixed(containerLeft) + 'rem');
-            }
-
-
-            /*****************************************************
-            Callback and reset
-            *****************************************************/
-            this.onChanging();
-
-        },
-
-
-        /*******************************************************************
-        ********************************************************************
-        SET VALUES (TO, FROM, PIN ETC.)
-        ********************************************************************
-        *******************************************************************/
-
-        /*******************************************************************
-        setAnyValue
-        *******************************************************************/
-        setAnyValue: function( id, value ){
-            if (this.handles[id]){
-                this.handles[id].value.setValue( value );
-
-                this.updateHandlesAndLines();
-                this.onChange();
-            }
-        },
-
-        /*******************************************************************
-        setValue, setFromValue, setToValue
-        *******************************************************************/
-        setValue    : function( value ) {this.setAnyValue( this.options.singleHandleId, value );},
-        setFromValue: function( value ) { this.setAnyValue( 'from',   value ); },
-        setToValue  : function( value ) { this.setAnyValue( 'to',     value ); },
-
-        /*******************************************************************
-        setPin
-        *******************************************************************/
-        setPin: function( value, color, icon ) {
-            if (!this.options.hasPin) return;
-            if (value !== null)
-                this.handles.pin.value.setValue( value, true );
-
-            this.options.pinColor = color || this.options.pinColor || 'black';
-
-            var oldIcon = this.options.pinIcon || '';
-            this.options.pinIcon = icon || this.options.pinIcon || 'fa-map-marker';
-
-            this.handles.pin.$handle
-                .css('color', this.options.pinColor)
-                .removeClass( oldIcon )
-                .addClass( this.options.pinIcon );
-
-            this.updateHandlesAndLines();
-        },
-
-
-        /*******************************************************************
-        ********************************************************************
         CALLBACK
         ********************************************************************
         *******************************************************************/
@@ -30485,7 +30070,6 @@ if (typeof define === 'function' && define.amd) {
 
         /*******************************************************************
         onChanging
-
         *******************************************************************/
         onChanging: function(){
             //If it is dragging and onChangeOnDragging == false => set timeout to call onChange after XX ms if the handle hasn't moved
@@ -30508,398 +30092,273 @@ if (typeof define === 'function' && define.amd) {
         },
 
 
-        /*******************************************************************
-        ********************************************************************
-        SERVICE METHODS
-        ********************************************************************
-        *******************************************************************/
 
-        /*******************************************************************
-        _prettify
-        *******************************************************************/
-        _prettify: function (num) {
-            return $.isFunction(this.options.prettify) ? this.options.prettify(num) : num;
-        },
 
-        /*******************************************************************
-        PrettifyLabel
-        *******************************************************************/
-        _prettifyLabel: function(text) {
-            return $.isFunction(this.options.prettifyLabel) ? this.options.prettifyLabel(text) : text;
-        },
 
-        /*******************************************************************
-        decorate
-        *******************************************************************/
-        decorate: function ( content ) {
-            return this.options.prefix + content + this.options.postfix;
-        },
+    }); //end of BaseSlider.prototype
 
-        /*******************************************************************
-        ********************************************************************
-        GRID
-        Use appendGridContainer to create new grids. Use appendLabel(text, left[, value]) to add a grid-label
-        ********************************************************************
-        *******************************************************************/
+}(jQuery, this, document));
 
-        /*******************************************************************
-        appendGridContainer
-        *******************************************************************/
-        appendGridContainer: function(){
-            if (this.$currentGridContainer){
-                this.totalGridContainerTop += this.$currentGridContainer.height();
-                this.$currentGridContainer =
-                    $('<span class="grid"></span>').insertAfter( this.$currentGridContainer );
-                this.$currentGridContainer.css('top', pxToRem( this.totalGridContainerTop, true) );
+;
+/****************************************************************************
+    jquery-base-slider-handle,
+
+    (c) 2015, FCOO
+
+    https://github.com/fcoo/jquery-base-slider
+    https://github.com/fcoo
+
+****************************************************************************/
+(function (window/*, document, undefined*/) {
+    "use strict";
+
+    //Create baseSlider-namespace
+	window._baseSlider = window._baseSlider || {};
+	var ns = window._baseSlider;
+
+    /*******************************************************************
+    elementsOverlapping
+    Return true if $element1 and $element2 is overlapping horizontal
+    *******************************************************************/
+    function elementsOverlapping( $element1, $element2 ){
+        if ($element1 && $element2){
+            var rect1 = $element1.get(0).getBoundingClientRect(),
+                rect2 = $element2.get(0).getBoundingClientRect();
+            return ((rect1.left >= rect2.left) && (rect1.left <= rect2.right)) ||
+                    ((rect2.left >= rect1.left) && (rect2.left <= rect1.right));
+        }
+        return false;
+    }
+
+    /*******************************************************************
+    SliderHandle
+    Object to reprecent a 'handle' on the slider
+    The handle don't need to have a actual DOM-handle. The min and max-value of the slider
+    is also reprecented as a SliderHandle
+    The object contains the following items:
+        value   : A SliderValue-object reprecenting the value
+        $handle : $-object = the DOM handle (optional)
+        marker  : Object containing of tree $-object: $outer and $text (optional)
+
+    options
+        marker: [string] = class-name of the marker
+    *******************************************************************/
+    var SliderHandle = function( options ){
+        this.id      = options.id;
+        this.slider  = options.slider || options.value.slider;
+        options.value.slider = this.slider;
+        this.value   = ns.sliderValue( options.value );
+        this.$handle = !!options.$handle; //Set to boolean. Created in this.append
+        this.handleClassName = options.handleClassName || '';
+        this.handleCSS = options.handleCSS || {};
+        this.appended = false,
+
+        this.markerData = options.markerData || {};
+
+        this.markerClassName = options.marker;
+        this.marker  = !!this.markerClassName;
+
+        //overlappingHandleList = list of SliderHandle. If any of the marker in overlappingHandleList[xx] is overlapping this => this is hidden
+        this.overlappingHandleList = [];
+
+        //overlapHandleList = list of SliderHandle. this is overlapping all the marker in overlapHandleList[xx]
+        this.overlapHandleList = [];
+
+
+        this.draggingClassName = options.draggingClassName; //Classname for handler when it is being dragged MANGLER
+        this.lastLeftPercent = '';
+    };
+
+    SliderHandle.prototype = {
+        //addOverlap( handle ) - Set this to overlap handle
+        addOverlap: function( handle ){
+            if (this.marker && handle && handle.marker ){
+                this.overlapHandleList.push( handle );
+                handle.overlappingHandleList.push( this );
             }
-            else {
-                this.$currentGridContainer = this.cache.$grid;
-                this.totalGridContainerTop = this.$currentGridContainer.position().top;
-            }
-
-            this.cache.$grid = this.cache.$container.find(".grid");
-            return this.$currentGridContainer;
         },
 
-
-        /*******************************************************************
-        appendTick
-        *******************************************************************/
-        appendTick: function( left, options ){
-            if (!this.$currentGridContainer) return;
-
-            options = $.extend( {minor: false, color: ''}, options );
-
-            var result = document.createElement("span");
-//            result.className = "grid-pol" + (options.minor ? ' minor' : '');
-            result.className = "grid-pol" + (options.minor ? '' : ' major');
-            result.style.left = left + '%';
-
-            if (options.color)
-                result.style.backgroundColor = options.color;
-
-            this.currentGridContainer.appendChild( result );
-            return result;
-
-        },
-
-        /*******************************************************************
-        _valueToText
-        *******************************************************************/
-        _valueToText: function( value ){
-            var result = this._prettifyLabel( value );
-            return this.options.decorateLabel ? this.decorate(result) : result;
-        },
-
-        /*******************************************************************
-        appendLabel
-        *******************************************************************/
-        appendLabel: function( left, value, options ){
-            if (!this.$currentGridContainer) return;
-
-            options = $.extend( {color: ''}, options );
-
-            //Check if the value for the label is a selectable one
-            options.labelClickable = options.labelClickable &&  ((value - this.options.stepOffset) % this.options.step) === 0;
-
-            var text = this._valueToText( value ),
-                outer = document.createElement("div"),
-                result = document.createElement("div"),
-                className = 'grid-label';
-
-            outer.className = 'grid-label-outer';
-            outer.style.left  = left+'%';
-            outer.appendChild(result);
-
-            if (options.minor)
-                className += ' minor';
-            if (options.italic)
-                className += ' italic';
-            if (options.color)
-                result.style.color = options.color;
-
-            //Create inner-span with the text
-            var inner = document.createElement("span"),
-                innerClassName = 'grid-label-text';
-            inner.innerHTML = text;
-
-            if (this.options.labelColorRec[value]){
-                var textOptions = this.options.labelColorRec[value];
-
-                innerClassName += ' frame';
-                if (textOptions.className)
-                    innerClassName += ' '+textOptions.className;
-                if (textOptions.color)
-                    inner.style.color = textOptions.color;
-                if (textOptions.backgroundColor)
-                    inner.style.backgroundColor = textOptions.backgroundColor;
-            }
-
-            inner.className = innerClassName;
-            result.appendChild(inner);
-
-            if (options.labelClickable && !this.options.disable && !this.options.readOnly){
-                //Can be used later: outer.setAttribute('data-base-slider-value', value);
-                outer.setAttribute('data-base-slider-percent', outer.style.left);
-                className += ' clickable';
-                if (this.options.labelClickableFullWidth)
-                    result.style.width = this.options.majorTickDistanceRem +'rem';
-
-            }
-
-            result.className = className;
-            this.currentGridContainer.appendChild( outer );
-            return result;
-        },
-
-
-        /*******************************************************************
-        getTextWidth
-        Get width of value as text OR max width of all values in array of value
-        *******************************************************************/
-        getTextWidth: function( value, options ){
-            var _this = this;
-            if ($.isArray( value )){
-                var html = '';
-                $.each( value, function(index, oneValue ){
-                    html += _this._valueToText( oneValue ) + '<br>';
-                });
-                return this.getDecorateTextWidth( html, options );
-            }
-            else
-                return this.getDecorateTextWidth( this._valueToText( value ) , options );
-        },
-
-        /*******************************************************************
-        getDecorateTextWidth
-        *******************************************************************/
-        getDecorateTextWidth: function( html, options, factor, floor ){
-            var newClassName = 'grid-label';
-            if (options){
-                if (options.minor)
-                    newClassName += ' minor';
-                if (options.italic)
-                    newClassName += ' italic';
-            }
-            if (this.textElement.className != newClassName )
-                this.textElement.className = newClassName;
-            this.textElement.innerHTML = html;
-
-            var result = parseFloat( this.textElement.offsetWidth );
-            if (factor)
-                result = factor*result;
-            if (floor)
-                result = Math.floor(result);
-
-            return pxToRem( result );
-        },
-
-
-        /*******************************************************************
-        appendGrid
-        *******************************************************************/
-        appendGrid: function () {
-            if (!this.options.grid) return;
-            this.appendStandardGrid();
-        },
-
-        /*******************************************************************
-        appendStandardGrid
-        Simple call _appendStandardGrid. Can be overwriten in decending classes
-        *******************************************************************/
-        appendStandardGrid: function ( textOptions ) {
-            this._appendStandardGrid( textOptions );
-        },
-
-
-        /*******************************************************************
-        preAppendGrid and postAppendGrid
-        must be called as first and last when creating a grid - used if a new appendStandardGrid is used
-        *******************************************************************/
-        preAppendGrid: function(){
-            this.appendGridContainer();
-            //The DOM-version of this.$currentGridContainer
-            this.currentGridContainer = this.$currentGridContainer.get(0);
-
-            //Create the grid outside the DOM
-            //Save width in % and set in in px instead of %
-            this.currentGridContainerWidth = this.currentGridContainer.style.width;
-            this.$currentGridContainer.css('width', this.$currentGridContainer.width());
-            this.$currentGridContainer.width( this.$currentGridContainer.width() );
-            this.$currentGridContainerMarker = $('<div/>').insertAfter( this.$currentGridContainer );
-            this.$currentGridContainer.detach();
-        },
-        postAppendGrid: function(){
-            //Insert the created grid into the DOM
-            this.$currentGridContainer.insertBefore( this.$currentGridContainerMarker );
-            this.$currentGridContainer.css('width', this.currentGridContainerWidth );
-            this.$currentGridContainerMarker.remove();
-
-            //Update the height of the slider
-            this.cache.$container.css('height', pxToRem( this.totalGridContainerTop + this.$currentGridContainer.height(), true) );
-
-        },
-
-
-        /*******************************************************************
-        getGridOptions
-        Get options needed for building the grid
-        *******************************************************************/
-        getGridOptions: function(){
-            var o = this.options,
-                result = {},
-                gridDistanceIndex = 0;
-
-            result.gridContainerWidthRem = pxToRem( this.cache.$grid.outerWidth(false) );
-            result.gridDistanceStep = o.gridDistances[gridDistanceIndex]; // = number of steps between each tick
-            result.stepRem = o.step * result.gridContainerWidthRem / o.range / o.majorTicksFactor;
-
-            //Increse grid-distance until the space between two ticks are more than 4px
-            while ( (result.stepRem*result.gridDistanceStep) <= o.minDistanceRem){
-                gridDistanceIndex++;
-                if (gridDistanceIndex < o.gridDistances.length)
-                    result.gridDistanceStep = o.gridDistances[gridDistanceIndex];
-                else
-                    result.gridDistanceStep = result.gridDistanceStep*2;
-            }
-
-            result.tickDistanceNum = result.gridDistanceStep * o.step;          //The numerical distance between each ticks
-            result.tickDistanceRem = result.gridDistanceStep * result.stepRem;  //The rem distance between each ticks
-
-            if (o.maxLabelWidthRem)
-                result.maxLabelWidthRem = o.maxLabelWidthRem;
-            else {
-                //Find widest label
-                var value = o.min,
-                    valueList = [],
-                    step = 1;
-
-                while (value <= o.max){
-                    //if value corrected by o.majorTicksOffset and o.majorTicksFactor is a DIV of the tick distance => calculate the width of the tick
-                    if ((value - o.majorTicksOffset)*o.majorTicksFactor % result.tickDistanceNum === 0){
-                        valueList.push( value );
-                        step = result.tickDistanceNum;
-                    }
-                    value += step;
-                }
-                result.maxLabelWidthRem = this.getTextWidth( valueList ) + o.minDistanceRem; //Adding min space between text/labels
-            }
-
-            //Calculate automatic distances between major ticks
-            var majorTicks = o.majorTicks;
-            if (!majorTicks){
-                //Find ticks between each major tick
-                gridDistanceIndex = 0;
-                majorTicks = o.gridDistances[gridDistanceIndex];
-                while (majorTicks * result.tickDistanceRem < result.maxLabelWidthRem){
-                    gridDistanceIndex++;
-                    if (gridDistanceIndex < o.gridDistances.length)
-                        majorTicks = o.gridDistances[gridDistanceIndex];
-                    else
-                        majorTicks = majorTicks*2;
-                }
-            }
-
-            result.majorTickDistanceNum = result.tickDistanceNum*majorTicks;
-            result.majorTickDistanceRem = result.tickDistanceRem*majorTicks;
-
-            return result;
-        },
-
-
-        /*******************************************************************
-        _appendStandardGrid
-        *******************************************************************/
-        _appendStandardGrid: function ( textOptions, tickOptions ) {
-            this.preAppendGrid();
-
-            textOptions = $.extend( {labelClickable: this.options.labelClickable}, textOptions || {}  );
-            tickOptions = tickOptions || {};
-
-            //Get all options regarding the grid
-            this.gridOptions = this.getGridOptions();
-            $.extend( this.options, this.gridOptions );
-
-
-            //Add all the minor and major ticks
-            var o     = this.options,
-                value = o.min,
-                step  = 1,
-                valueP, valueOffset;
-
-            while (value <= o.max){
-                valueOffset = (value - o.majorTicksOffset)*o.majorTicksFactor;
-                if (valueOffset % o.tickDistanceNum === 0){
-                    valueP = (value-o.min)*o.percentProValue;
-                    if (valueOffset % o.majorTickDistanceNum === 0){
-                        //add major tick and text/label
-                        this.appendTick( valueP, tickOptions );
-                        this.appendLabel( valueP, value, textOptions );
-                    }
-                    else
-                        if (o.showMinorTicks)
-                            //Add minor tick
-                            this.appendTick( valueP, { minor:true } );
-                    step = o.tickDistanceNum;
-                }
-                value += step;
-            }
-
-            //Append colors on the grid
-            if (this.options.gridColors)
-                this.appendGridColors( this.options.gridColors );
-
-            this.postAppendGrid();
-        },
-
-        /*******************************************************************
-        addGridColor
-        *******************************************************************/
-        appendGridColors: function( gridColors ){
-            var fromValue,
-                toValue  = this.options.min,
-                i,
-                gridColor,
-                percentFactor = 100 / (this.options.max - this.options.min);
-
-
-            for (i=0; i<gridColors.length; i++ ){
-                gridColor = gridColors[i];
-                if ( (gridColor.value === null) || (gridColor.value < this.options.min) || (gridColor.value > this.options.max) ){
-                    //add triangle to the left or right
-                    var $span = $('<span/>')
-                                    .addClass( 'grid-color')
-                                    .appendTo( this.$currentGridContainer );
-                    if (gridColor.value > this.options.max)
-                        $span
-                            .addClass('gt-max')
-                            .css('border-left-color', gridColor.color);
-                    else
-                        $span
-                            .addClass('lt-min')
-                            .css('border-right-color', gridColor.color);
-                }
-                else {
-                    fromValue = gridColor.fromValue !== undefined ? gridColor.fromValue : toValue;
-                    toValue = gridColor.value;
-
+        //append() - Create and append this.$handle and $.marker
+        append: function( $container ){
+            //Append handle
+            if (this.$handle)
+                this.$handle =
                     $('<span/>')
-                        .addClass('grid-color' + (i%2?' to':' from'))
-                        .css({
-                            'left'            : percentFactor*(fromValue - this.options.min) + '%',
-                            'width'           : percentFactor*(toValue-fromValue) + '%',
-                            'background-color': gridColor.color
-                           })
-                        .appendTo( this.$currentGridContainer );
+                        .addClass('handle '+this.id)
+                        .addClass(this.handleClassName)
+                        .css( this.handleCSS )
+                        .appendTo( $container );
+
+            //Append marker
+            if (this.marker){
+                this.marker = {};
+                //Outer div
+                this.marker.$outer =
+                    $('<div/>')
+                        .addClass('marker-outer')
+                        .addClass(this.markerClassName)
+                        .appendTo($container);
+                //Inner div
+                this.marker.$inner =
+                        $('<div/>')
+                            .addClass('marker')
+                            .appendTo(this.marker.$outer);
+                this.marker.$text =
+                        $('<span/>')
+                            .addClass('marker-text')
+                            .attr( this.markerData )
+                            .appendTo(this.marker.$inner);
+            }
+            this.appended = true;
+            return this;
+        },
+
+        //remove
+        remove: function(){
+            if (!this.appended) return;
+            if (this.$handle){
+                this.$handle.remove();
+                this.$handle = true;
+            }
+            if (this.marker.$outer){
+                this.marker.$outer.remove();
+                this.marker = true;
+            }
+            this.appended = false;
+        },
+
+        //update()
+        //Set the position of $handle and $marker and update the content of $marker
+        update: function( force ){
+            if (!this.appended) return;
+            var leftPercent = this.getLeftPosition() + '%';
+
+            if (force || (leftPercent != this.lastLeftPercent)){
+                this.lastLeftPercent = leftPercent;
+                if (this.$handle){
+                    this.$handle.css('left', leftPercent);
                 }
+                if (this.marker){
+                    //Set marker content
+                    this.marker.$text.html( this.getMarkerText() );
+
+                    //Set marker position
+                    this.marker.$outer.css('left', leftPercent);
+
+                    //Force all handles overlapped by this to update
+                    if (!force)
+                        $.each( this.overlapHandleList, function( index, handle ){
+                            handle.update( true );
+                        });
+
+                    //Set marker visibility
+                    this.marker.$outer.css('visibility', this.markerIsHidden() ? 'hidden' : 'visible');
+                }
+            }
+            return this;
+        },
+
+        //onFocus - overwriten for individual handle-types
+        onFocus: function(){
+            if (!this.appended) return;
+            this.$handle.addClass('hover');
+            if (this.marker && this.marker.$outer)
+                this.marker.$outer.addClass('hover');
+
+        },
+
+        //onBlur - overwriten for individual handle-types
+        onBlur: function(){
+            if (!this.appended) return;
+            this.$handle.removeClass('hover');
+            if (this.marker && this.marker.$outer)
+                this.marker.$outer.removeClass('hover');
+        },
+
+        //getMarkerText
+        getLeftPosition: function(){
+            return this.value.getPercent();
+        },
+
+        //getMarkerText
+        getMarkerText: function(){
+            return this.slider.decorate( this.slider._prettify( this.value.getValue() ) );
+        },
+
+        //markerIsHidden: return true if the marker is overlapping any of the markers in YYY
+        markerIsHidden: function(){
+            var thisMarker$text = this.marker.$text,
+                result = false;
+            $.each( this.overlappingHandleList, function( index, handle ){
+                result = result || elementsOverlapping( thisMarker$text, handle.marker.$text );
+            });
+            return result;
+        }
+
+    };
+
+
+    ns.SliderHandle = SliderHandle;
+    ns.sliderHandle = function( options ){
+        return new ns.SliderHandle( options );
+    };
+
+}(this/*, document*/));
+
+;
+/****************************************************************************
+jquery-base-slider-public.js
+****************************************************************************/
+(function ($, window/*, document, undefined*/) {
+    "use strict";
+
+    $.extend(window.BaseSlider.prototype, {
+        /*******************************************************************
+        SET VALUES (TO, FROM, PIN ETC.)
+        *******************************************************************/
+
+        /*******************************************************************
+        setAnyValue
+        *******************************************************************/
+        setAnyValue: function( id, value ){
+            if (this.handles[id]){
+                this.handles[id].value.setValue( value );
+
+                this.updateHandlesAndLines();
+                this.onChange();
             }
         },
 
+        /*******************************************************************
+        setValue, setFromValue, setToValue
+        *******************************************************************/
+        setValue    : function( value ) {this.setAnyValue( this.options.singleHandleId, value );},
+        setFromValue: function( value ) { this.setAnyValue( 'from',   value ); },
+        setToValue  : function( value ) { this.setAnyValue( 'to',     value ); },
 
         /*******************************************************************
-        ********************************************************************
+        setPin
+        *******************************************************************/
+        setPin: function( value, color, icon ) {
+            if (!this.options.hasPin) return;
+            if (value !== null)
+                this.handles.pin.value.setValue( value, true );
+
+            this.options.pinColor = color || this.options.pinColor || 'black';
+
+            var oldIcon = this.options.pinIcon || '';
+            this.options.pinIcon = icon || this.options.pinIcon || 'fa-map-marker';
+
+            this.handles.pin.$handle
+                .css('color', this.options.pinColor)
+                .removeClass( oldIcon )
+                .addClass( this.options.pinIcon );
+
+            this.updateHandlesAndLines();
+        },
+
+        /*******************************************************************
         PUBLIC METHODS
-        ********************************************************************
         *******************************************************************/
 
         /*******************************************************************
@@ -30944,19 +30403,148 @@ if (typeof define === 'function' && define.amd) {
             this.input = null;
             this.options = null;
         }
-    }; //end of BaseSlider.prototype
+
+    }); //end of BaseSlider.prototype
+
+}(jQuery, this, document));
+
+;
+/****************************************************************************
+    jquery-base-slider-value,
+
+    (c) 2015, FCOO
+
+    https://github.com/fcoo/jquery-base-slider
+    https://github.com/fcoo
+
+****************************************************************************/
+(function (window/*, document, undefined*/) {
+    "use strict";
+
+    //Create baseSlider-namespace
+	window._baseSlider = window._baseSlider || {};
+	var ns = window._baseSlider;
+
+    /*******************************************************************
+    toFixed
+    Round num to 5 digits
+    *******************************************************************/
+    function toFixed( num ) {
+        return +num.toFixed(5);
+    }
 
 
-    $.fn.baseSlider = function (options) {
-        return this.each(function() {
-            if (!$.data(this, "baseSlider")) {
-                $.data(this, "baseSlider", new window.BaseSlider(this, options, pluginCount++));
+    /*******************************************************************
+    SliderValue
+    Object to store and alter "value" releated to the slider
+    The object contains the following items:
+        value   : The actual value ,
+        percent : The value as percent of the total slider width
+    *******************************************************************/
+    var SliderValue = function( options ){
+        this.slider = options.slider;
+        this.valueOffset = this.slider.options.min;
+        this.valueRange = this.slider.options.max - this.valueOffset;
+        this.percentOffset = 0;
+        this.percentRange = 100;
+        this.adjustToStep = !!options.adjustToStep;
+        this.fixed = !!options.fixed;
+        this.fixedValue = options.value;
+        this.value   = 0;
+        this.percent = 0;
+        this.minList = [];
+        this.maxList = [];
+
+        var _this = this;
+        $.each( options.minList || [], function( index, sliderValueMin ){ _this.addMin( sliderValueMin ); });
+        $.each( options.maxList || [], function( index, sliderValueMax ){ _this.addMax( sliderValueMax ); });
+
+        this.setValue( options.value );
+    };
+
+    SliderValue.prototype = {
+        //addMin( sliderValue, minDistance )
+        //Add sliderValue to list of SliderValue that this must allways be greater than or equal to
+        addMin: function( sliderValue, minDistance ){
+            if (sliderValue === null) return this;
+            if ($.isNumeric(sliderValue))
+                sliderValue = new SliderValue({ value: sliderValue, slider: this.slider });
+            this.minList.push( {sliderValue: sliderValue, minDistance: minDistance || 0} );
+            this.update();
+            return this;
+        },
+
+        //addMax( sliderValue, minDistance )
+        //Add sliderValue to list of SliderValue that this must allways be less than or equal to
+        addMax: function( sliderValue, minDistance ){
+            if (sliderValue === null) return this;
+            if ($.isNumeric(sliderValue))
+                sliderValue = new SliderValue({ value: sliderValue, slider: this.slider });
+            this.maxList.push( {sliderValue: sliderValue, minDistance: minDistance || 0} );
+            this.update();
+            return this;
+        },
+
+        setValue: function( newValue, isFixed ){
+            this.value = newValue;
+            if (isFixed && this.fixed)
+                this.fixedValue = newValue;
+            this.update();
+            return this;
+        },
+
+        setPercent: function( newPercent ){
+            this.setValue( this.valueRange*(newPercent - this.percentOffset)/this.percentRange + this.valueOffset );
+        },
+
+        update: function(){
+
+            if (this.fixed)
+                this.value = this.fixedValue;
+            else {
+                //Adjust this.value with respect to {sliderValue,minDistance} in this.minList
+                var _this = this;
+                $.each( this.minList, function( index, rec ){
+                    if (rec.sliderValue)
+                        _this.value = Math.max( _this.value, rec.sliderValue.value + rec.minDistance );
+                });
+                //Adjust this.value with respect to {sliderValue,minDistance} in this.maxList
+                $.each( this.maxList, function( index, rec ){
+                    if (rec.sliderValue)
+                        _this.value = Math.min( _this.value, rec.sliderValue.value - rec.minDistance );
+                });
+
+                //Adjust this.value with respect to step and stepOffset
+                if (this.adjustToStep){
+                    var offset = this.slider.options.min + this.slider.options.stepOffset;
+                    this.value -= offset;
+                    this.value = this.slider.options.step * Math.round( this.value/this.slider.options.step );
+                    this.value += offset;
+                }
             }
-        });
+
+            //Calculate precent
+            this.percent = this.percentRange*(this.value - this.valueOffset)/this.valueRange + this.percentOffset;
+
+            return this;
+        },
+
+        getValue: function(){
+            return toFixed( this.value );
+        },
+
+        getPercent: function( inclUnit ){
+            return toFixed( this.percent ) + (inclUnit ? '%' : 0);
+        },
     };
 
 
-}(jQuery, this, document));
+    ns.SliderValue = SliderValue;
+    ns.sliderValue = function( options ){
+        return new ns.SliderValue( options );
+    };
+
+}(this/*, document*/));
 
 ;
 /****************************************************************************
@@ -31021,6 +30609,11 @@ if (typeof define === 'function' && define.amd) {
 
         _cbxSet: function( selected, dontCallOnChange, semiSelected, semiSelectedValue ){
             var options = this.data('cbx_options');
+
+            //Allow selected to be a function
+            if (typeof selected === "function")
+                selected = selected();
+
             options.selected = !!selected;
 
             var $elements = options.selector ? this.children( options.selector ) : this;
@@ -40220,7 +39813,6 @@ return index;
     https://github.com/FCOO
 
 ****************************************************************************/
-
 (function ($, window, document/*, undefined*/) {
     "use strict";
 
@@ -40233,27 +39825,40 @@ return index;
     //Create namespace
     var ns = window.JqueryScrollContainer = window.JqueryScrollContainer || {};
 
-    var scrollbarWidth = null;
-    window.getScrollbarWidth = function() {
-        if (scrollbarWidth === null){
-            if (typeof document === 'undefined')
-                return 0;
-
-            var body = document.body,
-                box = document.createElement('div'),
-                boxStyle = box.style;
-
-            box.className       = 'jq-scroll-default';
-            boxStyle.position   = 'fixed';
-            boxStyle.left       = 0;
-            boxStyle.visibility = 'hidden';
-            boxStyle.overflowY  = 'scroll';
-            body.appendChild(box);
-            scrollbarWidth = box.getBoundingClientRect().right;
-            body.removeChild(box);
+    //Calc the scrollbar-width when the document is loaded
+    var getScrollbarWidth = window.getScrollbarWidth = function() {
+        if (typeof document === 'undefined'){
+            window.setTimeout( getScrollbarWidth, 1000 );
+            return;
         }
+
+        var body = document.body,
+            box = document.createElement('div'),
+            boxStyle = box.style;
+
+        box.className       = 'jq-scroll-default';
+        boxStyle.position   = 'fixed';
+        boxStyle.left       = 0;
+        boxStyle.visibility = 'hidden';
+        boxStyle.overflowY  = 'scroll';
+        body.appendChild(box);
+        var scrollbarWidth = box.getBoundingClientRect().right;
+        body.removeChild(box);
+
+        //Update to css-var for scrollbars
+        var root = document.querySelector(':root');
+        root.style.setProperty('--jsc-scroll-size', scrollbarWidth+'px');
+        if (scrollbarWidth > 0){
+            root.style.setProperty('--jsc-scroll-padding'     , scrollbarWidth+'px');
+            root.style.setProperty('--jsc-scroll-auto-padding', '0px');
+        }
+
         return scrollbarWidth;
     };
+
+    //Called when document is laoded
+    $(getScrollbarWidth);
+
 
     //Extend $.fn with scrollIntoView
     $.fn.extend({
@@ -40344,7 +39949,7 @@ return index;
         this.addClass('jq-scroll-default');
 
         if (isVertical && options.paddingLeft)
-            this.css('padding-left', window.getScrollbarWidth()+'px' );
+            this.addClass('jq-scroll-padding-left');
 
         //Update scroll-shadow when scrolling
         if (!isBoth)
@@ -48130,7 +47735,7 @@ return index;
 }).call(this);
 ;
 //! moment-timezone.js
-//! version : 0.5.36
+//! version : 0.5.40
 //! Copyright (c) JS Foundation and other contributors
 //! license : MIT
 //! github.com/moment/moment-timezone
@@ -48160,7 +47765,7 @@ return index;
 	// 	return moment;
 	// }
 
-	var VERSION = "0.5.36",
+	var VERSION = "0.5.40",
 		zones = {},
 		links = {},
 		countries = {},
@@ -48822,7 +48427,7 @@ return index;
 	}
 
 	loadData({
-		"version": "2022c",
+		"version": "2022g",
 		"zones": [
 			"Africa/Abidjan|GMT|0|0||48e5",
 			"Africa/Nairobi|EAT|-30|0||47e5",
@@ -48843,25 +48448,28 @@ return index;
 			"America/Fortaleza|-03|30|0||34e5",
 			"America/Asuncion|-03 -04|30 40|01010101010101010101010|1T0r0 1fB0 19X0 1ip0 17b0 1ip0 17b0 1ip0 19X0 1fB0 19X0 1fB0 19X0 1fB0 19X0 1ip0 17b0 1ip0 17b0 1ip0 19X0 1fB0|28e5",
 			"America/Panama|EST|50|0||15e5",
-			"America/Mexico_City|CST CDT|60 50|01010101010101010101010|1T3k0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1lb0 14p0 1nX0|20e6",
+			"America/Mexico_City|CST CDT|60 50|0101010101010|1T3k0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0|20e6",
 			"America/Managua|CST|60|0||22e5",
 			"America/Caracas|-04|40|0||29e5",
 			"America/Lima|-05|50|0||11e6",
 			"America/Denver|MST MDT|70 60|01010101010101010101010|1SSV0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|26e5",
 			"America/Campo_Grande|-03 -04|30 40|010101|1SKr0 1zd0 On0 1HB0 FX0|77e4",
 			"America/Chicago|CST CDT|60 50|01010101010101010101010|1SSU0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|92e5",
-			"America/Chihuahua|MST MDT|70 60|01010101010101010101010|1T3l0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1lb0 14p0 1nX0|81e4",
+			"America/Chihuahua|MST MDT CST|70 60 60|0101010101012|1T3l0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0|81e4",
+			"America/Ciudad_Juarez|MST MDT CST|70 60 60|010101010101201010101010|1SSV0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1wn0 cm0 EP0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|",
 			"America/Phoenix|MST|70|0||42e5",
 			"America/Whitehorse|PST PDT MST|80 70 70|010101012|1SSW0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1z90|23e3",
 			"America/New_York|EST EDT|50 40|01010101010101010101010|1SST0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|21e6",
 			"America/Los_Angeles|PST PDT|80 70|01010101010101010101010|1SSW0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|15e6",
 			"America/Halifax|AST ADT|40 30|01010101010101010101010|1SSS0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|39e4",
-			"America/Godthab|-03 -02|30 20|01010101010101010101010|1T0p0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0|17e3",
+			"America/Godthab|-03 -02|30 20|01010101010101|1T0p0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0|17e3",
 			"America/Grand_Turk|AST EDT EST|40 40 50|012121212121212121212|1Vkv0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|37e2",
 			"America/Havana|CST CDT|50 40|01010101010101010101010|1SSR0 1zc0 Oo0 1zc0 Oo0 1zc0 Oo0 1zc0 Rc0 1zc0 Oo0 1zc0 Oo0 1zc0 Oo0 1zc0 Oo0 1zc0 Oo0 1zc0 Rc0 1zc0|21e5",
+			"America/Mazatlan|MST MDT|70 60|0101010101010|1T3l0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0|44e4",
 			"America/Metlakatla|AKST AKDT PST|90 80 80|010120101010101010101010|1SSX0 1zb0 Op0 1zb0 uM0 jB0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|14e2",
 			"America/Miquelon|-03 -02|30 20|01010101010101010101010|1SSR0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|61e2",
 			"America/Noronha|-02|20|0||30e2",
+			"America/Ojinaga|MST MDT CST CDT|70 60 60 50|01010101010123232323232|1SSV0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1wn0 Rc0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0|23e3",
 			"America/Santiago|-03 -04|30 40|01010101010101010101010|1Tk30 Ap0 1Nb0 Ap0 1zb0 11B0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 11B0 1qL0 11B0 1nX0 11B0 1nX0 11B0 1nX0 11B0|62e5",
 			"America/Sao_Paulo|-02 -03|20 30|010101|1SKq0 1zd0 On0 1HB0 FX0|20e6",
 			"Atlantic/Azores|-01 +00|10 0|01010101010101010101010|1T0p0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0|25e4",
@@ -48875,7 +48483,7 @@ return index;
 			"Europe/Istanbul|+03|-30|0||13e6",
 			"Antarctica/Troll|+00 +02|0 -20|01010101010101010101010|1T0p0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0|40",
 			"Asia/Dhaka|+06|-60|0||16e6",
-			"Asia/Amman|EET EEST|-20 -30|01010101010101010101010|1T2m0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 LA0 1C00 LA0 1C00 Oo0 1zc0 Oo0 1C00 LA0 1C00 LA0 1C00|25e5",
+			"Asia/Amman|EET EEST +03|-20 -30 -30|0101010101012|1T2m0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 LA0 1C00|25e5",
 			"Asia/Kamchatka|+12|-c0|0||18e4",
 			"Asia/Dubai|+04|-40|0||39e5",
 			"Asia/Beirut|EET EEST|-20 -30|01010101010101010101010|1T0m0 1qL0 WN0 1qL0 11B0 1nX0 11B0 1nX0 11B0 1qL0 WN0 1qL0 WN0 1qL0 11B0 1nX0 11B0 1nX0 11B0 1nX0 11B0 1qL0|22e5",
@@ -48884,9 +48492,9 @@ return index;
 			"Asia/Chita|+09|-90|0||33e4",
 			"Asia/Shanghai|CST|-80|0||23e6",
 			"Asia/Colombo|+0530|-5u|0||22e5",
-			"Asia/Damascus|EET EEST|-20 -30|01010101010101010101010|1T2m0 1nX0 11B0 1nX0 11B0 1nX0 11B0 1qL0 WN0 1qL0 WN0 1qL0 11B0 1nX0 11B0 1nX0 11B0 1qL0 WN0 1qL0 WN0 1qL0|26e5",
+			"Asia/Damascus|EET EEST +03|-20 -30 -30|0101010101012|1T2m0 1nX0 11B0 1nX0 11B0 1nX0 11B0 1qL0 WN0 1qL0 WN0 1qL0|26e5",
 			"Asia/Famagusta|+03 EET EEST|-30 -20 -30|0121212121212121212121|1Urd0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0|",
-			"Asia/Gaza|EET EEST|-20 -30|01010101010101010101010|1SXX0 1qL0 WN0 1qL0 11c0 1on0 11B0 1o00 11A0 1qo0 XA0 1q00 XA0 1q00 12o0 1nc0 12o0 1nc0 12o0 1nc0 12o0 1q00|18e5",
+			"Asia/Gaza|EET EEST|-20 -30|01010101010101010101010|1SXX0 1qL0 WN0 1qL0 11c0 1on0 11B0 1o00 11A0 1qo0 XA0 1qp0 WN0 1qL0 11B0 1nX0 11B0 1nX0 11B0 1nX0 11B0 1qL0|18e5",
 			"Asia/Hong_Kong|HKT|-80|0||73e5",
 			"Asia/Jakarta|WIB|-70|0||31e6",
 			"Asia/Jayapura|WIT|-90|0||26e4",
@@ -48934,7 +48542,7 @@ return index;
 			"MET|MET MEST|-10 -20|01010101010101010101010|1T0p0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0|",
 			"Pacific/Chatham|+1345 +1245|-dJ -cJ|01010101010101010101010|1T320 1a00 1fA0 1cM0 1fA0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00 1io0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00|600",
 			"Pacific/Apia|+14 +13|-e0 -d0|0101010101|1T320 1a00 1fA0 1cM0 1fA0 1a00 1fA0 1a00 1fA0|37e3",
-			"Pacific/Fiji|+13 +12|-d0 -c0|010101010101010101010|1Swe0 1VA0 s00 1VA0 s00 20o0 pc0 2hc0 bc0 4q00 pc0 20o0 pc0 20o0 pc0 20o0 s00 1VA0 s00 20o0|88e4",
+			"Pacific/Fiji|+13 +12|-d0 -c0|0101010101|1Swe0 1VA0 s00 1VA0 s00 20o0 pc0 2hc0 bc0|88e4",
 			"Pacific/Guam|ChST|-a0|0||17e4",
 			"Pacific/Marquesas|-0930|9u|0||86e2",
 			"Pacific/Pago_Pago|SST|b0|0||37e2",
@@ -49034,13 +48642,10 @@ return index;
 			"America/Chicago|Canada/Central",
 			"America/Chicago|US/Central",
 			"America/Chicago|US/Indiana-Starke",
-			"America/Chihuahua|America/Mazatlan",
-			"America/Chihuahua|Mexico/BajaSur",
 			"America/Denver|America/Boise",
 			"America/Denver|America/Cambridge_Bay",
 			"America/Denver|America/Edmonton",
 			"America/Denver|America/Inuvik",
-			"America/Denver|America/Ojinaga",
 			"America/Denver|America/Shiprock",
 			"America/Denver|America/Yellowknife",
 			"America/Denver|Canada/Mountain",
@@ -49111,6 +48716,7 @@ return index;
 			"America/Managua|America/Swift_Current",
 			"America/Managua|America/Tegucigalpa",
 			"America/Managua|Canada/Saskatchewan",
+			"America/Mazatlan|Mexico/BajaSur",
 			"America/Mexico_City|America/Bahia_Banderas",
 			"America/Mexico_City|America/Merida",
 			"America/Mexico_City|America/Monterrey",
@@ -49459,7 +49065,7 @@ return index;
 			"BW|Africa/Maputo Africa/Gaborone",
 			"BY|Europe/Minsk",
 			"BZ|America/Belize",
-			"CA|America/St_Johns America/Halifax America/Glace_Bay America/Moncton America/Goose_Bay America/Toronto America/Nipigon America/Thunder_Bay America/Iqaluit America/Pangnirtung America/Winnipeg America/Rainy_River America/Resolute America/Rankin_Inlet America/Regina America/Swift_Current America/Edmonton America/Cambridge_Bay America/Yellowknife America/Inuvik America/Dawson_Creek America/Fort_Nelson America/Whitehorse America/Dawson America/Vancouver America/Panama America/Puerto_Rico America/Phoenix America/Blanc-Sablon America/Atikokan America/Creston",
+			"CA|America/St_Johns America/Halifax America/Glace_Bay America/Moncton America/Goose_Bay America/Toronto America/Iqaluit America/Winnipeg America/Resolute America/Rankin_Inlet America/Regina America/Swift_Current America/Edmonton America/Cambridge_Bay America/Yellowknife America/Inuvik America/Dawson_Creek America/Fort_Nelson America/Whitehorse America/Dawson America/Vancouver America/Panama America/Puerto_Rico America/Phoenix America/Blanc-Sablon America/Atikokan America/Creston",
 			"CC|Asia/Yangon Indian/Cocos",
 			"CD|Africa/Maputo Africa/Lagos Africa/Kinshasa Africa/Lubumbashi",
 			"CF|Africa/Lagos Africa/Bangui",
@@ -49577,7 +49183,7 @@ return index;
 			"MU|Indian/Mauritius",
 			"MV|Indian/Maldives",
 			"MW|Africa/Maputo Africa/Blantyre",
-			"MX|America/Mexico_City America/Cancun America/Merida America/Monterrey America/Matamoros America/Mazatlan America/Chihuahua America/Ojinaga America/Hermosillo America/Tijuana America/Bahia_Banderas",
+			"MX|America/Mexico_City America/Cancun America/Merida America/Monterrey America/Matamoros America/Chihuahua America/Ciudad_Juarez America/Ojinaga America/Mazatlan America/Bahia_Banderas America/Hermosillo America/Tijuana",
 			"MY|Asia/Kuching Asia/Singapore Asia/Kuala_Lumpur",
 			"MZ|Africa/Maputo",
 			"NA|Africa/Windhoek",
@@ -49650,7 +49256,7 @@ return index;
 			"TV|Pacific/Tarawa Pacific/Funafuti",
 			"TW|Asia/Taipei",
 			"TZ|Africa/Nairobi Africa/Dar_es_Salaam",
-			"UA|Europe/Simferopol Europe/Kyiv Europe/Uzhgorod Europe/Zaporozhye",
+			"UA|Europe/Simferopol Europe/Kyiv",
 			"UG|Africa/Nairobi Africa/Kampala",
 			"UM|Pacific/Pago_Pago Pacific/Tarawa Pacific/Honolulu Pacific/Midway Pacific/Wake",
 			"US|America/New_York America/Detroit America/Kentucky/Louisville America/Kentucky/Monticello America/Indiana/Indianapolis America/Indiana/Vincennes America/Indiana/Winamac America/Indiana/Marengo America/Indiana/Petersburg America/Indiana/Vevay America/Chicago America/Indiana/Tell_City America/Indiana/Knox America/Menominee America/North_Dakota/Center America/North_Dakota/New_Salem America/North_Dakota/Beulah America/Denver America/Boise America/Phoenix America/Los_Angeles America/Anchorage America/Juneau America/Sitka America/Metlakatla America/Yakutat America/Nome America/Adak Pacific/Honolulu",
@@ -50102,14 +49708,6 @@ options:
 
     ** SAME AS IN JQUERY-BASE-SLIDER PLUS **
 
-    display:
-        value:
-            tzElement, utcElement, relativeElement  //jQuery-object or String (=search)
-        from:
-            tzElement, utcElement, relativeElement  //jQuery-object or String (=search)
-        to:
-            tzElement, utcElement, relativeElement  //jQuery-object or String (=search)
-
     format:
         showRelative: boolean; If true the grid etc show the relative time ('Now + 2h') Default = false
         showUTC     : boolean; When true a scale for utc is also shown.                 Default = false. Only if showRelative == false
@@ -50164,24 +49762,14 @@ options:
         };
 
     window.TimeSlider = function (input, options, pluginCount) {
-        var _this = this;
-
-        this.VERSION = "6.1.5";
+        this.VERSION = "7.0.2";
 
         //Setting default options
         this.options = $.extend( true, {}, defaultOptions, options );
-        this._updateOptionsFormat();
 
-        this.options.display = this.options.display || {};
-        //Convert options.display.[value | from | to] from selector-string to $-elements (if needed)
-        $.each( ['value', 'from', 'to'], function( index, id ){
-            _this.options.display[id] = _this.options.display[id] || {};
-            $.each( ['tzElement', 'utcElement', 'relativeElement'], function( index, attrId ){
-                var selector = _this.options.display[id][attrId];
-                if ($.type(selector) == 'string')
-                    _this.options.display[id][attrId] = $(selector);
-            });
-        });
+        this.useMomentDateFormat = !(options.format && options.format.date);
+
+        this._updateOptionsFormat();
 
         //Set min/minMoment, max/maxMoment, from/fromMoment, to/toMoment, and value/valueMoment
         var valMom = setValueAndMoment( this.options.min, this.options.minMoment );
@@ -50204,11 +49792,6 @@ options:
             var value = setValueAndMoment( undefined, moment( this.options.stepOffsetMoment ) ).value;
             this.options.stepOffset = (value - this.options.min) % this.options.step;
         }
-
-        //Update display-element onChanging if
-        if (!this.options.onChangeOnDragging)
-            this.preOnChanging =  $.proxy( this.updateDisplay, this );
-
 
         //Create BaseSlider - dont create grid here
         var optionsGrid = this.options.grid;
@@ -50281,7 +49864,6 @@ options:
             this.result.valueMoment = valueToMoment ( this.result.value );
         },
 
-
         /**************************************************************
         appendDateGrid
         ***************************************************************/
@@ -50289,29 +49871,25 @@ options:
             var o = this.options,
                 value,
                 valueP = 0,
-                valueRem = o.stepRem/o.step,
+                valuePx = o.stepPx/o.step,
                 midnights = 0,
                 isFirstMidnight = true,
                 firstMidnightValue = 0,
                 lastMidnightValue = 0,
-                dayRem,
+                dayPx,
                 values = [],
                 dateFormats,
                 dateFormatOk,
                 textWidth;
 
-            this.preAppendGrid();
+            this.preAppendGrid( {labelBetweenTicks: true} );
 
-            this.$currentGridContainer.addClass("label-between-ticks");
             this._prettifyLabel = this._prettifyLabelAbsoluteDate;
 
             //Setting tick at midnight
             value = o.min;
             while (value <= o.max){
-                //Old version: Force midnights tag to be on minor-tick => error on shift to/from DST (Daylight Saving Time)
-                //if ( ((value - this.options.majorTicksOffset) % o.tickDistanceNum === 0) && (this._valueToTzMoment( value, this.options.format.timezone ).hour() === 0) ){
-
-                //New version: Allow midnights tags on every hour regardless if there are a tag
+                //Allow midnights tags on every hour regardless if there are a tag
                 if (this._valueToTzMoment( value, this.options.format.timezone ).hour() === 0){
 
                     midnights++;
@@ -50327,15 +49905,15 @@ options:
                 valueP += o.percentProValue;
             }
 
-            //Find the max width (in rem) of a date-label = dayRem
-            dayRem = valueRem * (
+            //Find the max width (in Px) of a date-label = dayPx
+            dayPx = valuePx * (
                                   midnights === 0 ? o.range :
                                   midnights == 1  ? Math.max( firstMidnightValue - o.min, o.max - firstMidnightValue ) :
                                                     20  //Setting a full day to 20 hours to allow date-string on days up to 20 hours at the ends
-                                ) - this.options.minDistanceRem; // = margin
+                                ) - this.options.minDistance; // = margin
 
             if (!o.format.dateFormat){
-                //Find the format for the date, where all dates is smaller than dayRem
+                //Find the format for the date, where all dates is smaller than dayPx
                 dateFormats = moment.sfDateFormatList( function( code ){
                                 //Include all formats except full weekday or full month
                                 return (code.charAt(0) != 'F') && (code.charAt(1) != 'F');
@@ -50348,10 +49926,10 @@ options:
                     value += 24;
                 }
 
-                //Checking if all dates displayed in dayFormat are samller than the max width for a day = dayRem. Setting this._prettifyLabel will force getTextWidth to use the text directly
+                //Checking if all dates displayed in dayFormat are samller than the max width for a day = dayPx. Setting this._prettifyLabel will force getTextWidth to use the text directly
                 for (var i=0; i<dateFormats.length; i++ ){
                     o.format.dateFormat = dateFormats[i];
-                    dateFormatOk = (this.getTextWidth( values, textOptions ) <= dayRem);
+                    dateFormatOk = (this.getTextWidth( values, textOptions ) <= dayPx);
 
                     if (dateFormatOk)
                       break;
@@ -50378,17 +49956,17 @@ options:
                 else {
                     //first day - check if there are space to put a date-label
                     textWidth = this.getTextWidth( o.min, textOptions );
-                    if ( valueRem*(firstMidnightValue - o.min) >= textWidth ){
+                    if ( valuePx*(firstMidnightValue - o.min) >= textWidth ){
                         //Try to place the date-text under 12 o'clock (noon) but always keep inside the left edge
-                        var minTextValue = o.min + textWidth/2/valueRem;
+                        var minTextValue = o.min + textWidth/2/valuePx;
                         this.appendLabel( o.percentProValue * ( Math.max( minTextValue, firstMidnightValue-12 ) - o.min ), o.min, textOptions );
                     }
 
                     //last day - check if there are space to put a date-label
                     textWidth = this.getTextWidth( o.max, textOptions );
-                    if ( valueRem*(o.max - lastMidnightValue) >= textWidth ){
+                    if ( valuePx*(o.max - lastMidnightValue) >= textWidth ){
                         //Try to place the date-text under 12 o'clock (noon) but always keep inside the right edge
-                        var maxTextValue = o.max - textWidth/2/valueRem;
+                        var maxTextValue = o.max - textWidth/2/valuePx;
                         this.appendLabel( o.percentProValue * ( Math.min( maxTextValue, lastMidnightValue+12 ) - o.min ), o.max, textOptions );
                     }
 
@@ -50456,16 +50034,30 @@ options:
         /**************************************************************
         _updateOptionsFormat
         ***************************************************************/
-        _updateOptionsFormat: function( format ){
-            $.extend( true, this.options.format, format || {}  );
+        _updateOptionsFormat: function( format = {} ){
+            $.extend( true, this.options.format, format );
+
+            var forceFormat = this.useMomentDateFormat ? null : this.options.format.date;
 
             //Merge current moment.simpleFormat.options into this.options.format
             $.extend( true, this.options.format, moment.sfGetOptions() );
 
+            if (forceFormat)
+                this.options.format.date = forceFormat;
+
             //Create the format for the label over the 'dragger'
-            this.options.format.dateHourFormat =
-                (this.options.format.date == 'DMY' ? 'DD-MMM' : 'MMM-DD') + //Dec-24 / 24-Dec
-                ' ' + moment.sfGetTimeFormat();
+            var dateFormat = '';
+
+            switch (this.options.format.date + (this.options.format.showYear ? '_Y' : '')){
+                case 'DMY'  : dateFormat = 'DD. MMM';       break;
+                case 'DMY_Y': dateFormat = 'DD. MMM YYYY';  break;
+                case 'MDY'  : dateFormat = 'MMM DD';        break;
+                case 'MDY_Y': dateFormat = 'MMM DD YYYY';   break;
+                case 'YMD'  : dateFormat = 'MMM DD';        break;
+                case 'YMD_Y': dateFormat = 'YYYY MMM DD';   break;
+            }
+
+            this.options.format.dateHourFormat = dateFormat + ' ' + moment.sfGetTimeFormat();
 
             //Set dateformat = '' to make appendDateGrid find new format
             this.options.format.dateFormat = '';
@@ -50485,37 +50077,11 @@ options:
         ***************************************************************/
         setFormat: function( format ){
             //Reset label-width in case time-format is changed (12h <-> 24h)
-            this.options.maxLabelWidthRem = 0;
+            this.options.maxLabelWidth = 0;
 
             this._updateOptionsFormat( format );
             this.update();
-            this.updateDisplay();
         },
-
-        /**************************************************************
-        updateDisplay
-        Updates the elements with text versions of from-value and to-value as timezone-date, utc-date and relative time
-        ***************************************************************/
-        updateDisplay: function(){
-            var _this = this;
-            $.each( ['value', 'from', 'to'], function(index, id){
-                var value = _this.result[id],
-                    valueList = [
-                        _this._valueToFormat( value, _this.options.format.timezone ),
-                        _this._valueToFormat( value, 'utc' ),
-                        _this._valueToFormat( value )
-                    ];
-                $.each( ['tzElement', 'utcElement', 'relativeElement'], function( index, attrId ){
-                    var $elem = _this.options.display[id][attrId],
-                        text = valueList[index];
-                    if ($elem)
-                        $elem.each( function(){ $(this).text( text ); } );
-                });
-            });
-        },
-
-        preOnChange: function(){ this.updateDisplay(); }
-
     };
     window.TimeSlider.prototype = $.extend( {}, window.BaseSlider.prototype, window.TimeSlider.prototype );
 
@@ -54568,9 +54134,9 @@ module.exports = g;
                     "capitalize"  : "text-capitalize",
 
                     //Weight
-                    "normal"      : "font-weight-normal",
-                    "bold"        : "font-weight-bold",
-                    "italic"      : "font-italic"
+                    "normal"      : "fw-normal",
+                    "bold"        : "fw-bold",
+                    "italic"      : "fst-italic"
                 };
 
             $.each( bsStyleClass, function( style, className ){
@@ -54849,6 +54415,7 @@ module.exports = g;
                 addBorder         = false,
                 buildInsideParent = false,
                 noPadding         = false,
+                isButtonType      = false,
                 noValidation      = false;
 
 
@@ -54858,17 +54425,16 @@ module.exports = g;
                     options[id] = parentOptions[id];
             });
 
-
             var hasPreOrPost = options.prepend || options.before || options.append || options.after;
 
             if (options.type){
                 var type = options.type.toLowerCase();
                 switch (type){
-                    case 'button'                : buildFunc = $.bsButton;                  break;
+                    case 'button'                : buildFunc = $.bsButton;                  isButtonType = true; break;
 
-                    case 'checkboxbutton'        : buildFunc = $.bsCheckboxButton;          break;
-                    case 'standardcheckboxbutton': buildFunc = $.bsStandardCheckboxButton;  break;
-                    case 'iconcheckboxbutton'    : buildFunc = $.bsIconCheckboxButton;      break;
+                    case 'checkboxbutton'        : buildFunc = $.bsCheckboxButton;          isButtonType = true; break;
+                    case 'standardcheckboxbutton': buildFunc = $.bsStandardCheckboxButton;  isButtonType = true; break;
+                    case 'iconcheckboxbutton'    : buildFunc = $.bsIconCheckboxButton;      isButtonType = true; break;
 
                     case 'buttongroup'           : buildFunc = $.bsButtonGroup;             insideFormGroup = true; break;
 
@@ -54877,6 +54443,7 @@ module.exports = g;
                     case 'select'           :   buildFunc = $.bsSelect;             insideFormGroup = true; break;
 
                     case 'selectlist'       :   buildFunc = $.bsSelectList;         break;
+                    case 'selectbutton'     :   buildFunc = $.bsSelectButton;       isButtonType = true; break;
 
                     case 'radiobuttongroup' :   buildFunc = $.bsRadioButtonGroup;   addBorder = true; insideFormGroup = true; break;
                     case 'checkbox'         :   buildFunc = $.bsCheckbox;           insideFormGroup = true; noPadding = true; break;
@@ -54893,7 +54460,6 @@ module.exports = g;
                     case 'conpacttext'      :   buildFunc = buildCompactText;
                                                 options.noLabel = true; options.noVerticalPadding = true;
                                                 insideFormGroup = true; addBorder = true; noValidation = true; break;
-
                     case 'text'             :
                     case 'textarea'         :
                     case 'textbox'          :   insideFormGroup = true;
@@ -54926,6 +54492,14 @@ module.exports = g;
                 }
             }
 
+
+            //Button'ish elemnts get inside a formgroup if there are label or border
+            if (isButtonType)
+                if ((options.label && !options.noLabel) || options.border){
+                    addBorder = true;
+                    insideFormGroup = true;
+                }
+
             if (options.lineBefore || options.lineAfter)
                 insideFormGroup = true;
 
@@ -54951,11 +54525,10 @@ module.exports = g;
                         .toggleClass('line-before',          !!options.lineBefore)
                         .toggleClass('line-after',           !!options.lineAfter)
 
-                        .toggleClass('no-validation',        !!(noValidation || options.noValidation))
+                        .toggleClass('no-validation',        !!(noValidation || options.noValidation))  //HER skal den bruges hvis der bruges tooltips til validation errors?
 
                         .appendTo( $parent );
             }
-// HER>             var $originalParent = $parent;
 
             if (insideInputGroup || hasPreOrPost){
                 //Create element inside input-group
@@ -55205,6 +54778,8 @@ module.exports = g;
                 $contentContainer =
                     $('<div/>')
                         .addClass('accordion-body')
+                        .toggleClass('no-vertical-padding', !!opt.noVerticalPadding)
+                        .toggleClass('no-horizontal-padding', !!opt.noHorizontalPadding)
                         .appendTo( $outer );
 
             //Add footer
@@ -55252,15 +54827,17 @@ module.exports = g;
     };
 
 
+
     //Extend $.fn with method to open a card given by id (string) or index (integer)
     $.fn.bsOpenCard = function( indexOrId ){
         this.addClass('no-transition');
         var $accordionItem =
                 this.children(
                     $.type(indexOrId) == 'number' ?
-                    'div.card:nth-of-type('+(indexOrId+1)+')' :
-                    'div.card[data-user-id="' + indexOrId + '"]'
+                    'div.accordion-item:nth-of-type('+(indexOrId+1)+')' :
+                    'div.accordion-item[data-user-id="' + indexOrId + '"]'
                 );
+
         if ($accordionItem && $accordionItem.length)
             $accordionItem.children('.collapse').collapse('show');
         this.removeClass('no-transition');
@@ -55301,6 +54878,7 @@ module.exports = g;
                 selected            : 'selected',
                 noBorder            : 'no-border',
                 focus               : 'init_focus',
+                truncate            : 'text-truncate',
                 fullWidth           : 'w-100'
             };
 
@@ -55315,6 +54893,10 @@ module.exports = g;
 
         //Add class-name corresponding to options
         var newClass = [options.class || ''];
+
+        if (options._class)
+            newClass.push(options._class);
+
         $.each( optionToClassName, function( id, className ){
             if (options[id] && (!$.isFunction(options[id]) || options[id]()))
                 newClass.push(className);
@@ -55424,8 +55006,15 @@ module.exports = g;
     Bootstrap-button as a checkbox with check-icon in blue box
     **********************************************************/
     $.bsStandardCheckboxButton = function( options = {}){
+        //Clone options to avoid reflux
+        options = $.extend({}, options, {
+            class    : 'allow-zero-selected' + (options.class ? ' '+options.class : ''),
+            modernizr: true,
+        });
+
+
         var icon = [
-                options.type == 'radio' ?
+                ((options.type == 'radio') || options.isRadio || options.radio) ?
                     //Radio-button icons
                     [
                         'fas fa-circle standard-checkbox-checked-color icon-show-for-checked',              //"Blue"/"Semi-selected-orange" background
@@ -55444,12 +55033,6 @@ module.exports = g;
             icon.push(options.icon);
 
         options.icon = options.forceIcon || icon;
-
-        //Clone options to avoid reflux
-        options = $.extend({}, options, {
-            class    : 'allow-zero-selected' + (options.class ? ' '+options.class : ''),
-            modernizr: true,
-        });
 
         if (options.semiSelected)
             options.selected = true;
@@ -55514,22 +55097,28 @@ module.exports = g;
                 baseClass             : 'btn-group',
                 leftClass             : 'btn-group-left', //Class for group when content is left-align
                 centerClass           : '', //Class for group when content is center-align
+                fullWidthClass        : 'btn-group-full-width',
+                centerInParentClass   : 'btn-group-center-in-parent',
                 verticalClassPostfix  : '-vertical',
                 horizontalClassPostfix: '',
                 center                : !options.vertical, //Default: center on horizontal and left on vertical
                 useTouchSize          : true,
                 attr                  : { role: 'group' },
+                inclHeader            : options.vertical,   //Default: Include headers (= items without onClick)
                 buttonOptions         : {
-                    onClick        : options.onClick,
-                    returnFromClick: options.returnFromClick
+                    onClick         : options.onClick,
+                    returnFromClick : options.returnFromClick,
+                    _class          : 'text-truncate'
                 }
             });
 
+
         options.baseClassPostfix = options.vertical ? options.verticalClassPostfix : options.horizontalClassPostfix;
 
-        var result = $('<'+ options.tagName + '/>')
-                        ._bsAddIdAndName( options )
-                        ._bsAddBaseClassAndSize( options );
+        var result = options.container || options.$container || $('<'+ options.tagName + '/>');
+        result
+            ._bsAddIdAndName( options )
+            ._bsAddBaseClassAndSize( options );
 
         //Transfere generel button-options to buttonOptions
         $.each(['square', 'bigSquare', 'bigIcon', 'extraLargeIcon'], function(index, id){
@@ -55552,31 +55141,47 @@ module.exports = g;
         if (options.allowZeroSelected)
             result.addClass( 'allow-zero-selected' );
 
-        if (options.fullWidth)
-            result.addClass('btn-group-full-width');
+        if (options.fullWidthClass && options.fullWidth)
+            result.addClass(options.fullWidthClass);
 
-        if (options.centerInParent)
-            result.addClass('btn-group-center-in-parent');
+        if (options.centerInParentClass && options.centerInParent)
+            result.addClass(options.centerInParentClass);
 
 
         if (options.border)
             result.addClass('btn-group-border');
 
+        if (options.noRoundBorder)
+            result.addClass('btn-group-no-round-border');
+
         if (options.attr)
             result.attr( options.attr );
 
+        var $previousButton = null,
+            spaceAfter     = false;
         $.each( options.list, function(index, buttonOptions ){
 
-            if (buttonOptions.id)
-                $._anyBsButton( $.extend({}, options.buttonOptions, buttonOptions ) )
-                    .appendTo( result );
+           if ((buttonOptions.spaceBefore || buttonOptions.lineBefore || spaceAfter) && $previousButton){
+                $previousButton.addClass('space-after');
+            }
+
+            spaceAfter      = buttonOptions.spaceAfter || buttonOptions.lineAfter;
+            $previousButton = null;
+
+            if (buttonOptions.id || buttonOptions.onClick  || buttonOptions.onChange)
+                $previousButton =
+                    $._anyBsButton( $.extend({}, options.buttonOptions, buttonOptions ) )
+                        .appendTo( result );
             else
-                //Create content as header
-                $('<div/>')
-                    .addClass('header-content-container')
-                    .addClass( buttonOptions.class )
-                    ._bsHeaderAndIcons( {header: buttonOptions} )
-                    .appendTo( result );
+                if (options.inclHeader)
+                    //Create content as header
+                    $('<div/>')
+                        .addClass('btn header-content')
+                        .toggleClass('header-main', !!buttonOptions.mainHeader)
+
+                        .addClass( buttonOptions.class )
+                        ._bsHeaderAndIcons( {header: buttonOptions} )
+                        .appendTo( result );
         });
         return result;
     };
@@ -55625,6 +55230,35 @@ module.exports = g;
         var result = $.bsButtonGroup( options );
 
         result.data('radioGroup', radioGroup );
+
+        return result;
+    };
+
+
+    /**********************************************************
+    bsButtonBar( options ) - create a horizontal group of buttons
+    options:
+        inclHeader : false. If true buttons without id or onClick are included
+        justify    : "start", "end", "center", "between", "around", or "evenly"
+        buttons    : as bsButtonGroup
+    **********************************************************/
+    $.bsButtonBar = function( options ){
+        options =
+            $._bsAdjustOptions( options, {
+                fullWidthClass  : 'w-100',
+                fullWidth       : true,
+                class           : 'm-0 p-0 d-flex flex-row flex-nowrap justify-content-'+(options.justify || options.align || 'center'),
+            }, {
+                baseClass   : 'btn-bar',
+                vertical    : false,
+                center      : true,
+                useTouchSize: true,
+                buttonOptions: {
+                    _class: 'flex-shrink-1 text-truncate'
+                }
+            } );
+
+        var result = $.bsButtonGroup( options );
 
         return result;
     };
@@ -55989,7 +55623,16 @@ module.exports = g;
         this.options.id = 'bsInputId' + inputId++;
     }
 
-    BsModalInput.prototype = {
+
+    /*******************************************************
+    Export to jQuery
+    *******************************************************/
+    $.BsModalInput = BsModalInput;
+    $.bsModalInput = function( options ){
+        return new $.BsModalInput( options );
+    };
+
+    $.BsModalInput.prototype = {
         /*******************************************************
         getElement
         *******************************************************/
@@ -56031,7 +55674,7 @@ module.exports = g;
         /*******************************************************
         setValue
         *******************************************************/
-        setValue: function(value, validate){
+        setValue: function(value){
             var $elem = this.getElement(),
                 isSemiSelected;
 
@@ -56058,7 +55701,10 @@ module.exports = g;
                 case 'standardcheckboxbutton':
                 case 'iconcheckboxbutton'    : $elem._cbxSet(value, true, isSemiSelected, semiSelectedValue); break;
 
-                case 'selectlist'      : this.getRadioGroup().setSelected(value); break;
+                case 'selectlist'  : this.getRadioGroup().setSelected(value); break;
+
+                case 'selectbutton': $elem._bsSelectButton_setValue( value ); break;
+
                 case 'radiobuttongroup': this.getRadioGroup().setSelected(value, false, isSemiSelected, semiSelectedValue); break;
 
                 case 'slider'    :
@@ -56067,7 +55713,7 @@ module.exports = g;
                 case 'hidden'    : $elem.val( value );                  break;
             }
             this.onChanging();
-            return validate ? this.validate() : this;
+            return this;
         },
 
         /*******************************************************
@@ -56077,7 +55723,8 @@ module.exports = g;
             var result;
             switch (this.options.type || 'input'){
                 case 'input'            : result = '';    break;
-                case 'select'           : result = null;  break;
+                case 'select'           :
+                case 'selectbutton'     : result = null;  break;
 
                 case 'checkbox'              :
                 case 'checkboxbutton'        :
@@ -56102,7 +55749,6 @@ module.exports = g;
         resetValue
         *******************************************************/
         resetValue: function( onlyResetValidation ){
-            this.modalForm._resetInputValidation( this );
             if (!onlyResetValidation)
                 return this.setValue( this.getResetValue() );
         },
@@ -56134,6 +55780,9 @@ module.exports = g;
                 case 'selectlist'       : result = this.getRadioGroup().getSelected();  break;
                 case 'radiobuttongroup' : result = this.getRadioGroup().getSelected();  break;
 
+                case 'selectbutton'     : result = $elem._bsSelectButton_getValue(); break;
+
+
                 case 'slider'    :
                 case 'timeslider': result = this._getSliderValue();              break;
 
@@ -56142,21 +55791,6 @@ module.exports = g;
             }
 
             return result === null ? this.getResetValue() : result;
-        },
-
-        /*******************************************************
-        addValidation - Add the validations
-        *******************************************************/
-        addValidation: function(){
-            this.modalForm._addInputValidation( this );
-        },
-
-        /*******************************************************
-        validate
-        *******************************************************/
-        validate: function(){
-            this.modalForm._validateInput( this );
-            return this;
         },
 
         /*******************************************************
@@ -56205,12 +55839,11 @@ module.exports = g;
                     this.getInputGroupContainer().css('visibility', show ? 'visible' : 'hidden');
 
                 this.getElement().prop('disabled', !show);
-
-                this.modalForm._enableInputValidation( this, show );
             }
             return this;
-        },
+        }
     }; //End of BsModalInput.prototype
+
 
     /************************************************************************
     *************************************************************************
@@ -56233,13 +55866,14 @@ module.exports = g;
         this.options.id = this.options.id || 'bsModalFormId' + formId++;
 
         this.options.onClose_user = this.options.onClose || function(){};
+        this.options.onShow = $.proxy( this.onShow, this );
         this.options.onClose = $.proxy( this.onClose, this );
 
         //this.input = simple object with all input-elements. Also convert element-id to unique id for input-element
         this.inputs = {};
 
         var typeList = ['button', 'checkboxbutton', 'standardcheckboxbutton', 'iconcheckboxbutton',
-                        'input', 'select', 'selectlist', 'radiobuttongroup', 'checkbox', 'radio', 'table', 'slider', 'timeslider', 'hidden', 'inputgroup', 'formControlGroup'],
+                        'input', 'select', 'selectlist', 'selectbutton', 'radiobuttongroup', 'checkbox', 'radio', 'table', 'slider', 'timeslider', 'hidden', 'inputgroup', 'formControlGroup'],
 
             //semiSelectedValueTypes = {TYPE_ID:TYPE} TYPE_ID = the types that accept a semi-selected value. TYPE = the $.type result that detect if the value of a element is semi-selected
             semiSelectedValueTypes = {
@@ -56295,24 +55929,21 @@ module.exports = g;
         this.options.show = false; //Only show using method edit(...)
 
         //Create the form
-        this.$form = $('<form/>');
+        var $form = this.$form = $('<form novalidate/>');
         if (this.options.extended && this.options.useExtended){
-            this.$form._bsAppendContent( this.options.extended.content, this.options.contentContext, null, this.options );
-            this.options.extended.content = this.$form;
+            $form._bsAppendContent( this.options.extended.content, this.options.contentContext, null, this.options );
+            this.options.extended.content = $form;
         }
         else {
-            this.$form._bsAppendContent( this.options.content, this.options.contentContext, null, this.options );
-            this.options.content = this.$form;
+            $form._bsAppendContent( this.options.content, this.options.contentContext, null, this.options );
+            this.options.content = $form;
         }
-
-        if (this.options.formValidation)
-            this.$form.addClass('form-validation');
 
         //Create the modal
         this.$bsModal = $.bsModal( this.options );
 
         //Append the hidden submit-button the the form
-        this.$form.append( $hiddenSubmitButton );
+        $form.append( $hiddenSubmitButton );
 
         //Get the button used to submit the form
         var bsModalDialog = this.$bsModal.data('bsModalDialog'),
@@ -56320,16 +55951,17 @@ module.exports = g;
 
         this.$submitButton = $buttons[$buttons.length-1];
 
-        //Add the validator
-        this._addValidation();
 
         //Add the validations
         this._eachInput( function( input ){
-            input.addValidation();
+            if (input.options.validators){
+                input.addValidation();
+                $form.addClass('needs-validation form-validation');
+            }
         });
 
         //Add onSubmit
-        this._addOnSubmit( $.proxy(this.onSubmit, this) );
+        $form.on('submit', $.proxy(this.onSubmit, this) );
 
         return this;
     }
@@ -56358,12 +55990,11 @@ module.exports = g;
             if (tabIndexOrId !== undefined)
                 this.$bsModal.bsSelectTab(tabIndexOrId);
 
-            this.setValues( values, false, true, semiSelected );
+            this.setValues( values, true, semiSelected );
             this.originalValues = this.getValues();
 
             //Reset validation
             this.$bsModal.find(':disabled').prop('disabled', false );
-            this._resetValidation();
 
             this.showOrHide( null );
             this.isCreated = true;
@@ -56386,6 +56017,13 @@ module.exports = g;
             });
 
             return result;
+        },
+
+        /*******************************************************
+        onShow
+        *******************************************************/
+        onShow: function(){
+            this.$form.removeClass('was-validated');
         },
 
         /*******************************************************
@@ -56445,50 +56083,6 @@ module.exports = g;
 
 
         /*******************************************************
-        _addOnSubmit (*)
-        *******************************************************/
-        _addOnSubmit: function( onSubmitFunc ){
-            this.$form.on('submit', onSubmitFunc );
-        },
-
-        /*******************************************************
-        _addValidation (*)
-        *******************************************************/
-        _addValidation: function(){
-        },
-
-        /*******************************************************
-        _resetValidation (*)
-        *******************************************************/
-        _resetValidation: function(){
-        },
-
-        /*******************************************************
-        _addInputValidation (*)
-        *******************************************************/
-        _addInputValidation: function( /*bsModalInput*/ ){
-        },
-
-        /*******************************************************
-        _validateInput (*)
-        *******************************************************/
-        _validateInput: function( /*bsModalInput*/ ){
-        },
-
-        /*******************************************************
-        _resetInputValidation (*)
-        *******************************************************/
-        _resetInputValidation: function( /*bsModalInput*/ ){
-        },
-
-        /*******************************************************
-        _enableInputValidation (*)
-        *******************************************************/
-        _enableInputValidation: function( /*bsModalInput, enabled*/ ){
-        },
-
-
-        /*******************************************************
         _eachInput
         *******************************************************/
         _eachInput: function( func ){
@@ -56522,11 +56116,11 @@ module.exports = g;
         /*******************************************************
         setValues
         *******************************************************/
-        setValues: function(values, validate, resetUndefined){
+        setValues: function(values, resetUndefined){
             this._eachInput( function( input ){
                 var value = values[input.options.userId];
                 if ( value != undefined)
-                    input.setValue(value, validate);
+                    input.setValue(value);
                 else
                     if (resetUndefined)
                         input.resetValue();
@@ -56575,19 +56169,182 @@ module.exports = g;
         onSubmit = called when the form is valid and submitted
         *******************************************************/
         onSubmit: function( event/*, data*/ ){
-            this.options.onSubmit ? this.options.onSubmit( this.getValues() ) : null;
+            var form = this.$form.get(0);
 
-            this.$bsModal._close();
-            this.options.onClose_user();
-
-            event.preventDefault();
+            if (form.checkValidity()) {
+                this.options.onSubmit ? this.options.onSubmit( this.getValues() ) : null;
+                this.$bsModal._close();
+                this.options.onClose_user();
+                event.preventDefault();
+            }
+            else {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            this.$form.addClass('was-validated');
             return false;
         },
 
-    };
+    };  //end of $.BsModalForm.prototype
 }(jQuery, this, document));
 
 
+;
+/****************************************************************************
+jquery-bootstrap-form-validation.js
+
+Sets up default validation
+See
+https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+https://getbootstrap.com/docs/5.2/forms/validation/
+
+****************************************************************************/
+(function ($, i18next, window, document, undefined) {
+	"use strict";
+
+
+    /********************************************************************************
+    In the options for BsModalForm each input can have options.validators =
+        STRING or OBJ or []STRING/OBJ
+    OBJ = {type: STRING, OPTIONS}
+
+    type        OPTIONS
+    required
+    notEmpty
+
+    range       min: NUMBER, max: NUMBER //one or two given
+    length      min: NUMBER, max: NUMBER //one or two given
+    TODO: type        type: STRING
+    TODO: pattern     pattern: STRING
+
+    If a input has more than one validatior the error contains info on all validators
+    Eq. "The field is required - Must be between 1 and 10"
+
+    ********************************************************************************/
+
+    //Extend $.BsModalInput.prototype with methods to add validation to input-elements
+    $.extend($.BsModalInput.prototype, {
+        addValidation: function(){
+            var validators          = this.options.validators,
+                validatorList       = $.isArray(validators) ? validators : [validators],
+                $element            = this.getElement(),
+                $validationTooltip  = this.$validationTooltip =
+                    $('<div/>')
+                        .addClass('invalid-tooltip')
+                        .insertAfter($element);
+
+
+            var errorList   = [],
+                firstError  = {},
+                nextError   = {},
+                prop        = {},
+                attr        = {};
+
+
+            function range(validator, postfix, minText, maxText, minMaxText, exactlyText){
+                var min = validator.min,
+                    max = validator.max;
+                nextError =
+                    min === undefined ? maxText :
+                    max === undefined ? minText :
+                    min == max ? exactlyText :
+                    minMaxText;
+                i18next.languages.forEach(function(lang){
+                    nextError[lang] = nextError[lang] ? nextError[lang].replace('%min', min).replace('%max', max) : '';
+                });
+
+                if (min !== undefined){
+                    attr['min'+postfix] = min;
+                    prop.required = true;
+                }
+
+                if (max !== undefined)
+                    attr['max'+postfix] = max;
+            }
+
+            validatorList.forEach(function(validator){
+                validator = typeof validator == 'string' ? {type: validator} : validator;
+                nextError = '';
+                switch (validator.type.toUpperCase()){
+                    case 'REQUIRED':
+                    case 'NOTEMPTY' :
+                        prop.required = true;
+                        firstError = {da: "Feltet skal udfyldes", en: "The field is required"};
+                        break;
+
+                    case 'RANGE' :
+                         range(validator, '',
+                            {da: 'Skal mindst være %min',         en:'No less that %min'},              //minText
+                            {da: 'Må højest være %max',           en:'No more than %max'},              //maxText
+                            {da: 'Skal være mellem %min og %max', en:'Must be between %min and %max'},  //minMaxText
+                            {da: 'Skal være præcis %min',         en:'Must be exactly %min'}            //exactlyText
+                         );
+                        break;
+
+                    case 'LENGTH' :
+                        range(validator, 'length',
+                            {da: 'Skal mindst være %min tegn lang',         en:'No less that %min char long'},                  //minText
+                            {da: 'Må højest være %max tegn lang',           en:'No more than %max char long'},                  //maxText
+                            {da: 'Skal være mellem %min og %max tegn lang', en:'Must be between %min and %max characters long'},//minMaxText
+                            {da: 'Skal være præcis %min tegn lang',         en:'Must be exactly %mincharacters long'}           //exactlyText
+                        );
+                        break;
+                }
+                if (nextError)
+                    errorList.push(nextError);
+            });
+
+            $element.prop(prop);
+            $element.attr(attr);
+
+            if (firstError)
+                errorList.unshift(firstError);
+            var errorText = {};
+            errorList.forEach(function(error){
+                i18next.languages.forEach(function(lang){
+                    var langText = errorText[lang] || '';
+                    if (error[lang])
+                        langText = langText + (langText.length ? '&nbsp;- ' : '') + error[lang];
+                    errorText[lang] = langText;
+                });
+            });
+            $validationTooltip._bsAddHtml({text: errorText});
+        },
+    });
+
+}(jQuery, this.i18next, this, document));
+
+/*
+required                : Specifies whether a form field needs to be filled in before the form can be submitted.
+minlength and maxlength : Specifies the minimum and maximum length of textual data (strings).
+min and max             : Specifies the minimum and maximum values of numerical input types.
+type                    : Specifies whether the data needs to be a number, an email address, or some other specific preset type.
+pattern                 : Specifies a regular expression that defines a pattern the entered data needs to follow.
+
+
+The following error-messages are taken from form-validation (not used anymore)
+between     : {default: "Please enter a value between %s and %s", notInclusive: "Please enter a value between %s and %s strictly"}
+callback    : {default: "Please enter a valid value"}
+choice      : {default: "Please enter a valid value", less: "Please choose %s options at minimum", more: "Please choose %s options at maximum", between: "Please choose %s - %s options"}
+color       : {default: "Please enter a valid color"}
+creditCard  : {default: "Please enter a valid credit card number"}
+date        : {default: "Please enter a valid date", min: "Please enter a date after %s", max: "Please enter a date before %s", range: "Please enter a date in the range %s - %s"}
+different   : {default: "Please enter a different value"}
+digits      : {default: "Please enter only digits"}
+emailAddress: {default: "Please enter a valid email address"}
+file        : {default: "Please choose a valid file"}
+greaterThan : {default: "Please enter a value greater than or equal to %s", notInclusive: "Please enter a value greater than %s"}
+identical   : {default: "Please enter the same value"}
+integer     : {default: "Please enter a valid number"}
+lessThan    : {default: "Please enter a value less than or equal to %s", notInclusive: "Please enter a value less than %s"}
+notEmpty    : {default: "Please enter a value"}
+numeric     : {default: "Please enter a valid float number"}
+promise     : {default: "Please enter a valid value"}
+regexp      : {default: "Please enter a value matching the pattern"}
+remote      : {default: "Please enter a valid value"}
+stringLength: {default: "Please enter a value with valid length", less: "Please enter less than %s characters", more: "Please enter more than %s characters", between: "Please enter value between %s and %s characters long"}
+uri         : {default: "Please enter a valid URI"}
+*/
 ;
 /****************************************************************************
 	jquery-bootstrap-header.js,
@@ -56701,8 +56458,11 @@ module.exports = g;
                     classAndTitle = mandatoryHeaderIconClassAndTitle[id] || {};
 
                 if (iconOptions && iconOptions.onClick){
+                    var icon = iconOptions.icon || $.bsHeaderIcons[id];
+                    icon = $.isArray(icon) ? icon : [icon];
+
                     $._bsCreateIcon(
-                        iconOptions.icon || $.bsHeaderIcons[id],
+                        icon,
                         $iconContainer,
                         iconOptions.title || classAndTitle.title || '',
                         (iconOptions.className || '') + ' header-icon ' + (classAndTitle.class || '')
@@ -57024,53 +56784,72 @@ options
         });
 
         //Create bsButtonGroup, but without any buttons (for now)
-        var $result = $.bsButtonGroup( $.extend({}, options, {class:'bs-menu-container', center: false, vertical: true, list: [] }) );
+        var $result       = $.bsButtonGroup( $.extend({}, options, {class:'bs-menu-container', center: false, vertical: true, list: [] }) ),
+            $previousItem = null,
+            spaceAfter    = false;
 
         //Append the items
         $.each(list, function(index, itemOptions){
-            var $item = null, radioGroup = null;
+            var $item = null,
+                isItemWithSpaceAfter = false,
+                radioGroup = null;
 
             itemOptions.small = options.small;
 
             switch (itemOptions.type){
-                case 'button':
-                    $item = $.bsButton($.extend(itemOptions, {returnFromClick: true}));
+                case 'button'                :
+                case 'checkboxbutton'        :
+                case 'standardcheckboxbutton':
+                case 'iconcheckboxbutton'    :
+                    $item = $._anyBsButton($.extend(itemOptions, {returnFromClick: true}));
+                    isItemWithSpaceAfter = true;
                     break;
 
                 case 'checkbox':
                     $item = $.bsStandardCheckboxButton(itemOptions);
+                    isItemWithSpaceAfter = true;
                     break;
 
                 case 'radio':
-                    $item = $.bsRadioButtonGroup( $.extend({vertical: true}, itemOptions));
+                    $item = $.bsRadioButtonGroup( $.extend({vertical: true, fullWidth: true}, itemOptions));
                     radioGroup = $item.data('radioGroup');
+                    isItemWithSpaceAfter = true;
                     break;
 
                 case 'content':
-                    $item = itemOptions.content;
+                    var content = itemOptions.content;
+                    if (content instanceof $)
+                        $item = content.clone(true);
+                    else
+                        $item = $('<div/>')._bsAddHtml( content );
                     break;
 
                 default:
+                    //A header
                     $item = $('<div/>')
-                                .addClass('btn-group-header')
+                                .addClass('btn header-content')
+                                .toggleClass('header-main', !!itemOptions.mainHeader)
                                 ._bsAddHtml( itemOptions );
+                    itemOptions.spaceBefore = true;
             }
 
             $item.addClass(itemOptions.class);
 
-            $result.append($item);
+            if (isItemWithSpaceAfter)
+                $item.addClass('text-truncate');
 
-            if (itemOptions.lineBefore)
-                $item = $item.add(
-                    $('<hr>').addClass('before').insertBefore( $item.first() )
-                );
-            if (itemOptions.lineAfter)
-                $item = $item.add(
-                    $('<hr>').addClass('after').insertAfter( $item.last() )
-                );
+            if ((itemOptions.spaceBefore || itemOptions.lineBefore || spaceAfter) && $previousItem){
+                $previousItem.addClass('space-after');
+            }
+            spaceAfter = itemOptions.spaceAfter || itemOptions.lineAfter;
+
+            $previousItem = isItemWithSpaceAfter ? $item : null;
+
+            $result.append($item);
 
             options.list[index].$item = $item;
             options.list[index].radioGroup = radioGroup;
+
         });
         $result.data('bsMenu_options', options);
         var update = $.proxy(updateBsMenu, $result);
@@ -57148,11 +56927,14 @@ options
 (function ($, window/*, document, undefined*/) {
 	"use strict";
 
-    $.bsZIndexModalBackdrop = 1040; // zindexModalBackdrop = 1040, //MUST be equal to $zindex-modal-backdrop in bootstrap/scss/_variables.scss
+    $.bsZIndexModalBackdrop = 1050; //MUST be equal to $zindex-modal-backdrop in bootstrap/scss/_variables.scss
 
     var zindexAllwaysOnTop  = 9999,
         modalBackdropLevels = 0,
-        $modalBackdrop = null;
+
+        $modalBackdrop_current = null,
+        $modalBackdrop = null,
+        $modalTransparentBackdrop = null;
 
     /******************************************************
     $.fn._setModalBackdropZIndex
@@ -57173,20 +56955,30 @@ options
     $._addModalBackdropLevel
     Move the backdrop up in z-index
     ******************************************************/
-    $._addModalBackdropLevel = function(){
+    function addAnyModalBackdropLevel( $modalBD, transparent ){
         modalBackdropLevels++;
 
-        if (!$modalBackdrop)
-            $modalBackdrop =
+        if (!$modalBD)
+            $modalBD =
                 $('<div/>')
                     .append( $('<i/>')._bsAddHtml({icon:'fa-spinner fa-spin'}) )
                     .addClass('global-backdrop')
+                    .toggleClass('transparent', !!transparent)
                     .appendTo( $('body') );
 
-        $modalBackdrop
+        $modalBD
             ._setModalBackdropZIndex( -1 )
             .removeClass('hidden')
             .addClass('show');
+
+        return $modalBD;
+    }
+
+    $._addModalBackdropLevel = function(transparent){
+        if (transparent)
+            $modalBackdrop_current = $modalTransparentBackdrop = addAnyModalBackdropLevel($modalTransparentBackdrop, true);
+        else
+            $modalBackdrop_current = $modalBackdrop = addAnyModalBackdropLevel($modalBackdrop);
     };
 
     /******************************************************
@@ -57194,17 +56986,23 @@ options
     Move the backdrop down in z-index
     ******************************************************/
     $._removeModalBackdropLevel = function( noDelay ){
+        var isTransparentBD = ($modalBackdrop_current === $modalTransparentBackdrop);
+
         modalBackdropLevels--;
 
-        $modalBackdrop._setModalBackdropZIndex( -1 );
-        if (!modalBackdropLevels){
-            $modalBackdrop
+        $modalBackdrop_current._setModalBackdropZIndex( -1 );
+        if (!modalBackdropLevels || isTransparentBD){
+            $modalBackdrop_current
                 .removeClass('show');
-            if (noDelay)
-                $modalBackdrop.addClass('hidden');
+            if (noDelay || isTransparentBD)
+                $modalBackdrop_current.addClass('hidden');
             else
-                window.setTimeout( function(){ $modalBackdrop.addClass('hidden'); }, 2000 );
+                window.setTimeout( function(){ $modalBackdrop_current.addClass('hidden'); }, 2000 );
         }
+
+        if ($modalBackdrop_current === $modalTransparentBackdrop)
+            $modalBackdrop_current = $modalBackdrop;
+
     };
 
 
@@ -57770,7 +57568,7 @@ jquery-bootstrap-modal-promise.js
         currentModal = this;
 
         //Move up the backdrop
-        $._addModalBackdropLevel();
+        $._addModalBackdropLevel(this.bsModal.transparentBackground);
 
         //Add layer for noty on the modal
         $._bsNotyAddLayer();
@@ -57981,6 +57779,21 @@ jquery-bootstrap-modal-promise.js
             options.noHorizontalPadding = true;
         }
 
+
+        //Find the correct alert-XX class from Bootstrap
+        function getAlertClass( options = {}){
+            var result = options.type || '';
+            switch (result){
+                case 'alert'  : result = 'primary'; break;
+                case 'success': result = 'success'; break;
+                case 'warning': result = 'warning'; break;
+                case 'error'  : result = 'danger';  break;
+                case 'info'   : result = 'info';    break;
+                case 'help'   : result = 'light';   break;
+            }
+            return result ? 'alert-'+result : '';
+        }
+
         //Append fixed content (if any)
         //options.fixedContentOptions = options different from content for fixed-content
         var fixedOptions = $.extend({}, options, options.fixedContentOptions || {}),
@@ -57988,13 +57801,13 @@ jquery-bootstrap-modal-promise.js
                 $('<div/>')
                     .addClass('modal-body-fixed')
                     .addClass(className || '')
-                    .addClass(scrollbarClass )
+                    .toggleClass(scrollbarClass, !!options._fixedContentHasScrollClass )
                     .toggleClass('py-0',                        !!fixedOptions.noVerticalPadding)
                     .toggleClass('pt-0',                        !!fixedOptions.noTopPadding)
                     .toggleClass('pb-0',                        !!fixedOptions.noBottomPadding)
                     .toggleClass('px-0',                        !!fixedOptions.noHorizontalPadding)
                     .toggleClass('modal-body-semi-transparent', !!fixedOptions.semiTransparent)
-                    .toggleClass('modal-type-' + options.type,  !!fixedOptions.type)
+                    .addClass( getAlertClass(fixedOptions) )
                     .addClass(options.fixedClassName || '')
                     .appendTo( this );
 
@@ -58009,7 +57822,7 @@ jquery-bootstrap-modal-promise.js
                     .toggleClass('py-0',                         !!options.noVerticalPadding)
                     .toggleClass('px-0',                         !!options.noHorizontalPadding)
                     .toggleClass('modal-body-semi-transparent',  !!options.semiTransparent)
-                    .toggleClass('modal-type-' + options.type,   !!options.type)
+                    .addClass( getAlertClass(options) )
                     .addClass(options.className || '')
                     .appendTo( this );
 
@@ -58072,6 +57885,8 @@ jquery-bootstrap-modal-promise.js
         //this.bsModal contains all created elements
         this.bsModal = {};
         this.bsModal.onChange = options.onChange || null;
+
+        this.bsModal.transparentBackground = !!options.transparentBackground;
 
         //bsModal.cssHeight and bsModal.cssWidth = [size] of { width or height options}
         this.bsModal.cssHeight = {};
@@ -58618,7 +58433,6 @@ jquery-bootstrap-modal-promise.js
         $result.onClose = options.onClose;
 
         //Create as modal and adds methods - only allow close by esc for non-static modal (typical a non-form)
-// HER>         $result.modal({
         new bootstrap.Modal($result, {
            //Name       Value                                   Type                Default Description
            backdrop :   options.static ? "static" : true,   //  boolean or 'static' true	Includes a modal-backdrop element. Alternatively, specify static for a backdrop which doesn't close the modal on click.
@@ -58754,7 +58568,6 @@ jquery-bootstrap-modal-promise.js
     Noty.overrideDefaults({
         theme: 'jquery-bootstrap'
     });
-
 
     var defaultNotyOptions = {
         layout   : 'topCenter',
@@ -58938,7 +58751,7 @@ jquery-bootstrap-modal-promise.js
             //Add footer (if any)
             if (options.footer){
                 $('<div/>')
-                    .addClass('footer-content')
+                    .addClass('modal-footer footer-content')
                     .addClass('text-' + (options.footer.textAlign || 'left'))
                     ._bsAddHtml( options.footer )
                     .insertAfter($body);
@@ -59279,10 +59092,18 @@ jquery-bootstrap-modal-promise.js
                     ._bsAddHtml( options.footer );
 
         //If trigger == 'context' or 'contextmenu' use 'manual' and add event
+        //In Bootstrap 5 'show' -> 'show' do not work => Need to keep track of state
         if ((options.trigger == 'context') || (options.trigger == 'contextmenu')){
             options.trigger = 'manual';
+            this.on('show.bs.popover', function(){
+                $this.popoverShown = true;
+            });
+            this.on('hide.bs.popover', function(){
+                $this.popoverShown = false;
+            });
             this.on('contextmenu.jbs.popover', function(){
-                $this.popover('show');
+                if (!$this.popoverShown)
+                    $this.popover('show');
                 return false;
             });
         }
@@ -59546,10 +59367,21 @@ jquery-bootstrap-modal-promise.js
             $option.prop('label', text);
     }
 
+
+    function bsSelect_onChange( event ){
+        var $select = $(event.target),
+            selectedIndex = $select.get(0).selectedIndex,
+            options = $select.data('bsOptions'),
+            selectedItem = options.optionList[selectedIndex];
+
+        if (options.onChange)
+            $.proxy(options.onChange, options.context)(selectedItem.id, true, $select);
+    }
+
     var selectboxId = 0;
     $.bsSelect = $.bsSelectBox = $.bsSelectbox = function( options ){
 
-        options.items = options.items || options.list;
+        //options.items = options.items || options.list;
         options.list = options.list || options.items;
 
         options =
@@ -59566,6 +59398,8 @@ jquery-bootstrap-modal-promise.js
                     ._bsAddBaseClassAndSize( options )
                     ._bsAddIdAndName( options );
 
+
+        options.optionList = [];
         $.each( options.list, function( index, itemOptions ){
             var $option =
                     itemOptions.id ?
@@ -59576,11 +59410,20 @@ jquery-bootstrap-modal-promise.js
 
             $option
                 .addClass('jb-option')
+                .addClass(itemOptions.textClass)
+                .toggleClass('text-center', !!itemOptions.center)
                 .data('jb-text', itemOptions.text)
                 .appendTo($select);
 
+            if (itemOptions.id)
+                options.optionList.push( itemOptions );
+
             setOptionText( $option );
         });
+
+
+        $select.data('bsOptions', options);
+        $select.on('change', bsSelect_onChange);
 
         //wrap inside a label (if any)
         var $result = options.label ? $select._wrapLabel({ label: options.label }) : $select;
@@ -59591,6 +59434,115 @@ jquery-bootstrap-modal-promise.js
     };
 
 }(jQuery, this.i18next, this, document));
+;
+/****************************************************************************
+	jquery-bootstrap-selectbutton.js,
+
+    bsSelectButton( options ) - create a button that opens a modal with a selectlist
+
+****************************************************************************/
+
+(function ($/*, window, document, undefined*/) {
+	"use strict";
+
+    var selectButtonId = 0;
+    $.bsSelectButton = $.bsSelectbutton = function( options ){
+
+        options.id      = options.id || '_bsSelectButton'+ selectButtonId++,
+        options.text    = options.text || {da:'Vælg...', en:'Select...'};
+        options.onClick = $.fn._bsSelectButton_onClick;
+        options.list    = options.list || options.items;
+        options._class  = (options._class || '') + ' text-truncate btn-select';
+        delete options.items;
+
+        var $result = $.bsButton( options );
+
+        options = $result.data('bsButton_options');
+        options.context = $result,
+        $result.data('bsButton_options', options);
+
+        if (options.selectedId)
+            $result._bsSelectButton_setValue(options.selectedId);
+
+        return $result;
+    };
+
+    /**************************************************
+    Methods for bsSelectButton
+    **************************************************/
+    $.fn._bsSelectButton_setValue = function( value ){
+        var options = this.data('bsButton_options'),
+            selectedItem;
+
+        options.selectedId = value;
+        this.data('bsButton_options', options);
+
+        options.list.forEach( function(item){
+            if (item.id == value)
+                selectedItem = item;
+        });
+
+        if (selectedItem){
+            this
+                .empty()
+                ._bsAddHtml(
+                    $.extend(true,
+                        {textClass: 'text-truncate'},
+                        selectedItem
+                    )
+                );
+
+            if (options.onChange)
+                $.proxy(options.onChange, options.context)(value);
+        }
+
+        return this;
+    };
+
+    $.fn._bsSelectButton_getValue = function(){
+        return this.data('bsButton_options').selectedId;
+    };
+
+    var $selectButton_Modal = null;
+    $.fn._bsSelectButton_onClick = function( /*id, selected, $button*/ ){
+        var options    = this.data('bsButton_options'),
+            selectedId = options.selectedId,
+            list       = $.extend(true, {}, options).list;
+
+        list.forEach(function(item){
+            item.selected = item.id ? item.id == selectedId : false;
+        });
+
+        if ($selectButton_Modal)
+            $selectButton_Modal.remove();
+
+        $selectButton_Modal = $.bsModal({
+            noHeader    : true,
+            closeButton : false,
+            clickable   : true,
+            transparentBackground: true,
+            scroll      : list.length > 5,
+            content: {
+                type         : 'selectlist',
+                allowReselect: true,
+                list         : list,
+                onChange     : $.fn._bsSelectButton_onChange,
+                context      : this,
+                truncate     : true
+            },
+            show: true
+        });
+    };
+
+    /**************************************************
+    **************************************************/
+    $.fn._bsSelectButton_onChange = function( id ){
+        this._bsSelectButton_setValue( id );
+        if ($selectButton_Modal)
+            $selectButton_Modal.close();
+    };
+
+}(jQuery, this, document));
 ;
 /****************************************************************************
 	jquery-bootstrap-selectlist.js,
@@ -59638,7 +59590,8 @@ jquery-bootstrap-modal-promise.js
             var isItem = (itemOptions.id != undefined ),
                 $item = $(isItem ? '<a/>' : '<div/>')
                             .addClass( isItem ? 'dropdown-item' : 'dropdown-header' )
-                            .addClass( options.center ? 'text-center' : '')
+                            .toggleClass( 'text-center',   !!options.center )
+                            .toggleClass( 'text-truncate', !!options.truncate )
                             ._bsAddHtml( itemOptions, false, false, true )
                             .appendTo( $result );
 
@@ -59837,8 +59790,8 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
     $.BSASMODAL.BSTABLE = function( modalOptions = {}){
         var showHeader = this.find('.no-header').length == 0,
             _this      = this,
-            $tableWithHeader,
-            $result, $thead, count;
+            $result,
+            count;
 
         if (showHeader){
             //Clone the header and place them in fixed-body of the modal. Hide the original header by padding the table
@@ -59850,12 +59803,12 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                 _this.sortBy( columnIndex );
             });
 
-            $tableWithHeader =
+            this.$tableWithHeader =
                 $('<table/>')
                     ._bsAddBaseClassAndSize( this.data(dataTableId) )
                     .addClass('table-with-header')
                     .append( this.$theadClone );
-            $thead = this.find('thead');
+            this.$thead = this.find('thead');
             count  = 20;
         }
 
@@ -59864,14 +59817,15 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                             flexWidth        : true,
                             noVerticalPadding: true,
                             content          : this,
-                            fixedContent     : $tableWithHeader
+                            fixedContent     : this.$tableWithHeader,
+                            _fixedContentHasScrollClass: true,      //Internal options to have scroll-bar-margin on fixed content
                         })
                       );
 
         if (showHeader){
             //Using timeout to wait for the browser to update DOM and get height of the header
-            var setHeaderHeight = this.setHeaderHeight = function(){
-                    var height = $tableWithHeader.outerHeight();
+            var setHeaderHeight = function(){
+                    var height = _this.$tableWithHeader.outerHeight();
                     if (height <= 0){
                         count--;
                         if (count){
@@ -59881,23 +59835,14 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                         }
                     }
 
-                    _this.css('margin-top', -height+'px');
-                    setHeaderWidth();
+                    _this.setHeaderWidthAndHeight();
 
                     //Only set header-height once
                     $result.off('shown.bs.modal.table', setHeaderHeight );
-                },
-
-                setHeaderWidth = function(){
-                    $thead.find('th').each(function( index, th ){
-                        _this.$theadClone.find('th:nth-child(' + (index+1) + ')')
-                            .width( $(th).width()+'px' );
-                    });
-                    $tableWithHeader.width( _this.width()+'px' );
                 };
 
             $result.on('shown.bs.modal.table', setHeaderHeight );
-            $thead.resize( setHeaderWidth );
+            this.$thead.resize( $.proxy(this.setHeaderWidthAndHeight, this) );
         }
 
         return $result;
@@ -59924,7 +59869,6 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             if (options.selectable)
                 $tr.attr('id', rowContent.id || 'rowId_'+rowId++);
 
-//HER            var lastSortBy = this.lastSortBy || {};
             var _this = this;
             $.each( options.columns, function( index, columnOptions ){
                 var content = rowContent[columnOptions.id],
@@ -60042,6 +59986,26 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
         },
 
         /**********************************************************
+        setHeaderWidthAndHeight - Set the width of headers in the cloned table and adjust margin-top
+        **********************************************************/
+        setHeaderWidthAndHeight: function(){
+            var _this   = this,
+                options = _this.data(dataTableId);
+
+            if (options.showHeader){
+                this.$thead.find('th').each(function( index, th ){
+                    _this.$theadClone.find('th:nth-child(' + (index+1) + ')')
+                        .width( $(th).width()+'px' );
+                });
+                this.$tableWithHeader.width( this.width()+'px' );
+
+                //Set the margin-top of the table to hide its own header
+                var headerHeight = _this.$tableWithHeader.outerHeight();
+                this.css('margin-top', -headerHeight + 'px');
+            }
+        },
+
+        /**********************************************************
         sortBy - Sort the table
         **********************************************************/
         sortBy: function( idOrIndex, dir ){
@@ -60153,6 +60117,10 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                     }
                 });
             }
+
+            //Re-calc and update width and height of headers
+            this.setHeaderWidthAndHeight();
+
         },
 
         /**********************************************************
@@ -60162,8 +60130,7 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             this.find('tbody tr').removeClass('filter-out');
             if (!dontSort)
                 this._resort();
-            if (this.setHeaderHeight)
-                this.setHeaderHeight();
+            this.setHeaderWidthAndHeight();
             return this;
         },
 
@@ -60207,8 +60174,8 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
             //Sort table again
             this._resort();
 
-            if (this.setHeaderHeight)
-                this.setHeaderHeight();
+            this.setHeaderWidthAndHeight();
+
             return this;
         }
     }; //end of bsTable_prototype = {
@@ -60557,6 +60524,66 @@ TODO:   truncate     : false. If true the column will be truncated. Normally onl
                         }
                     })
                 );
+    };
+
+}(jQuery, this, document));
+;
+/****************************************************************************
+jquery-utilities.js
+
+Utilities for manipulation JSON and other objects
+
+****************************************************************************/
+
+(function ($ /*, window, document, undefined*/) {
+	"use strict";
+
+    /******************************************
+    $.mergeObjects(obj1, obj2)
+    Merge obj2 into obj1. Return the merged version
+    The merge is on all content of objects and tables
+    *******************************************/
+    $.mergeObjects = function mergeObjects(obj1, obj2){
+        function objType( obj ){
+            if ($.isArray(obj)) return 'array';
+            if ($.isPlainObject(obj)) return 'object';
+            if (obj === undefined)  return 'undefined';
+            return 'simple';
+        }
+        function copyObj(obj){
+            return $.extend(true, {}, obj);
+        }
+
+        var type1 = objType(obj1),
+            type2 = objType(obj2),
+            result;
+
+        //If obj2 is undefined => No change
+        if (type2 == 'undefined')
+            return obj1;
+
+        //If the two obj are different types or simple types: Can't merge => obj1 is replaced by obj2
+        if ((type1 != type2) || (type2 == 'simple'))
+            return obj2;
+
+        if (type1 == 'array'){
+            result = [...obj1];
+            for (var i=0; i<obj2.length; i++){
+                if (i < obj1.length)
+                    result[i] = mergeObjects(obj1[i], obj2[i]);
+                else
+                    result.push( copyObj(obj2[i]) );
+            }
+        }
+
+        if (type1 == 'object'){
+            result = copyObj(obj1);
+            $.each(obj2, function(id, value){
+                result[id] = mergeObjects(obj1[id], value);
+            });
+        }
+
+        return result;
     };
 
 }(jQuery, this, document));

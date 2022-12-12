@@ -11,7 +11,8 @@
 
     <link  href="bower_components.css" rel="stylesheet">
     <link  href="demo.css" rel="stylesheet">
-    <link  href="css/fontawesome-all.css" rel="stylesheet">
+    <link  href="fcoo-fontawesome.css" rel="stylesheet">
+
     <style>
         html, body { width:100%; height: 100%}
     </style>
@@ -170,6 +171,7 @@ $('body').on('click', function(){
 });
 */
 $('body').on('contextmenu', function(){
+    fcoo.globalSetting.set('test', 210);
     fcoo.globalSetting.edit();
     return false;
 });
