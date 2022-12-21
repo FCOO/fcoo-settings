@@ -51,7 +51,7 @@
 
     //Global texts
     ns.texts = ns.texts || {};
-    ns.texts.reset = {da:'Nulstil', en:'Reset'};
+    ns.texts.reset = {da:'Gendan', en:'Reset'};
 
 
     /***********************************************
