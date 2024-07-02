@@ -588,7 +588,7 @@
             },
 
             accordionList: [
-                {id: ns.events.LANGUAGECHANGED,       header: {icon: 'fa-comments',       iconClass: 'fa-fw', text: {da: 'Sprog', en: 'Language'}} },
+                {id: ns.events.LANGUAGECHANGED,       header: {icon: 'fa-comments',       iconClass: 'fa-fw', text: {da: 'Sprog (Language)', en: 'Language (Sprog)'}} },
                 {id: ns.events.TIMEZONECHANGED,       header: {icon: 'fa-globe',          iconClass: 'fa-fw', text: {da: 'Tidszone', en: 'Time Zone'}} },
                 {id: ns.events.DATETIMEFORMATCHANGED, header: {icon: 'fa-calendar-alt',   iconClass: 'fa-fw', text: {da: 'Dato og klokkeslæt', en: 'Date and Time'}} },
                 {id: ns.events.LATLNGFORMATCHANGED,   header: {icon: 'fa-map-marker-alt', iconClass: 'fa-fw', text: {da: 'Positioner', en: 'Positions'}} },
