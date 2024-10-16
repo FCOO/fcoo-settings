@@ -23187,7 +23187,7 @@ return jQuery;
     }
   }
 
-  function defer() {
+  const defer = () => {
     let res;
     let rej;
     const promise = new Promise((resolve, reject) => {
@@ -23197,28 +23197,24 @@ return jQuery;
     promise.resolve = res;
     promise.reject = rej;
     return promise;
-  }
-  function makeString(object) {
+  };
+  const makeString = object => {
     if (object == null) return '';
     return '' + object;
-  }
-  function copy(a, s, t) {
+  };
+  const copy = (a, s, t) => {
     a.forEach(m => {
       if (s[m]) t[m] = s[m];
     });
-  }
+  };
   const lastOfPathSeparatorRegExp = /###/g;
-  function getLastOfPath(object, path, Empty) {
-    function cleanKey(key) {
-      return key && key.indexOf('###') > -1 ? key.replace(lastOfPathSeparatorRegExp, '.') : key;
-    }
-    function canNotTraverseDeeper() {
-      return !object || typeof object === 'string';
-    }
+  const cleanKey = key => key && key.indexOf('###') > -1 ? key.replace(lastOfPathSeparatorRegExp, '.') : key;
+  const canNotTraverseDeeper = object => !object || typeof object === 'string';
+  const getLastOfPath = (object, path, Empty) => {
     const stack = typeof path !== 'string' ? path : path.split('.');
     let stackIndex = 0;
     while (stackIndex < stack.length - 1) {
-      if (canNotTraverseDeeper()) return {};
+      if (canNotTraverseDeeper(object)) return {};
       const key = cleanKey(stack[stackIndex]);
       if (!object[key] && Empty) object[key] = new Empty();
       if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -23228,13 +23224,13 @@ return jQuery;
       }
       ++stackIndex;
     }
-    if (canNotTraverseDeeper()) return {};
+    if (canNotTraverseDeeper(object)) return {};
     return {
       obj: object,
       k: cleanKey(stack[stackIndex])
     };
-  }
-  function setPath(object, path, newValue) {
+  };
+  const setPath = (object, path, newValue) => {
     const {
       obj,
       k
@@ -23255,32 +23251,31 @@ return jQuery;
       }
     }
     last.obj[`${last.k}.${e}`] = newValue;
-  }
-  function pushPath(object, path, newValue, concat) {
+  };
+  const pushPath = (object, path, newValue, concat) => {
     const {
       obj,
       k
     } = getLastOfPath(object, path, Object);
     obj[k] = obj[k] || [];
-    if (concat) obj[k] = obj[k].concat(newValue);
-    if (!concat) obj[k].push(newValue);
-  }
-  function getPath(object, path) {
+    obj[k].push(newValue);
+  };
+  const getPath = (object, path) => {
     const {
       obj,
       k
     } = getLastOfPath(object, path);
     if (!obj) return undefined;
     return obj[k];
-  }
-  function getPathWithDefaults(data, defaultData, key) {
+  };
+  const getPathWithDefaults = (data, defaultData, key) => {
     const value = getPath(data, key);
     if (value !== undefined) {
       return value;
     }
     return getPath(defaultData, key);
-  }
-  function deepExtend(target, source, overwrite) {
+  };
+  const deepExtend = (target, source, overwrite) => {
     for (const prop in source) {
       if (prop !== '__proto__' && prop !== 'constructor') {
         if (prop in target) {
@@ -23295,10 +23290,8 @@ return jQuery;
       }
     }
     return target;
-  }
-  function regexEscape(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-  }
+  };
+  const regexEscape = str => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
   var _entityMap = {
     '&': '&amp;',
     '<': '&lt;',
@@ -23307,12 +23300,12 @@ return jQuery;
     "'": '&#39;',
     '/': '&#x2F;'
   };
-  function escape(data) {
+  const escape = data => {
     if (typeof data === 'string') {
       return data.replace(/[&<>"'\/]/g, s => _entityMap[s]);
     }
     return data;
-  }
+  };
   class RegExpCache {
     constructor(capacity) {
       this.capacity = capacity;
@@ -23335,7 +23328,7 @@ return jQuery;
   }
   const chars = [' ', ',', '?', '!', ';'];
   const looksLikeObjectPathRegExpCache = new RegExpCache(20);
-  function looksLikeObjectPath(key, nsSeparator, keySeparator) {
+  const looksLikeObjectPath = (key, nsSeparator, keySeparator) => {
     nsSeparator = nsSeparator || '';
     keySeparator = keySeparator || '';
     const possibleChars = chars.filter(c => nsSeparator.indexOf(c) < 0 && keySeparator.indexOf(c) < 0);
@@ -23349,8 +23342,8 @@ return jQuery;
       }
     }
     return matched;
-  }
-  function deepFind(obj, path) {
+  };
+  const deepFind = function (obj, path) {
     let keySeparator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '.';
     if (!obj) return undefined;
     if (obj[path]) return obj[path];
@@ -23379,11 +23372,8 @@ return jQuery;
       current = next;
     }
     return current;
-  }
-  function getCleanedCode(code) {
-    if (code && code.indexOf('_') > 0) return code.replace('_', '-');
-    return code;
-  }
+  };
+  const getCleanedCode = code => code && code.replace('_', '-');
 
   class ResourceStore extends EventEmitter {
     constructor(data) {
@@ -23461,7 +23451,7 @@ return jQuery;
         silent: false
       };
       for (const m in resources) {
-        if (typeof resources[m] === 'string' || Object.prototype.toString.apply(resources[m]) === '[object Array]') this.addResource(lng, ns, m, resources[m], {
+        if (typeof resources[m] === 'string' || Array.isArray(resources[m])) this.addResource(lng, ns, m, resources[m], {
           silent: true
         });
       }
@@ -23642,7 +23632,7 @@ return jQuery;
       const joinArrays = options.joinArrays !== undefined ? options.joinArrays : this.options.joinArrays;
       const handleAsObjectInI18nFormat = !this.i18nFormat || this.i18nFormat.handleAsObject;
       const handleAsObject = typeof res !== 'string' && typeof res !== 'boolean' && typeof res !== 'number';
-      if (handleAsObjectInI18nFormat && res && handleAsObject && noObject.indexOf(resType) < 0 && !(typeof joinArrays === 'string' && resType === '[object Array]')) {
+      if (handleAsObjectInI18nFormat && res && handleAsObject && noObject.indexOf(resType) < 0 && !(typeof joinArrays === 'string' && Array.isArray(res))) {
         if (!options.returnObjects && !this.options.returnObjects) {
           if (!this.options.returnedObjectHandler) {
             this.logger.warn('accessing an object - but returnObjects options is not enabled!');
@@ -23659,7 +23649,7 @@ return jQuery;
           return r;
         }
         if (keySeparator) {
-          const resTypeIsArray = resType === '[object Array]';
+          const resTypeIsArray = Array.isArray(res);
           const copy = resTypeIsArray ? [] : {};
           const newKeyToUse = resTypeIsArray ? resExactUsedKey : resUsedKey;
           for (const m in res) {
@@ -23677,7 +23667,7 @@ return jQuery;
           }
           res = copy;
         }
-      } else if (handleAsObjectInI18nFormat && typeof joinArrays === 'string' && resType === '[object Array]') {
+      } else if (handleAsObjectInI18nFormat && typeof joinArrays === 'string' && Array.isArray(res)) {
         res = res.join(joinArrays);
         if (res) res = this.extendTranslation(res, keys, options, lastKey);
       } else {
@@ -23794,13 +23784,13 @@ return jQuery;
           ...this.options.interpolation.defaultVariables,
           ...data
         };
-        res = this.interpolator.interpolate(res, data, options.lng || this.language, options);
+        res = this.interpolator.interpolate(res, data, options.lng || this.language || resolved.usedLng, options);
         if (skipOnVariables) {
           const na = res.match(this.interpolator.nestingRegexp);
           const nestAft = na && na.length;
           if (nestBef < nestAft) options.nest = false;
         }
-        if (!options.lng && this.options.compatibilityAPI !== 'v1' && resolved && resolved.res) options.lng = resolved.usedLng;
+        if (!options.lng && this.options.compatibilityAPI !== 'v1' && resolved && resolved.res) options.lng = this.language || resolved.usedLng;
         if (options.nest !== false) res = this.interpolator.nest(res, function () {
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
@@ -23947,9 +23937,7 @@ return jQuery;
     }
   }
 
-  function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
   class LanguageUtil {
     constructor(options) {
       this.options = options;
@@ -23973,6 +23961,15 @@ return jQuery;
     }
     formatLanguageCode(code) {
       if (typeof code === 'string' && code.indexOf('-') > -1) {
+        if (typeof Intl !== 'undefined' && typeof Intl.getCanonicalLocales !== 'undefined') {
+          try {
+            let formattedCode = Intl.getCanonicalLocales(code)[0];
+            if (formattedCode && this.options.lowerCaseLng) {
+              formattedCode = formattedCode.toLowerCase();
+            }
+            if (formattedCode) return formattedCode;
+          } catch (e) {}
+        }
         const specialCases = ['hans', 'hant', 'latn', 'cyrl', 'cans', 'mong', 'arab'];
         let p = code.split('-');
         if (this.options.lowerCaseLng) {
@@ -24026,7 +24023,7 @@ return jQuery;
       if (!fallbacks) return [];
       if (typeof fallbacks === 'function') fallbacks = fallbacks(code);
       if (typeof fallbacks === 'string') fallbacks = [fallbacks];
-      if (Object.prototype.toString.apply(fallbacks) === '[object Array]') return fallbacks;
+      if (Array.isArray(fallbacks)) return fallbacks;
       if (!code) return fallbacks.default || [];
       let found = fallbacks[code];
       if (!found) found = fallbacks[this.getScriptPartFromCode(code)];
@@ -24154,72 +24151,28 @@ return jQuery;
     fc: 22
   }];
   let _rulesPluralsTypes = {
-    1: function (n) {
-      return Number(n > 1);
-    },
-    2: function (n) {
-      return Number(n != 1);
-    },
-    3: function (n) {
-      return 0;
-    },
-    4: function (n) {
-      return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
-    },
-    5: function (n) {
-      return Number(n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5);
-    },
-    6: function (n) {
-      return Number(n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2);
-    },
-    7: function (n) {
-      return Number(n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
-    },
-    8: function (n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : n != 8 && n != 11 ? 2 : 3);
-    },
-    9: function (n) {
-      return Number(n >= 2);
-    },
-    10: function (n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : n < 7 ? 2 : n < 11 ? 3 : 4);
-    },
-    11: function (n) {
-      return Number(n == 1 || n == 11 ? 0 : n == 2 || n == 12 ? 1 : n > 2 && n < 20 ? 2 : 3);
-    },
-    12: function (n) {
-      return Number(n % 10 != 1 || n % 100 == 11);
-    },
-    13: function (n) {
-      return Number(n !== 0);
-    },
-    14: function (n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : n == 3 ? 2 : 3);
-    },
-    15: function (n) {
-      return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
-    },
-    16: function (n) {
-      return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n !== 0 ? 1 : 2);
-    },
-    17: function (n) {
-      return Number(n == 1 || n % 10 == 1 && n % 100 != 11 ? 0 : 1);
-    },
-    18: function (n) {
-      return Number(n == 0 ? 0 : n == 1 ? 1 : 2);
-    },
-    19: function (n) {
-      return Number(n == 1 ? 0 : n == 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3);
-    },
-    20: function (n) {
-      return Number(n == 1 ? 0 : n == 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2);
-    },
-    21: function (n) {
-      return Number(n % 100 == 1 ? 1 : n % 100 == 2 ? 2 : n % 100 == 3 || n % 100 == 4 ? 3 : 0);
-    },
-    22: function (n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : (n < 0 || n > 10) && n % 10 == 0 ? 2 : 3);
-    }
+    1: n => Number(n > 1),
+    2: n => Number(n != 1),
+    3: n => 0,
+    4: n => Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2),
+    5: n => Number(n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5),
+    6: n => Number(n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2),
+    7: n => Number(n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2),
+    8: n => Number(n == 1 ? 0 : n == 2 ? 1 : n != 8 && n != 11 ? 2 : 3),
+    9: n => Number(n >= 2),
+    10: n => Number(n == 1 ? 0 : n == 2 ? 1 : n < 7 ? 2 : n < 11 ? 3 : 4),
+    11: n => Number(n == 1 || n == 11 ? 0 : n == 2 || n == 12 ? 1 : n > 2 && n < 20 ? 2 : 3),
+    12: n => Number(n % 10 != 1 || n % 100 == 11),
+    13: n => Number(n !== 0),
+    14: n => Number(n == 1 ? 0 : n == 2 ? 1 : n == 3 ? 2 : 3),
+    15: n => Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2),
+    16: n => Number(n % 10 == 1 && n % 100 != 11 ? 0 : n !== 0 ? 1 : 2),
+    17: n => Number(n == 1 || n % 10 == 1 && n % 100 != 11 ? 0 : 1),
+    18: n => Number(n == 0 ? 0 : n == 1 ? 1 : 2),
+    19: n => Number(n == 1 ? 0 : n == 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3),
+    20: n => Number(n == 1 ? 0 : n == 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2),
+    21: n => Number(n % 100 == 1 ? 1 : n % 100 == 2 ? 2 : n % 100 == 3 || n % 100 == 4 ? 3 : 0),
+    22: n => Number(n == 1 ? 0 : n == 2 ? 1 : (n < 0 || n > 10) && n % 10 == 0 ? 2 : 3)
   };
   const nonIntlVersions = ['v1', 'v2', 'v3'];
   const intlVersions = ['v4'];
@@ -24231,7 +24184,7 @@ return jQuery;
     many: 4,
     other: 5
   };
-  function createRules() {
+  const createRules = () => {
     const rules = {};
     sets.forEach(set => {
       set.lngs.forEach(l => {
@@ -24242,7 +24195,7 @@ return jQuery;
       });
     });
     return rules;
-  }
+  };
   class PluralResolver {
     constructor(languageUtils) {
       let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -24254,17 +24207,32 @@ return jQuery;
         this.logger.error('Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.');
       }
       this.rules = createRules();
+      this.pluralRulesCache = {};
     }
     addRule(lng, obj) {
       this.rules[lng] = obj;
+    }
+    clearCache() {
+      this.pluralRulesCache = {};
     }
     getRule(code) {
       let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       if (this.shouldUseIntlApi()) {
         try {
-          return new Intl.PluralRules(getCleanedCode(code === 'dev' ? 'en' : code), {
-            type: options.ordinal ? 'ordinal' : 'cardinal'
+          const cleanedCode = getCleanedCode(code === 'dev' ? 'en' : code);
+          const type = options.ordinal ? 'ordinal' : 'cardinal';
+          const cacheKey = JSON.stringify({
+            cleanedCode,
+            type
           });
+          if (cacheKey in this.pluralRulesCache) {
+            return this.pluralRulesCache[cacheKey];
+          }
+          const rule = new Intl.PluralRules(cleanedCode, {
+            type
+          });
+          this.pluralRulesCache[cacheKey] = rule;
+          return rule;
         } catch (err) {
           return;
         }
@@ -24333,7 +24301,7 @@ return jQuery;
     }
   }
 
-  function deepFindWithDefaults(data, defaultData, key) {
+  const deepFindWithDefaults = function (data, defaultData, key) {
     let keySeparator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '.';
     let ignoreJSONStructure = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
     let path = getPathWithDefaults(data, defaultData, key);
@@ -24342,7 +24310,8 @@ return jQuery;
       if (path === undefined) path = deepFind(defaultData, key, keySeparator);
     }
     return path;
-  }
+  };
+  const regexSafe = val => val.replace(/\$/g, '$$$$');
   class Interpolator {
     constructor() {
       let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -24410,9 +24379,6 @@ return jQuery;
       let value;
       let replaces;
       const defaultData = this.options && this.options.interpolation && this.options.interpolation.defaultVariables || {};
-      function regexSafe(val) {
-        return val.replace(/\$/g, '$$$$');
-      }
       const handleFormat = key => {
         if (key.indexOf(this.formatSeparator) < 0) {
           const path = deepFindWithDefaults(data, defaultData, key, this.options.keySeparator, this.options.ignoreJSONStructure);
@@ -24483,7 +24449,7 @@ return jQuery;
       let match;
       let value;
       let clonedOptions;
-      function handleHasOptions(key, inheritedOptions) {
+      const handleHasOptions = (key, inheritedOptions) => {
         const sep = this.nestingOptionsSeparator;
         if (key.indexOf(sep) < 0) return key;
         const c = key.split(new RegExp(`${sep}[ ]*{`));
@@ -24507,7 +24473,7 @@ return jQuery;
         }
         if (clonedOptions.defaultValue && clonedOptions.defaultValue.indexOf(this.prefix) > -1) delete clonedOptions.defaultValue;
         return key;
-      }
+      };
       while (match = this.nestingRegexp.exec(str)) {
         let formatters = [];
         clonedOptions = {
@@ -24543,7 +24509,7 @@ return jQuery;
     }
   }
 
-  function parseFormatStr(formatStr) {
+  const parseFormatStr = formatStr => {
     let formatName = formatStr.toLowerCase().trim();
     const formatOptions = {};
     if (formatStr.indexOf('(') > -1) {
@@ -24557,13 +24523,15 @@ return jQuery;
       } else {
         const opts = optStr.split(';');
         opts.forEach(opt => {
-          if (!opt) return;
-          const [key, ...rest] = opt.split(':');
-          const val = rest.join(':').trim().replace(/^'+|'+$/g, '');
-          if (!formatOptions[key.trim()]) formatOptions[key.trim()] = val;
-          if (val === 'false') formatOptions[key.trim()] = false;
-          if (val === 'true') formatOptions[key.trim()] = true;
-          if (!isNaN(val)) formatOptions[key.trim()] = parseInt(val, 10);
+          if (opt) {
+            const [key, ...rest] = opt.split(':');
+            const val = rest.join(':').trim().replace(/^'+|'+$/g, '');
+            const trimmedKey = key.trim();
+            if (!formatOptions[trimmedKey]) formatOptions[trimmedKey] = val;
+            if (val === 'false') formatOptions[trimmedKey] = false;
+            if (val === 'true') formatOptions[trimmedKey] = true;
+            if (!isNaN(val)) formatOptions[trimmedKey] = parseInt(val, 10);
+          }
         });
       }
     }
@@ -24571,11 +24539,18 @@ return jQuery;
       formatName,
       formatOptions
     };
-  }
-  function createCachedFormatter(fn) {
+  };
+  const createCachedFormatter = fn => {
     const cache = {};
-    return function invokeFormatter(val, lng, options) {
-      const key = lng + JSON.stringify(options);
+    return (val, lng, options) => {
+      let optForCache = options;
+      if (options && options.interpolationkey && options.formatParams && options.formatParams[options.interpolationkey] && options[options.interpolationkey]) {
+        optForCache = {
+          ...optForCache,
+          [options.interpolationkey]: undefined
+        };
+      }
+      const key = lng + JSON.stringify(optForCache);
       let formatter = cache[key];
       if (!formatter) {
         formatter = fn(getCleanedCode(lng), options);
@@ -24583,7 +24558,7 @@ return jQuery;
       }
       return formatter(val);
     };
-  }
+  };
   class Formatter {
     constructor() {
       let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -24640,6 +24615,10 @@ return jQuery;
     format(value, format, lng) {
       let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
       const formats = format.split(this.formatSeparator);
+      if (formats.length > 1 && formats[0].indexOf('(') > 1 && formats[0].indexOf(')') < 0 && formats.find(f => f.indexOf(')') > -1)) {
+        const lastIndex = formats.findIndex(f => f.indexOf(')') > -1);
+        formats[0] = [formats[0], ...formats.splice(1, lastIndex)].join(this.formatSeparator);
+      }
       const result = formats.reduce((mem, f) => {
         const {
           formatName,
@@ -24668,12 +24647,12 @@ return jQuery;
     }
   }
 
-  function removePending(q, name) {
+  const removePending = (q, name) => {
     if (q.pending[name] !== undefined) {
       delete q.pending[name];
       q.pendingCount--;
     }
-  }
+  };
   class Connector extends EventEmitter {
     constructor(backend, store, services) {
       let options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
@@ -24739,12 +24718,13 @@ return jQuery;
       const lng = s[0];
       const ns = s[1];
       if (err) this.emit('failedLoading', lng, ns, err);
-      if (data) {
+      if (!err && data) {
         this.store.addResourceBundle(lng, ns, data, undefined, undefined, {
           skipCopy: true
         });
       }
       this.state[name] = err ? -1 : 2;
+      if (err && data) this.state[name] = 0;
       const loaded = {};
       this.queue.forEach(q => {
         pushPath(q.loaded, [lng], ns);
@@ -24894,69 +24874,67 @@ return jQuery;
     }
   }
 
-  function get() {
-    return {
-      debug: false,
-      initImmediate: true,
-      ns: ['translation'],
-      defaultNS: ['translation'],
-      fallbackLng: ['dev'],
-      fallbackNS: false,
-      supportedLngs: false,
-      nonExplicitSupportedLngs: false,
-      load: 'all',
-      preload: false,
-      simplifyPluralSuffix: true,
-      keySeparator: '.',
-      nsSeparator: ':',
-      pluralSeparator: '_',
-      contextSeparator: '_',
-      partialBundledLanguages: false,
-      saveMissing: false,
-      updateMissing: false,
-      saveMissingTo: 'fallback',
-      saveMissingPlurals: true,
-      missingKeyHandler: false,
-      missingInterpolationHandler: false,
-      postProcess: false,
-      postProcessPassResolved: false,
-      returnNull: false,
-      returnEmptyString: true,
-      returnObjects: false,
-      joinArrays: false,
-      returnedObjectHandler: false,
-      parseMissingKeyHandler: false,
-      appendNamespaceToMissingKey: false,
-      appendNamespaceToCIMode: false,
-      overloadTranslationOptionHandler: function handle(args) {
-        let ret = {};
-        if (typeof args[1] === 'object') ret = args[1];
-        if (typeof args[1] === 'string') ret.defaultValue = args[1];
-        if (typeof args[2] === 'string') ret.tDescription = args[2];
-        if (typeof args[2] === 'object' || typeof args[3] === 'object') {
-          const options = args[3] || args[2];
-          Object.keys(options).forEach(key => {
-            ret[key] = options[key];
-          });
-        }
-        return ret;
-      },
-      interpolation: {
-        escapeValue: true,
-        format: value => value,
-        prefix: '{{',
-        suffix: '}}',
-        formatSeparator: ',',
-        unescapePrefix: '-',
-        nestingPrefix: '$t(',
-        nestingSuffix: ')',
-        nestingOptionsSeparator: ',',
-        maxReplaces: 1000,
-        skipOnVariables: true
+  const get = () => ({
+    debug: false,
+    initImmediate: true,
+    ns: ['translation'],
+    defaultNS: ['translation'],
+    fallbackLng: ['dev'],
+    fallbackNS: false,
+    supportedLngs: false,
+    nonExplicitSupportedLngs: false,
+    load: 'all',
+    preload: false,
+    simplifyPluralSuffix: true,
+    keySeparator: '.',
+    nsSeparator: ':',
+    pluralSeparator: '_',
+    contextSeparator: '_',
+    partialBundledLanguages: false,
+    saveMissing: false,
+    updateMissing: false,
+    saveMissingTo: 'fallback',
+    saveMissingPlurals: true,
+    missingKeyHandler: false,
+    missingInterpolationHandler: false,
+    postProcess: false,
+    postProcessPassResolved: false,
+    returnNull: false,
+    returnEmptyString: true,
+    returnObjects: false,
+    joinArrays: false,
+    returnedObjectHandler: false,
+    parseMissingKeyHandler: false,
+    appendNamespaceToMissingKey: false,
+    appendNamespaceToCIMode: false,
+    overloadTranslationOptionHandler: args => {
+      let ret = {};
+      if (typeof args[1] === 'object') ret = args[1];
+      if (typeof args[1] === 'string') ret.defaultValue = args[1];
+      if (typeof args[2] === 'string') ret.tDescription = args[2];
+      if (typeof args[2] === 'object' || typeof args[3] === 'object') {
+        const options = args[3] || args[2];
+        Object.keys(options).forEach(key => {
+          ret[key] = options[key];
+        });
       }
-    };
-  }
-  function transformOptions(options) {
+      return ret;
+    },
+    interpolation: {
+      escapeValue: true,
+      format: value => value,
+      prefix: '{{',
+      suffix: '}}',
+      formatSeparator: ',',
+      unescapePrefix: '-',
+      nestingPrefix: '$t(',
+      nestingSuffix: ')',
+      nestingOptionsSeparator: ',',
+      maxReplaces: 1000,
+      skipOnVariables: true
+    }
+  });
+  const transformOptions = options => {
     if (typeof options.ns === 'string') options.ns = [options.ns];
     if (typeof options.fallbackLng === 'string') options.fallbackLng = [options.fallbackLng];
     if (typeof options.fallbackNS === 'string') options.fallbackNS = [options.fallbackNS];
@@ -24964,17 +24942,17 @@ return jQuery;
       options.supportedLngs = options.supportedLngs.concat(['cimode']);
     }
     return options;
-  }
+  };
 
-  function noop() {}
-  function bindMemberFunctions(inst) {
+  const noop = () => {};
+  const bindMemberFunctions = inst => {
     const mems = Object.getOwnPropertyNames(Object.getPrototypeOf(inst));
     mems.forEach(mem => {
       if (typeof inst[mem] === 'function') {
         inst[mem] = inst[mem].bind(inst);
       }
     });
-  }
+  };
   class I18n extends EventEmitter {
     constructor() {
       let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -25031,11 +25009,11 @@ return jQuery;
       if (options.nsSeparator !== undefined) {
         this.options.userDefinedNsSeparator = options.nsSeparator;
       }
-      function createClassOnDemand(ClassOrObject) {
+      const createClassOnDemand = ClassOrObject => {
         if (!ClassOrObject) return null;
         if (typeof ClassOrObject === 'function') return new ClassOrObject();
         return ClassOrObject;
-      }
+      };
       if (!this.options.isClone) {
         if (this.modules.logger) {
           baseLogger.init(createClassOnDemand(this.modules.logger), this.options);
@@ -25173,6 +25151,14 @@ return jQuery;
     }
     reloadResources(lngs, ns, callback) {
       const deferred = defer();
+      if (typeof lngs === 'function') {
+        callback = lngs;
+        lngs = undefined;
+      }
+      if (typeof ns === 'function') {
+        callback = ns;
+        ns = undefined;
+      }
       if (!lngs) lngs = this.languages;
       if (!ns) ns = this.options.ns;
       if (!callback) callback = noop;
@@ -25292,7 +25278,7 @@ return jQuery;
         options.lng = options.lng || fixedT.lng;
         options.lngs = options.lngs || fixedT.lngs;
         options.ns = options.ns || fixedT.ns;
-        options.keyPrefix = options.keyPrefix || keyPrefix || fixedT.keyPrefix;
+        if (options.keyPrefix !== '') options.keyPrefix = options.keyPrefix || keyPrefix || fixedT.keyPrefix;
         const keySeparator = _this3.options.keySeparator || '.';
         let resultKey;
         if (options.keyPrefix && Array.isArray(key)) {
@@ -25336,7 +25322,7 @@ return jQuery;
       if (lng.toLowerCase() === 'cimode') return true;
       const loadNotPending = (l, n) => {
         const loadState = this.services.backendConnector.state[`${l}|${n}`];
-        return loadState === -1 || loadState === 2;
+        return loadState === -1 || loadState === 0 || loadState === 2;
       };
       if (options.precheck) {
         const preResult = options.precheck(this, loadNotPending);
@@ -43740,13 +43726,12 @@ module.exports = Yaml;
     Promise.defaultErrorHandler = Promise.defaultErrorHandler || function( /* error: {name, status, message, text, statusText}  */ ){};
 
     function createErrorObject( reason, url ){
-        var response = reason.response,
-            text = response ? response.statusText :
-                    reason.message ? reason.message :
-                    reason;
+        var response = reason.response || {},
+            text = response.statusText || reason.statusText || response.message || reason.message;
+
         return {
             name      : 'Error',
-            status    : response ? response.status : null,
+            status    : response.status || reason.status || null,
             url       : url,
             message   : text,
             text      : text,
@@ -43759,7 +43744,7 @@ module.exports = Yaml;
         if (e && e.preventDefault)
             e.preventDefault();
 
-        //Unknown why, but in some browwsers onunhandledrejection is called twice - one time with e.detail
+        //Unknown why, but in some browsers onunhandledrejection is called twice - one time with e.detail
         if (e && e.detail)
             return false;
 
@@ -43845,8 +43830,6 @@ module.exports = Yaml;
                             .then(()=> Promise.fetch(url, options) );
                     }
                     else {
-
-                        //console.log('HER', error, reject, options);
                         let error =  createErrorObject(reason, options.url);
                         if (options.reject)
                             options.reject(error);
@@ -44568,6 +44551,96 @@ return index;
 }(jQuery, this.i18next, this, document));
 ;
 /****************************************************************************
+jquery-scroll-booster.js
+
+Adding the use of ding ScrollBooster
+https://ilyashubin.github.io/scrollbooster/
+
+
+****************************************************************************/
+(function ($, window/*, document, undefined*/) {
+    "use strict";
+
+
+    $.fn.extend({
+
+        addScrollBooster: function( options = {} ){
+            let $viewport =
+                    (options.viewport ? $(options.viewport) : null) ||
+                    options.$viewport ||
+                    (options.container ? $(options.container) : null) ||
+                    options.$container ||
+                    this,
+                $content  = (options.content ? $(options.content) : null) || options.$content,
+                direction = (options.direction == 'both' ? 'all' : null) || options.direction || 'all';
+
+            options = $.extend(true, {}, {
+                viewport                        : $viewport.get(0), //DOM Node  null     Content viewport element (required)
+                content                         : $content.get(0),  //DOM Node  viewport child element    Scrollable content element inside viewport
+                scrollMode                      : 'native',         //String    undefined Scroll technique - via CSS transform or natively. Could be 'transform' or 'native'
+                direction                       : direction,        //String    'all'     Scroll direction. Could be 'horizontal', 'vertical' or 'all'
+                bounce                          : false,            //Boolean   true      Enables elastic bounce effect when hitting viewport borders
+
+              //textSelection                   : false,    //Boolean   false     Enables text selection inside viewport
+              //inputsFocus                     : true,     //Boolean   true      Enables focus for elements: 'input', 'textarea', 'button', 'select' and 'label'
+              //pointerMode                     : 'all',    //String    'all'     Specify pointer type. Supported values - 'touch' (scroll only on touch devices), 'mouse' (scroll only on desktop), 'all' (mobile and desktop)
+              //friction                        : 0.05,     //Number    0.05      Scroll friction factor - how fast scrolling stops after pointer release
+              //bounceForce                     : 0.1,      //Number    0.1       Elastic bounce effect factor
+              //emulateScroll                   : false,    //Boolean   false     Enables mouse wheel/trackpad emulation inside viewport
+              //preventDefaultOnEmulateScroll   : false,    //String    false     Prevents horizontal or vertical default when emulateScroll is enabled (eg. useful to prevent horizontal trackpad gestures while enabling vertical scrolling). Could be 'horizontal' or 'vertical'.
+              //lockScrollOnDragDirection       : false,    //String    false     Detect drag direction and either prevent default mousedown/touchstart event or lock content scroll. Could be 'horizontal', 'vertical' or 'all'
+              //dragDirectionTolerance          : 40,       //Number    40        Tolerance for horizontal or vertical drag detection
+              //onUpdate                        : null,     //Function  noop      Handler function to perform actual scrolling. Receives scrolling state object with coordinates
+              //onClick                         : null,     //Function  noop      Click handler function. Here you can, for example, prevent default event for click on links. Receives object with scrolling metrics and event object. Calls after each click in scrollable area
+              //onPointerDown                   : null,     //Function  noop      mousedown/touchstart events handler
+              //onPointerUp                     : null,     //Function  noop      mouseup/touchend events handler
+              //onPointerMove                   : null,     //Function  noop      mousemove/touchmove events handler
+              //onWheel                         : null,     //Function  noop      wheel event handler
+              //shouldScroll                    : null,     //Function  noop      Function to permit or disable scrolling. Receives object with scrolling state and event object. Calls on pointerdown (mousedown, touchstart) in scrollable area. You can return true or false to enable or disable scrolling
+
+            }, options );
+
+            let scrollBooster = new window.ScrollBooster(options);
+            this.data('scrollBooster', scrollBooster);
+
+            $viewport.on('mouseleave', this._sb_mouseleave.bind(this) );
+
+            return scrollBooster;
+        },
+
+        getScrollBooster: function(){
+            return this.data('scrollBooster');
+        },
+
+        sbUpdate: function(){
+            let sb = this.getScrollBooster();
+            if (sb)
+                sb.updateMetrics();
+        },
+
+        sbScrollTo(left, top){
+            let sb = this.getScrollBooster();
+            if (sb){
+                sb.scrollTo({x: left, y: top});
+                sb.updateMetrics();
+            }
+            else
+                this.$container.get(0).scrollTo(left, top);
+
+        },
+
+
+        _sb_mouseleave: function(){
+            let sb = this.getScrollBooster();
+            if (sb && sb.isDragging)
+                sb.events.pointerup();
+        }
+
+    });
+
+}(jQuery, this, document));
+;
+/****************************************************************************
     jquery-scroll-container.js,
 
     (c) 2017, FCOO
@@ -44731,6 +44804,404 @@ return index;
     };
 
 }(jQuery, this, document));
+;
+/****************************************************************************
+scrollbooster-bable.js,
+
+A bable-adjusted version of ScrollBooster
+See https://ilyashubin.github.io/scrollbooster/
+
+****************************************************************************/
+!function (t, e) {
+  "object" == typeof exports && "object" == typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define("ScrollBooster", [], e) : "object" == typeof exports ? exports.ScrollBooster = e() : t.ScrollBooster = e();
+}(this, function () {
+  return function (t) {
+    var e = {};
+    function i(o) {
+      if (e[o]) return e[o].exports;
+      var n = e[o] = {
+        i: o,
+        l: !1,
+        exports: {}
+      };
+      return t[o].call(n.exports, n, n.exports, i), n.l = !0, n.exports;
+    }
+    return i.m = t, i.c = e, i.d = function (t, e, o) {
+      i.o(t, e) || Object.defineProperty(t, e, {
+        enumerable: !0,
+        get: o
+      });
+    }, i.r = function (t) {
+      "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(t, Symbol.toStringTag, {
+        value: "Module"
+      }), Object.defineProperty(t, "__esModule", {
+        value: !0
+      });
+    }, i.t = function (t, e) {
+      if (1 & e && (t = i(t)), 8 & e) return t;
+      if (4 & e && "object" == typeof t && t && t.__esModule) return t;
+      var o = Object.create(null);
+      if (i.r(o), Object.defineProperty(o, "default", {
+        enumerable: !0,
+        value: t
+      }), 2 & e && "string" != typeof t) for (var n in t) i.d(o, n, function (e) {
+        return t[e];
+      }.bind(null, n));
+      return o;
+    }, i.n = function (t) {
+      var e = t && t.__esModule ? function () {
+        return t.default;
+      } : function () {
+        return t;
+      };
+      return i.d(e, "a", e), e;
+    }, i.o = function (t, e) {
+      return Object.prototype.hasOwnProperty.call(t, e);
+    }, i.p = "", i(i.s = 0);
+  }([function (t, e, i) {
+    "use strict";
+
+    function o(t, e) {
+      var i = Object.keys(t);
+      if (Object.getOwnPropertySymbols) {
+        var o = Object.getOwnPropertySymbols(t);
+        e && (o = o.filter(function (e) {
+          return Object.getOwnPropertyDescriptor(t, e).enumerable;
+        })), i.push.apply(i, o);
+      }
+      return i;
+    }
+    function n(t) {
+      for (var e = 1; e < arguments.length; e++) {
+        var i = null != arguments[e] ? arguments[e] : {};
+        e % 2 ? o(Object(i), !0).forEach(function (e) {
+          s(t, e, i[e]);
+        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(t, Object.getOwnPropertyDescriptors(i)) : o(Object(i)).forEach(function (e) {
+          Object.defineProperty(t, e, Object.getOwnPropertyDescriptor(i, e));
+        });
+      }
+      return t;
+    }
+    function s(t, e, i) {
+      return e in t ? Object.defineProperty(t, e, {
+        value: i,
+        enumerable: !0,
+        configurable: !0,
+        writable: !0
+      }) : t[e] = i, t;
+    }
+    function r(t, e) {
+      if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+    }
+    function a(t, e) {
+      for (var i = 0; i < e.length; i++) {
+        var o = e[i];
+        o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(t, o.key, o);
+      }
+    }
+    i.r(e), i.d(e, "default", function () {
+      return p;
+    });
+    var l = function (t) {
+        return Math.max(t.offsetHeight, t.scrollHeight);
+      },
+      p = function () {
+        function t() {
+          var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+          r(this, t);
+          var i = {
+            content: e.viewport.children[0],
+            direction: "all",
+            pointerMode: "all",
+            scrollMode: void 0,
+            bounce: !0,
+            bounceForce: .1,
+            friction: .05,
+            textSelection: !1,
+            inputsFocus: !0,
+            emulateScroll: !1,
+            preventDefaultOnEmulateScroll: !1,
+            preventPointerMoveDefault: !0,
+            lockScrollOnDragDirection: !1,
+            dragDirectionTolerance: 40,
+            onPointerDown: function () {},
+            onPointerUp: function () {},
+            onPointerMove: function () {},
+            onClick: function () {},
+            onUpdate: function () {},
+            onWheel: function () {},
+            shouldScroll: function () {
+              return !0;
+            }
+          };
+          if (this.props = n(n({}, i), e), this.props.viewport && this.props.viewport instanceof Element) {
+            if (this.props.content) {
+              this.isDragging = !1, this.isTargetScroll = !1, this.isScrolling = !1, this.isRunning = !1;
+              var o = {
+                x: 0,
+                y: 0
+              };
+              this.position = n({}, o), this.velocity = n({}, o), this.dragStartPosition = n({}, o), this.dragOffset = n({}, o), this.clientOffset = n({}, o), this.dragPosition = n({}, o), this.targetPosition = n({}, o), this.scrollOffset = n({}, o), this.rafID = null, this.events = {}, this.updateMetrics(), this.handleEvents();
+            } else console.error("ScrollBooster init error: Viewport does not have any content");
+          } else console.error('ScrollBooster init error: "viewport" config property must be present and must be Element');
+        }
+        var e, i, o;
+        return e = t, (i = [{
+          key: "updateOptions",
+          value: function () {
+            var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+            this.props = n(n({}, this.props), t), this.props.onUpdate(this.getState()), this.startAnimationLoop();
+          }
+        }, {
+          key: "updateMetrics",
+          value: function () {
+            var t;
+            this.viewport = {
+              width: this.props.viewport.clientWidth,
+              height: this.props.viewport.clientHeight
+            }, this.content = {
+              width: (t = this.props.content, Math.max(t.offsetWidth, t.scrollWidth)),
+              height: l(this.props.content)
+            }, this.edgeX = {
+              from: Math.min(-this.content.width + this.viewport.width, 0),
+              to: 0
+            }, this.edgeY = {
+              from: Math.min(-this.content.height + this.viewport.height, 0),
+              to: 0
+            }, this.props.onUpdate(this.getState()), this.startAnimationLoop();
+          }
+        }, {
+          key: "startAnimationLoop",
+          value: function () {
+            var t = this;
+            this.isRunning = !0, cancelAnimationFrame(this.rafID), this.rafID = requestAnimationFrame(function () {
+              return t.animate();
+            });
+          }
+        }, {
+          key: "animate",
+          value: function () {
+            var t = this;
+            if (this.isRunning) {
+              this.updateScrollPosition(), this.isMoving() || (this.isRunning = !1, this.isTargetScroll = !1);
+              var e = this.getState();
+              this.setContentPosition(e), this.props.onUpdate(e), this.rafID = requestAnimationFrame(function () {
+                return t.animate();
+              });
+            }
+          }
+        }, {
+          key: "updateScrollPosition",
+          value: function () {
+            this.applyEdgeForce(), this.applyDragForce(), this.applyScrollForce(), this.applyTargetForce();
+            var t = 1 - this.props.friction;
+            this.velocity.x *= t, this.velocity.y *= t, "vertical" !== this.props.direction && (this.position.x += this.velocity.x), "horizontal" !== this.props.direction && (this.position.y += this.velocity.y), this.props.bounce && !this.isScrolling || this.isTargetScroll || (this.position.x = Math.max(Math.min(this.position.x, this.edgeX.to), this.edgeX.from), this.position.y = Math.max(Math.min(this.position.y, this.edgeY.to), this.edgeY.from));
+          }
+        }, {
+          key: "applyForce",
+          value: function (t) {
+            this.velocity.x += t.x, this.velocity.y += t.y;
+          }
+        }, {
+          key: "applyEdgeForce",
+          value: function () {
+            if (this.props.bounce && !this.isDragging) {
+              var t = this.position.x < this.edgeX.from,
+                e = this.position.x > this.edgeX.to,
+                i = this.position.y < this.edgeY.from,
+                o = this.position.y > this.edgeY.to,
+                n = t || e,
+                s = i || o;
+              if (n || s) {
+                var r = t ? this.edgeX.from : this.edgeX.to,
+                  a = i ? this.edgeY.from : this.edgeY.to,
+                  l = r - this.position.x,
+                  p = a - this.position.y,
+                  c = {
+                    x: l * this.props.bounceForce,
+                    y: p * this.props.bounceForce
+                  },
+                  h = this.position.x + (this.velocity.x + c.x) / this.props.friction,
+                  u = this.position.y + (this.velocity.y + c.y) / this.props.friction;
+                (t && h >= this.edgeX.from || e && h <= this.edgeX.to) && (c.x = l * this.props.bounceForce - this.velocity.x), (i && u >= this.edgeY.from || o && u <= this.edgeY.to) && (c.y = p * this.props.bounceForce - this.velocity.y), this.applyForce({
+                  x: n ? c.x : 0,
+                  y: s ? c.y : 0
+                });
+              }
+            }
+          }
+        }, {
+          key: "applyDragForce",
+          value: function () {
+            if (this.isDragging) {
+              var t = this.dragPosition.x - this.position.x,
+                e = this.dragPosition.y - this.position.y;
+              this.applyForce({
+                x: t - this.velocity.x,
+                y: e - this.velocity.y
+              });
+            }
+          }
+        }, {
+          key: "applyScrollForce",
+          value: function () {
+            this.isScrolling && (this.applyForce({
+              x: this.scrollOffset.x - this.velocity.x,
+              y: this.scrollOffset.y - this.velocity.y
+            }), this.scrollOffset.x = 0, this.scrollOffset.y = 0);
+          }
+        }, {
+          key: "applyTargetForce",
+          value: function () {
+            this.isTargetScroll && this.applyForce({
+              x: .08 * (this.targetPosition.x - this.position.x) - this.velocity.x,
+              y: .08 * (this.targetPosition.y - this.position.y) - this.velocity.y
+            });
+          }
+        }, {
+          key: "isMoving",
+          value: function () {
+            return this.isDragging || this.isScrolling || Math.abs(this.velocity.x) >= .01 || Math.abs(this.velocity.y) >= .01;
+          }
+        }, {
+          key: "scrollTo",
+          value: function () {
+            var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+            this.isTargetScroll = !0, this.targetPosition.x = -t.x || 0, this.targetPosition.y = -t.y || 0, this.startAnimationLoop();
+          }
+        }, {
+          key: "setPosition",
+          value: function () {
+            var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+            this.velocity.x = 0, this.velocity.y = 0, this.position.x = -t.x || 0, this.position.y = -t.y || 0, this.startAnimationLoop();
+          }
+        }, {
+          key: "getState",
+          value: function () {
+            return {
+              isMoving: this.isMoving(),
+              isDragging: !(!this.dragOffset.x && !this.dragOffset.y),
+              position: {
+                x: -this.position.x,
+                y: -this.position.y
+              },
+              dragOffset: this.dragOffset,
+              dragAngle: this.getDragAngle(this.clientOffset.x, this.clientOffset.y),
+              borderCollision: {
+                left: this.position.x >= this.edgeX.to,
+                right: this.position.x <= this.edgeX.from,
+                top: this.position.y >= this.edgeY.to,
+                bottom: this.position.y <= this.edgeY.from
+              }
+            };
+          }
+        }, {
+          key: "getDragAngle",
+          value: function (t, e) {
+            return Math.round(Math.atan2(t, e) * (180 / Math.PI));
+          }
+        }, {
+          key: "getDragDirection",
+          value: function (t, e) {
+            return Math.abs(90 - Math.abs(t)) <= 90 - e ? "horizontal" : "vertical";
+          }
+        }, {
+          key: "setContentPosition",
+          value: function (t) {
+            "transform" === this.props.scrollMode && (this.props.content.style.transform = "translate(".concat(-t.position.x, "px, ").concat(-t.position.y, "px)")), "native" === this.props.scrollMode && (this.props.viewport.scrollTop = t.position.y, this.props.viewport.scrollLeft = t.position.x);
+          }
+        }, {
+          key: "handleEvents",
+          value: function () {
+            var t = this,
+              e = {
+                x: 0,
+                y: 0
+              },
+              i = {
+                x: 0,
+                y: 0
+              },
+              o = null,
+              n = null,
+              s = !1,
+              r = function (n) {
+                if (t.isDragging) {
+                  var r = s ? n.touches[0] : n,
+                    a = r.pageX,
+                    l = r.pageY,
+                    p = r.clientX,
+                    c = r.clientY;
+                  t.dragOffset.x = a - e.x, t.dragOffset.y = l - e.y, t.clientOffset.x = p - i.x, t.clientOffset.y = c - i.y, (Math.abs(t.clientOffset.x) > 5 && !o || Math.abs(t.clientOffset.y) > 5 && !o) && (o = t.getDragDirection(t.getDragAngle(t.clientOffset.x, t.clientOffset.y), t.props.dragDirectionTolerance)), t.props.lockScrollOnDragDirection && "all" !== t.props.lockScrollOnDragDirection ? o === t.props.lockScrollOnDragDirection && s ? (t.dragPosition.x = t.dragStartPosition.x + t.dragOffset.x, t.dragPosition.y = t.dragStartPosition.y + t.dragOffset.y) : s ? (t.dragPosition.x = t.dragStartPosition.x, t.dragPosition.y = t.dragStartPosition.y) : (t.dragPosition.x = t.dragStartPosition.x + t.dragOffset.x, t.dragPosition.y = t.dragStartPosition.y + t.dragOffset.y) : (t.dragPosition.x = t.dragStartPosition.x + t.dragOffset.x, t.dragPosition.y = t.dragStartPosition.y + t.dragOffset.y);
+                }
+              };
+            this.events.pointerdown = function (o) {
+              s = !(!o.touches || !o.touches[0]), t.props.onPointerDown(t.getState(), o, s);
+              var n = s ? o.touches[0] : o,
+                a = n.pageX,
+                l = n.pageY,
+                p = n.clientX,
+                c = n.clientY,
+                h = t.props.viewport,
+                u = h.getBoundingClientRect();
+              if (!(p - u.left >= h.clientLeft + h.clientWidth) && !(c - u.top >= h.clientTop + h.clientHeight) && t.props.shouldScroll(t.getState(), o) && 2 !== o.button && ("mouse" !== t.props.pointerMode || !s) && ("touch" !== t.props.pointerMode || s) && !(t.props.inputsFocus && ["input", "textarea", "button", "select", "label"].indexOf(o.target.nodeName.toLowerCase()) > -1)) {
+                if (t.props.textSelection) {
+                  if (function (t, e, i) {
+                    for (var o = t.childNodes, n = document.createRange(), s = 0; s < o.length; s++) {
+                      var r = o[s];
+                      if (3 === r.nodeType) {
+                        n.selectNodeContents(r);
+                        var a = n.getBoundingClientRect();
+                        if (e >= a.left && i >= a.top && e <= a.right && i <= a.bottom) return r;
+                      }
+                    }
+                    return !1;
+                  }(o.target, p, c)) return;
+                  (f = window.getSelection ? window.getSelection() : document.selection) && (f.removeAllRanges ? f.removeAllRanges() : f.empty && f.empty());
+                }
+                var f;
+                t.isDragging = !0, e.x = a, e.y = l, i.x = p, i.y = c, t.dragStartPosition.x = t.position.x, t.dragStartPosition.y = t.position.y, r(o), t.startAnimationLoop();
+              }
+            }, this.events.pointermove = function (e) {
+              !e.cancelable || "all" !== t.props.lockScrollOnDragDirection && t.props.lockScrollOnDragDirection !== o || e.preventDefault(), r(e), t.props.onPointerMove(t.getState(), e, s);
+            }, this.events.pointerup = function (e) {
+              t.isDragging = !1, o = null, t.props.onPointerUp(t.getState(), e, s);
+            }, this.events.wheel = function (e) {
+              var i = t.getState();
+              t.props.emulateScroll && (t.velocity.x = 0, t.velocity.y = 0, t.isScrolling = !0, t.scrollOffset.x = -e.deltaX, t.scrollOffset.y = -e.deltaY, t.props.onWheel(i, e), t.startAnimationLoop(), clearTimeout(n), n = setTimeout(function () {
+                return t.isScrolling = !1;
+              }, 200/*80*/), t.props.preventDefaultOnEmulateScroll && t.getDragDirection(t.getDragAngle(-e.deltaX, -e.deltaY), t.props.dragDirectionTolerance) === t.props.preventDefaultOnEmulateScroll && e.preventDefault());
+            }, this.events.scroll = function () {
+              var e = t.props.viewport,
+                i = e.scrollLeft,
+                o = e.scrollTop;
+              Math.abs(t.position.x + i) > 3 && (t.position.x = -i, t.velocity.x = 0), Math.abs(t.position.y + o) > 3 && (t.position.y = -o, t.velocity.y = 0);
+            }, this.events.click = function (e) {
+              var i = t.getState(),
+                o = "vertical" !== t.props.direction ? i.dragOffset.x : 0,
+                n = "horizontal" !== t.props.direction ? i.dragOffset.y : 0;
+              Math.max(Math.abs(o), Math.abs(n)) > 5 && (e.preventDefault(), e.stopPropagation()), t.props.onClick(i, e, s);
+            }, this.events.contentLoad = function () {
+              return t.updateMetrics();
+            }, this.events.resize = function () {
+              return t.updateMetrics();
+            }, this.props.viewport.addEventListener("mousedown", this.events.pointerdown), this.props.viewport.addEventListener("touchstart", this.events.pointerdown, {
+              passive: !1
+            }), this.props.viewport.addEventListener("click", this.events.click), this.props.viewport.addEventListener("wheel", this.events.wheel, {
+              passive: !1
+            }), this.props.viewport.addEventListener("scroll", this.events.scroll), this.props.content.addEventListener("load", this.events.contentLoad, !0), window.addEventListener("mousemove", this.events.pointermove), window.addEventListener("touchmove", this.events.pointermove, {
+              passive: !1
+            }), window.addEventListener("mouseup", this.events.pointerup), window.addEventListener("touchend", this.events.pointerup), window.addEventListener("resize", this.events.resize);
+          }
+        }, {
+          key: "destroy",
+          value: function () {
+            this.props.viewport.removeEventListener("mousedown", this.events.pointerdown), this.props.viewport.removeEventListener("touchstart", this.events.pointerdown), this.props.viewport.removeEventListener("click", this.events.click), this.props.viewport.removeEventListener("wheel", this.events.wheel), this.props.viewport.removeEventListener("scroll", this.events.scroll), this.props.content.removeEventListener("load", this.events.contentLoad), window.removeEventListener("mousemove", this.events.pointermove), window.removeEventListener("touchmove", this.events.pointermove), window.removeEventListener("mouseup", this.events.pointerup), window.removeEventListener("touchend", this.events.pointerup), window.removeEventListener("resize", this.events.resize);
+          }
+        }]) && a(e.prototype, i), o && a(e, o), t;
+      }();
+  }]).default;
+});
 ;
 // Stupid jQuery table plugin.
 
@@ -52501,7 +52972,7 @@ return index;
 }).call(this);
 ;
 //! moment-timezone.js
-//! version : 0.5.45
+//! version : 0.5.46
 //! Copyright (c) JS Foundation and other contributors
 //! license : MIT
 //! github.com/moment/moment-timezone
@@ -52531,7 +53002,7 @@ return index;
 	// 	return moment;
 	// }
 
-	var VERSION = "0.5.45",
+	var VERSION = "0.5.46",
 		zones = {},
 		links = {},
 		countries = {},
@@ -53226,7 +53697,7 @@ return index;
 	}
 
 	loadData({
-		"version": "2024a",
+		"version": "2024b",
 		"zones": [
 			"Africa/Abidjan|GMT|0|0||48e5",
 			"Africa/Nairobi|EAT|-30|0||47e5",
@@ -53336,7 +53807,6 @@ return index;
 			"Europe/Moscow|MSK|-30|0||16e6",
 			"Europe/Volgograd|+04 MSK|-40 -30|01|249a0|10e5",
 			"Pacific/Honolulu|HST|a0|0||37e4",
-			"MET|MET MEST|-10 -20|01010101010101010101010|1XSp0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0 11A0 1o00 11A0 1o00 11A0 1o00 11A0 1qM0 WM0 1qM0 WM0 1qM0|",
 			"Pacific/Chatham|+1345 +1245|-dJ -cJ|01010101010101010101010|1XV20 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00 1io0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1a00 1fA0 1cM0|600",
 			"Pacific/Apia|+14 +13|-e0 -d0|010101|1XV20 1a00 1fA0 1a00 1fA0|37e3",
 			"Pacific/Fiji|+13 +12|-d0 -c0|010101|1Xnq0 20o0 pc0 2hc0 bc0|88e4",
@@ -53802,6 +54272,7 @@ return index;
 			"Europe/Paris|Europe/Warsaw",
 			"Europe/Paris|Europe/Zagreb",
 			"Europe/Paris|Europe/Zurich",
+			"Europe/Paris|MET",
 			"Europe/Paris|Poland",
 			"Pacific/Auckland|Antarctica/McMurdo",
 			"Pacific/Auckland|Antarctica/South_Pole",
@@ -53972,7 +54443,7 @@ return index;
 			"MK|Europe/Belgrade Europe/Skopje",
 			"ML|Africa/Abidjan Africa/Bamako",
 			"MM|Asia/Yangon",
-			"MN|Asia/Ulaanbaatar Asia/Hovd Asia/Choibalsan",
+			"MN|Asia/Ulaanbaatar Asia/Hovd",
 			"MO|Asia/Macau",
 			"MP|Pacific/Guam Pacific/Saipan",
 			"MQ|America/Martinique",
@@ -54608,7 +55079,7 @@ options:
         };
 
     window.TimeSlider = function (input, options, pluginCount) {
-        this.VERSION = "7.7.3";
+        this.VERSION = "7.7.4";
 
         //Setting default options
         this.options = $.extend( true, {}, defaultOptions, options );
@@ -54723,8 +55194,9 @@ options:
         },
 
         _prettifyLabelAbsoluteDate: function( value ){
-                return this._valueToTzMoment( value, this.options.format.timezone ).format( this.options.format.dateFormat );
-            },
+            let result = this._valueToTzMoment( value, this.options.format.timezone ).format( this.options.format.dateFormat );
+            return result[0].toUpperCase() + result.slice(1);
+        },
 
         /**************************************************************
         adjustResult
@@ -61665,8 +62137,11 @@ uri         : {default: "Please enter a valid URI"}
 
     $.BSMODAL_USE_SQUARE_ICONS = $.BSMODAL_USE_SQUARE_ICONS || false;
 
-    let bsHeaderIcons       = {},
-        bsHeaderIconsSquare = {};
+    let bsHeaderIcons       = $.bsHeaderIcons       = {},
+        bsHeaderIconsSquare = $.bsHeaderIconsSquare = {};
+
+    $.getBsHeaderIcons = $.getHeaderIcons = function( SquareIcons ){ return SquareIcons ? bsHeaderIconsSquare : bsHeaderIcons };
+    $.getModalHeaderIcons = function(){ return $.getBsHeaderIcons( $.BSMODAL_USE_SQUARE_ICONS ); };
 
     function adjustHeaderIcon( headerIcon ){
         if ((typeof headerIcon == 'string') || Array.isArray(headerIcon))

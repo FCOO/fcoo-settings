@@ -165,15 +165,8 @@
 
             this.set( data );
 
-            //Save all Value from settings
-            var dataToSave = this.data;
-            $.each( this.settings, function( id, setting ){
-                if (setting.value)
-                    dataToSave[ setting.options.id ] = setting.getValue();
-            });
-
             if (!this.options.dontSave)
-                this.store.setItem(id || 'DEFAULT', dataToSave).then(callback || function(){});
+                this.store.setItem(id || 'DEFAULT', this.getAll()).then(callback || function(){});
         },
 
         saveAs: function( id, callback ){
@@ -244,6 +237,19 @@
             }
         },
 
+        /***********************************************
+        getAll()
+        ***********************************************/
+        getAll: function(){
+            var result = $.extend(true, {}, this.data);
+
+            if (!this.options.simpleMode)
+                $.each( this.settings, function( id, setting ){
+                    if (setting.value)
+                        result[ setting.options.id ] = setting.getValue();
+                });
+            return result;
+        },
 
         /***********************************************
         getDefault( id )
