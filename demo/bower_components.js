@@ -23070,123 +23070,7 @@ return jQuery;
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.i18next = factory());
 })(this, (function () { 'use strict';
 
-  const consoleLogger = {
-    type: 'logger',
-    log(args) {
-      this.output('log', args);
-    },
-    warn(args) {
-      this.output('warn', args);
-    },
-    error(args) {
-      this.output('error', args);
-    },
-    output(type, args) {
-      if (console && console[type]) console[type].apply(console, args);
-    }
-  };
-  class Logger {
-    constructor(concreteLogger) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      this.init(concreteLogger, options);
-    }
-    init(concreteLogger) {
-      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      this.prefix = options.prefix || 'i18next:';
-      this.logger = concreteLogger || consoleLogger;
-      this.options = options;
-      this.debug = options.debug;
-    }
-    log() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-      return this.forward(args, 'log', '', true);
-    }
-    warn() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-      return this.forward(args, 'warn', '', true);
-    }
-    error() {
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
-      return this.forward(args, 'error', '');
-    }
-    deprecate() {
-      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
-      }
-      return this.forward(args, 'warn', 'WARNING DEPRECATED: ', true);
-    }
-    forward(args, lvl, prefix, debugOnly) {
-      if (debugOnly && !this.debug) return null;
-      if (typeof args[0] === 'string') args[0] = `${prefix}${this.prefix} ${args[0]}`;
-      return this.logger[lvl](args);
-    }
-    create(moduleName) {
-      return new Logger(this.logger, {
-        ...{
-          prefix: `${this.prefix}:${moduleName}:`
-        },
-        ...this.options
-      });
-    }
-    clone(options) {
-      options = options || this.options;
-      options.prefix = options.prefix || this.prefix;
-      return new Logger(this.logger, options);
-    }
-  }
-  var baseLogger = new Logger();
-
-  class EventEmitter {
-    constructor() {
-      this.observers = {};
-    }
-    on(events, listener) {
-      events.split(' ').forEach(event => {
-        if (!this.observers[event]) this.observers[event] = new Map();
-        const numListeners = this.observers[event].get(listener) || 0;
-        this.observers[event].set(listener, numListeners + 1);
-      });
-      return this;
-    }
-    off(event, listener) {
-      if (!this.observers[event]) return;
-      if (!listener) {
-        delete this.observers[event];
-        return;
-      }
-      this.observers[event].delete(listener);
-    }
-    emit(event) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-      if (this.observers[event]) {
-        const cloned = Array.from(this.observers[event].entries());
-        cloned.forEach(_ref => {
-          let [observer, numTimesAdded] = _ref;
-          for (let i = 0; i < numTimesAdded; i++) {
-            observer(...args);
-          }
-        });
-      }
-      if (this.observers['*']) {
-        const cloned = Array.from(this.observers['*'].entries());
-        cloned.forEach(_ref2 => {
-          let [observer, numTimesAdded] = _ref2;
-          for (let i = 0; i < numTimesAdded; i++) {
-            observer.apply(observer, [event, ...args]);
-          }
-        });
-      }
-    }
-  }
-
+  const isString = obj => typeof obj === 'string';
   const defer = () => {
     let res;
     let rej;
@@ -23209,9 +23093,9 @@ return jQuery;
   };
   const lastOfPathSeparatorRegExp = /###/g;
   const cleanKey = key => key && key.indexOf('###') > -1 ? key.replace(lastOfPathSeparatorRegExp, '.') : key;
-  const canNotTraverseDeeper = object => !object || typeof object === 'string';
+  const canNotTraverseDeeper = object => !object || isString(object);
   const getLastOfPath = (object, path, Empty) => {
-    const stack = typeof path !== 'string' ? path : path.split('.');
+    const stack = !isString(path) ? path : path.split('.');
     let stackIndex = 0;
     while (stackIndex < stack.length - 1) {
       if (canNotTraverseDeeper(object)) return {};
@@ -23279,7 +23163,7 @@ return jQuery;
     for (const prop in source) {
       if (prop !== '__proto__' && prop !== 'constructor') {
         if (prop in target) {
-          if (typeof target[prop] === 'string' || target[prop] instanceof String || typeof source[prop] === 'string' || source[prop] instanceof String) {
+          if (isString(target[prop]) || target[prop] instanceof String || isString(source[prop]) || source[prop] instanceof String) {
             if (overwrite) target[prop] = source[prop];
           } else {
             deepExtend(target[prop], source[prop], overwrite);
@@ -23301,7 +23185,7 @@ return jQuery;
     '/': '&#x2F;'
   };
   const escape = data => {
-    if (typeof data === 'string') {
+    if (isString(data)) {
       return data.replace(/[&<>"'\/]/g, s => _entityMap[s]);
     }
     return data;
@@ -23375,6 +23259,123 @@ return jQuery;
   };
   const getCleanedCode = code => code && code.replace('_', '-');
 
+  const consoleLogger = {
+    type: 'logger',
+    log(args) {
+      this.output('log', args);
+    },
+    warn(args) {
+      this.output('warn', args);
+    },
+    error(args) {
+      this.output('error', args);
+    },
+    output(type, args) {
+      if (console && console[type]) console[type].apply(console, args);
+    }
+  };
+  class Logger {
+    constructor(concreteLogger) {
+      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      this.init(concreteLogger, options);
+    }
+    init(concreteLogger) {
+      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      this.prefix = options.prefix || 'i18next:';
+      this.logger = concreteLogger || consoleLogger;
+      this.options = options;
+      this.debug = options.debug;
+    }
+    log() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      return this.forward(args, 'log', '', true);
+    }
+    warn() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+      return this.forward(args, 'warn', '', true);
+    }
+    error() {
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
+      }
+      return this.forward(args, 'error', '');
+    }
+    deprecate() {
+      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
+      }
+      return this.forward(args, 'warn', 'WARNING DEPRECATED: ', true);
+    }
+    forward(args, lvl, prefix, debugOnly) {
+      if (debugOnly && !this.debug) return null;
+      if (isString(args[0])) args[0] = `${prefix}${this.prefix} ${args[0]}`;
+      return this.logger[lvl](args);
+    }
+    create(moduleName) {
+      return new Logger(this.logger, {
+        ...{
+          prefix: `${this.prefix}:${moduleName}:`
+        },
+        ...this.options
+      });
+    }
+    clone(options) {
+      options = options || this.options;
+      options.prefix = options.prefix || this.prefix;
+      return new Logger(this.logger, options);
+    }
+  }
+  var baseLogger = new Logger();
+
+  class EventEmitter {
+    constructor() {
+      this.observers = {};
+    }
+    on(events, listener) {
+      events.split(' ').forEach(event => {
+        if (!this.observers[event]) this.observers[event] = new Map();
+        const numListeners = this.observers[event].get(listener) || 0;
+        this.observers[event].set(listener, numListeners + 1);
+      });
+      return this;
+    }
+    off(event, listener) {
+      if (!this.observers[event]) return;
+      if (!listener) {
+        delete this.observers[event];
+        return;
+      }
+      this.observers[event].delete(listener);
+    }
+    emit(event) {
+      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+      if (this.observers[event]) {
+        const cloned = Array.from(this.observers[event].entries());
+        cloned.forEach(_ref => {
+          let [observer, numTimesAdded] = _ref;
+          for (let i = 0; i < numTimesAdded; i++) {
+            observer(...args);
+          }
+        });
+      }
+      if (this.observers['*']) {
+        const cloned = Array.from(this.observers['*'].entries());
+        cloned.forEach(_ref2 => {
+          let [observer, numTimesAdded] = _ref2;
+          for (let i = 0; i < numTimesAdded; i++) {
+            observer.apply(observer, [event, ...args]);
+          }
+        });
+      }
+    }
+  }
+
   class ResourceStore extends EventEmitter {
     constructor(data) {
       let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
@@ -23414,7 +23415,7 @@ return jQuery;
         if (key) {
           if (Array.isArray(key)) {
             path.push(...key);
-          } else if (typeof key === 'string' && keySeparator) {
+          } else if (isString(key) && keySeparator) {
             path.push(...key.split(keySeparator));
           } else {
             path.push(key);
@@ -23427,7 +23428,7 @@ return jQuery;
         ns = path[1];
         key = path.slice(2).join('.');
       }
-      if (result || !ignoreJSONStructure || typeof key !== 'string') return result;
+      if (result || !ignoreJSONStructure || !isString(key)) return result;
       return deepFind(this.data && this.data[lng] && this.data[lng][ns], key, keySeparator);
     }
     addResource(lng, ns, key, value) {
@@ -23451,7 +23452,7 @@ return jQuery;
         silent: false
       };
       for (const m in resources) {
-        if (typeof resources[m] === 'string' || Array.isArray(resources[m])) this.addResource(lng, ns, m, resources[m], {
+        if (isString(resources[m]) || Array.isArray(resources[m])) this.addResource(lng, ns, m, resources[m], {
           silent: true
         });
       }
@@ -23571,7 +23572,7 @@ return jQuery;
         if (nsSeparator !== keySeparator || nsSeparator === keySeparator && this.options.ns.indexOf(parts[0]) > -1) namespaces = parts.shift();
         key = parts.join(keySeparator);
       }
-      if (typeof namespaces === 'string') namespaces = [namespaces];
+      if (isString(namespaces)) namespaces = [namespaces];
       return {
         key,
         namespaces
@@ -23631,8 +23632,8 @@ return jQuery;
       const noObject = ['[object Number]', '[object Function]', '[object RegExp]'];
       const joinArrays = options.joinArrays !== undefined ? options.joinArrays : this.options.joinArrays;
       const handleAsObjectInI18nFormat = !this.i18nFormat || this.i18nFormat.handleAsObject;
-      const handleAsObject = typeof res !== 'string' && typeof res !== 'boolean' && typeof res !== 'number';
-      if (handleAsObjectInI18nFormat && res && handleAsObject && noObject.indexOf(resType) < 0 && !(typeof joinArrays === 'string' && Array.isArray(res))) {
+      const handleAsObject = !isString(res) && typeof res !== 'boolean' && typeof res !== 'number';
+      if (handleAsObjectInI18nFormat && res && handleAsObject && noObject.indexOf(resType) < 0 && !(isString(joinArrays) && Array.isArray(res))) {
         if (!options.returnObjects && !this.options.returnObjects) {
           if (!this.options.returnedObjectHandler) {
             this.logger.warn('accessing an object - but returnObjects options is not enabled!');
@@ -23667,13 +23668,13 @@ return jQuery;
           }
           res = copy;
         }
-      } else if (handleAsObjectInI18nFormat && typeof joinArrays === 'string' && Array.isArray(res)) {
+      } else if (handleAsObjectInI18nFormat && isString(joinArrays) && Array.isArray(res)) {
         res = res.join(joinArrays);
         if (res) res = this.extendTranslation(res, keys, options, lastKey);
       } else {
         let usedDefault = false;
         let usedKey = false;
-        const needsPluralHandling = options.count !== undefined && typeof options.count !== 'string';
+        const needsPluralHandling = options.count !== undefined && !isString(options.count);
         const hasDefaultValue = Translator.hasDefaultValue(options);
         const defaultValueSuffix = needsPluralHandling ? this.pluralResolver.getSuffix(lng, options.count, options) : '';
         const defaultValueSuffixOrdinalFallback = options.ordinal && needsPluralHandling ? this.pluralResolver.getSuffix(lng, options.count, {
@@ -23773,13 +23774,13 @@ return jQuery;
             }
           }
         });
-        const skipOnVariables = typeof res === 'string' && (options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
+        const skipOnVariables = isString(res) && (options && options.interpolation && options.interpolation.skipOnVariables !== undefined ? options.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
         let nestBef;
         if (skipOnVariables) {
           const nb = res.match(this.interpolator.nestingRegexp);
           nestBef = nb && nb.length;
         }
-        let data = options.replace && typeof options.replace !== 'string' ? options.replace : options;
+        let data = options.replace && !isString(options.replace) ? options.replace : options;
         if (this.options.interpolation.defaultVariables) data = {
           ...this.options.interpolation.defaultVariables,
           ...data
@@ -23804,7 +23805,7 @@ return jQuery;
         if (options.interpolation) this.interpolator.reset();
       }
       const postProcess = options.postProcess || this.options.postProcess;
-      const postProcessorNames = typeof postProcess === 'string' ? [postProcess] : postProcess;
+      const postProcessorNames = isString(postProcess) ? [postProcess] : postProcess;
       if (res !== undefined && res !== null && postProcessorNames && postProcessorNames.length && options.applyPostProcessor !== false) {
         res = postProcessor.handle(postProcessorNames, res, key, this.options && this.options.postProcessPassResolved ? {
           i18nResolved: {
@@ -23823,7 +23824,7 @@ return jQuery;
       let exactUsedKey;
       let usedLng;
       let usedNS;
-      if (typeof keys === 'string') keys = [keys];
+      if (isString(keys)) keys = [keys];
       keys.forEach(k => {
         if (this.isValidLookup(found)) return;
         const extracted = this.extractFromKey(k, options);
@@ -23831,9 +23832,9 @@ return jQuery;
         usedKey = key;
         let namespaces = extracted.namespaces;
         if (this.options.fallbackNS) namespaces = namespaces.concat(this.options.fallbackNS);
-        const needsPluralHandling = options.count !== undefined && typeof options.count !== 'string';
+        const needsPluralHandling = options.count !== undefined && !isString(options.count);
         const needsZeroSuffixLookup = needsPluralHandling && !options.ordinal && options.count === 0 && this.pluralResolver.shouldUseIntlApi();
-        const needsContextHandling = options.context !== undefined && (typeof options.context === 'string' || typeof options.context === 'number') && options.context !== '';
+        const needsContextHandling = options.context !== undefined && (isString(options.context) || typeof options.context === 'number') && options.context !== '';
         const codes = options.lngs ? options.lngs : this.languageUtils.toResolveHierarchy(options.lng || this.language, options.fallbackLng);
         namespaces.forEach(ns => {
           if (this.isValidLookup(found)) return;
@@ -23905,7 +23906,7 @@ return jQuery;
     getUsedParamsDetails() {
       let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       const optionsKeys = ['defaultValue', 'ordinal', 'context', 'replace', 'lng', 'lngs', 'fallbackLng', 'ns', 'keySeparator', 'nsSeparator', 'returnObjects', 'returnDetails', 'joinArrays', 'postProcess', 'interpolation'];
-      const useOptionsReplaceForData = options.replace && typeof options.replace !== 'string';
+      const useOptionsReplaceForData = options.replace && !isString(options.replace);
       let data = useOptionsReplaceForData ? options.replace : options;
       if (useOptionsReplaceForData && typeof options.count !== 'undefined') {
         data.count = options.count;
@@ -23960,7 +23961,7 @@ return jQuery;
       return this.formatLanguageCode(p[0]);
     }
     formatLanguageCode(code) {
-      if (typeof code === 'string' && code.indexOf('-') > -1) {
+      if (isString(code) && code.indexOf('-') > -1) {
         if (typeof Intl !== 'undefined' && typeof Intl.getCanonicalLocales !== 'undefined') {
           try {
             let formattedCode = Intl.getCanonicalLocales(code)[0];
@@ -24022,7 +24023,7 @@ return jQuery;
     getFallbackCodes(fallbacks, code) {
       if (!fallbacks) return [];
       if (typeof fallbacks === 'function') fallbacks = fallbacks(code);
-      if (typeof fallbacks === 'string') fallbacks = [fallbacks];
+      if (isString(fallbacks)) fallbacks = [fallbacks];
       if (Array.isArray(fallbacks)) return fallbacks;
       if (!code) return fallbacks.default || [];
       let found = fallbacks[code];
@@ -24043,11 +24044,11 @@ return jQuery;
           this.logger.warn(`rejecting language code not found in supportedLngs: ${c}`);
         }
       };
-      if (typeof code === 'string' && (code.indexOf('-') > -1 || code.indexOf('_') > -1)) {
+      if (isString(code) && (code.indexOf('-') > -1 || code.indexOf('_') > -1)) {
         if (this.options.load !== 'languageOnly') addCode(this.formatLanguageCode(code));
         if (this.options.load !== 'languageOnly' && this.options.load !== 'currentOnly') addCode(this.getScriptPartFromCode(code));
         if (this.options.load !== 'currentOnly') addCode(this.getLanguagePartFromCode(code));
-      } else if (typeof code === 'string') {
+      } else if (isString(code)) {
         addCode(this.formatLanguageCode(code));
       }
       fallbackCodes.forEach(fc => {
@@ -24305,7 +24306,7 @@ return jQuery;
     let keySeparator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '.';
     let ignoreJSONStructure = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
     let path = getPathWithDefaults(data, defaultData, key);
-    if (!path && ignoreJSONStructure && typeof key === 'string') {
+    if (!path && ignoreJSONStructure && isString(key)) {
       path = deepFind(data, key, keySeparator);
       if (path === undefined) path = deepFind(defaultData, key, keySeparator);
     }
@@ -24415,7 +24416,7 @@ return jQuery;
           if (value === undefined) {
             if (typeof missingInterpolationHandler === 'function') {
               const temp = missingInterpolationHandler(str, match, options);
-              value = typeof temp === 'string' ? temp : '';
+              value = isString(temp) ? temp : '';
             } else if (options && Object.prototype.hasOwnProperty.call(options, matchedVar)) {
               value = '';
             } else if (skipOnVariables) {
@@ -24425,7 +24426,7 @@ return jQuery;
               this.logger.warn(`missed to pass in variable ${matchedVar} for interpolating ${str}`);
               value = '';
             }
-          } else if (typeof value !== 'string' && !this.useRawValueToEscape) {
+          } else if (!isString(value) && !this.useRawValueToEscape) {
             value = makeString(value);
           }
           const safeValue = todo.safeValue(value);
@@ -24479,7 +24480,7 @@ return jQuery;
         clonedOptions = {
           ...options
         };
-        clonedOptions = clonedOptions.replace && typeof clonedOptions.replace !== 'string' ? clonedOptions.replace : clonedOptions;
+        clonedOptions = clonedOptions.replace && !isString(clonedOptions.replace) ? clonedOptions.replace : clonedOptions;
         clonedOptions.applyPostProcessor = false;
         delete clonedOptions.defaultValue;
         let doReduce = false;
@@ -24490,8 +24491,8 @@ return jQuery;
           doReduce = true;
         }
         value = fc(handleHasOptions.call(this, match[1].trim(), clonedOptions), clonedOptions);
-        if (value && match[0] === str && typeof value !== 'string') return value;
-        if (typeof value !== 'string') value = makeString(value);
+        if (value && match[0] === str && !isString(value)) return value;
+        if (!isString(value)) value = makeString(value);
         if (!value) {
           this.logger.warn(`missed to resolve ${match[1]} for nesting ${str}`);
           value = '';
@@ -24603,8 +24604,7 @@ return jQuery;
       let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
         interpolation: {}
       };
-      const iOpts = options.interpolation;
-      this.formatSeparator = iOpts.formatSeparator ? iOpts.formatSeparator : iOpts.formatSeparator || ',';
+      this.formatSeparator = options.interpolation.formatSeparator || ',';
     }
     add(name, fc) {
       this.formats[name.toLowerCase().trim()] = fc;
@@ -24805,8 +24805,8 @@ return jQuery;
         this.logger.warn('No backend was added via i18next.use. Will not load resources.');
         return callback && callback();
       }
-      if (typeof languages === 'string') languages = this.languageUtils.toResolveHierarchy(languages);
-      if (typeof namespaces === 'string') namespaces = [namespaces];
+      if (isString(languages)) languages = this.languageUtils.toResolveHierarchy(languages);
+      if (isString(namespaces)) namespaces = [namespaces];
       const toLoad = this.queueLoad(languages, namespaces, options, callback);
       if (!toLoad.toLoad.length) {
         if (!toLoad.pending.length) callback();
@@ -24910,8 +24910,8 @@ return jQuery;
     overloadTranslationOptionHandler: args => {
       let ret = {};
       if (typeof args[1] === 'object') ret = args[1];
-      if (typeof args[1] === 'string') ret.defaultValue = args[1];
-      if (typeof args[2] === 'string') ret.tDescription = args[2];
+      if (isString(args[1])) ret.defaultValue = args[1];
+      if (isString(args[2])) ret.tDescription = args[2];
       if (typeof args[2] === 'object' || typeof args[3] === 'object') {
         const options = args[3] || args[2];
         Object.keys(options).forEach(key => {
@@ -24935,9 +24935,9 @@ return jQuery;
     }
   });
   const transformOptions = options => {
-    if (typeof options.ns === 'string') options.ns = [options.ns];
-    if (typeof options.fallbackLng === 'string') options.fallbackLng = [options.fallbackLng];
-    if (typeof options.fallbackNS === 'string') options.fallbackNS = [options.fallbackNS];
+    if (isString(options.ns)) options.ns = [options.ns];
+    if (isString(options.fallbackLng)) options.fallbackLng = [options.fallbackLng];
+    if (isString(options.fallbackNS)) options.fallbackNS = [options.fallbackNS];
     if (options.supportedLngs && options.supportedLngs.indexOf('cimode') < 0) {
       options.supportedLngs = options.supportedLngs.concat(['cimode']);
     }
@@ -24985,7 +24985,7 @@ return jQuery;
         options = {};
       }
       if (!options.defaultNS && options.defaultNS !== false && options.ns) {
-        if (typeof options.ns === 'string') {
+        if (isString(options.ns)) {
           options.defaultNS = options.ns;
         } else if (options.ns.indexOf('translation') < 0) {
           options.defaultNS = options.ns[0];
@@ -25118,7 +25118,7 @@ return jQuery;
     loadResources(language) {
       let callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
       let usedCallback = callback;
-      const usedLng = typeof language === 'string' ? language : this.language;
+      const usedLng = isString(language) ? language : this.language;
       if (typeof language === 'function') usedCallback = language;
       if (!this.options.resources || this.options.partialBundledLanguages) {
         if (usedLng && usedLng.toLowerCase() === 'cimode' && (!this.options.preload || this.options.preload.length === 0)) return usedCallback();
@@ -25236,7 +25236,7 @@ return jQuery;
       };
       const setLng = lngs => {
         if (!lng && !lngs && this.services.languageDetector) lngs = [];
-        const l = typeof lngs === 'string' ? lngs : this.services.languageUtils.getBestMatchFromCodes(lngs);
+        const l = isString(lngs) ? lngs : this.services.languageUtils.getBestMatchFromCodes(lngs);
         if (l) {
           if (!this.language) {
             setLngProps(l);
@@ -25288,7 +25288,7 @@ return jQuery;
         }
         return _this3.t(resultKey, options);
       };
-      if (typeof lng === 'string') {
+      if (isString(lng)) {
         fixedT.lng = lng;
       } else {
         fixedT.lngs = lng;
@@ -25339,7 +25339,7 @@ return jQuery;
         if (callback) callback();
         return Promise.resolve();
       }
-      if (typeof ns === 'string') ns = [ns];
+      if (isString(ns)) ns = [ns];
       ns.forEach(n => {
         if (this.options.ns.indexOf(n) < 0) this.options.ns.push(n);
       });
@@ -25351,7 +25351,7 @@ return jQuery;
     }
     loadLanguages(lngs, callback) {
       const deferred = defer();
-      if (typeof lngs === 'string') lngs = [lngs];
+      if (isString(lngs)) lngs = [lngs];
       const preloaded = this.options.preload || [];
       const newLngs = lngs.filter(lng => preloaded.indexOf(lng) < 0 && this.services.languageUtils.isSupportedCode(lng));
       if (!newLngs.length) {
@@ -43726,17 +43726,19 @@ module.exports = Yaml;
     Promise.defaultErrorHandler = Promise.defaultErrorHandler || function( /* error: {name, status, message, text, statusText}  */ ){};
 
     function createErrorObject( reason, url ){
-        var response = reason.response || {},
-            text = response.statusText || reason.statusText || response.message || reason.message;
+        let response = reason.response || {},
+            text     = response.statusText || reason.statusText || response.message || reason.message,
+            error    = new Error(text, url);
 
-        return {
+        $.extend(error, {
             name      : 'Error',
             status    : response.status || reason.status || null,
             url       : url,
             message   : text,
             text      : text,
             statusText: text
-        };
+        });
+        return error;
     }
 
     //Set event handler for unhandled rejections
@@ -43819,7 +43821,10 @@ module.exports = Yaml;
                     if (response.ok)
                         resolve(response);
                     else
-                        return Promise.reject(response);
+                        return Promise.reject(createErrorObject(response, options.url));
+                        //return Promise.reject(new Error(response));
+                        //return Promise.reject(response);
+                        //return createErrorObject(response, options.url);
                 })
                 .catch((/*error*/reason) => {
                     if (options.retries > 0){
@@ -60557,9 +60562,6 @@ module.exports = g;
         var bsButtonOptions = $.extend({}, options);
         bsButtonOptions.selected = false;
         var $result = $.bsButton( bsButtonOptions ).checkbox( $.extend(options, {className: 'checked'}) );
-
-//        var $result = $.bsButton( bsButtonOptions ).checkbox( options );
-
         return $result;
     };
 
@@ -60636,15 +60638,11 @@ module.exports = g;
 
 
     $.bsBigIconButton = function( options ){
-        return $.bsButton({
-            id          : options.id,
+        return $.bsButton($.extend(true, {}, options, {
             class       : 'w-100 d-flex',
             content     : $._bsBigIconButtonContent( options ),
             allowContent: true,
-            radioGroup  : options.radioGroup,
-            onClick     : options.onClick,
-        });
-
+        }) );
     };
 
 
@@ -62140,7 +62138,7 @@ uri         : {default: "Please enter a valid URI"}
     let bsHeaderIcons       = $.bsHeaderIcons       = {},
         bsHeaderIconsSquare = $.bsHeaderIconsSquare = {};
 
-    $.getBsHeaderIcons = $.getHeaderIcons = function( SquareIcons ){ return SquareIcons ? bsHeaderIconsSquare : bsHeaderIcons };
+    $.getBsHeaderIcons = $.getHeaderIcons = function( SquareIcons ){ return SquareIcons ? bsHeaderIconsSquare : bsHeaderIcons; };
     $.getModalHeaderIcons = function(){ return $.getBsHeaderIcons( $.BSMODAL_USE_SQUARE_ICONS ); };
 
     function adjustHeaderIcon( headerIcon ){
@@ -64583,7 +64581,7 @@ jquery-bootstrap-modal-promise.js
 
 }(jQuery, this.bootstrap, this, document));
 ;
-/****************************************************************************
+/*****************************************************  ***********************
 	jquery-bootstrap-noty.js,
 
 	(c) 2017, FCOO
@@ -64909,6 +64907,13 @@ jquery-bootstrap-modal-promise.js
 
         var classNames = '.modal.noty-container.noty-container-'+options.layout,
             $container = $bsNotyLayerToUse.find(classNames);
+
+        //Adjust width
+        if (options.extraWidth)
+            classNames = classNames +'.noty-extra-width';
+        if (options.megaWidth)
+            classNames = classNames +'.noty-mega-width';
+
         if (!$container.length){
             $container =
                 $('<div/>')
@@ -64949,7 +64954,8 @@ jquery-bootstrap-modal-promise.js
     /********************************************************************
     *********************************************************************
     Create standard variations of bsNoty:
-    notySuccess/notyOk, notyError, notyWarning, notyAlert, notyInfo (and dito $bsNoty[TYPE]
+    notySuccess/notyOk, notyError, notyWarning, notyAlert, noty
+ (and dito $bsNoty[TYPE]
     The following default options is used
     queue: "global" but if != "global" options.killer is set to options.queue
     killer: if options.queue != "global" => killer = queue and the noty will close all noty with same queue.
@@ -65649,9 +65655,13 @@ options
         options.onClick = $.fn._bsSelectButton_onClick;
         options.list    = options.list || options.items;
         options._class  = (options._class || '') + ' text-truncate btn-select';
+
+        //isBB = true => use $.bsBigIconButton
+        options.isBB = options.isBB || options.useBigButtons || options.useBigButton || options.bigButtons || options.bigButton;
+
         delete options.items;
 
-        var $result = $.bsButton( options );
+        var $result = options.isBB ? $.bsBigIconButton( options ) : $.bsButton( options );
 
         options = $result.data('bsButton_options');
         options.context = $result,
@@ -65679,14 +65689,12 @@ options
         });
 
         if (selectedItem){
-            this
-                .empty()
-                ._bsAddHtml(
-                    $.extend(true,
-                        {textClass: 'text-truncate'},
-                        selectedItem
-                    )
-                );
+            this.empty();
+
+            if (options.isBB)
+                this.append( $._bsBigIconButtonContent( selectedItem ) );
+            else
+                this._bsAddHtml( $.extend(true, {textClass: 'text-truncate'}, selectedItem ) );
 
             if (options.onChange)
                 $.proxy(options.onChange, options.context)(value);
@@ -65715,13 +65723,15 @@ options
             clickable   : true,
             transparentBackground: true,
             scroll      : list.length > 5,
+
             content: {
-                type         : 'selectlist',
-                allowReselect: true,
-                list         : list,
-                onChange     : $.fn._bsSelectButton_onChange,
-                context      : this,
-                truncate     : true
+                type             : 'selectlist',
+                allowReselect    : true,
+                list             : list,
+                onChange         : $.fn._bsSelectButton_onChange,
+                context          : this,
+                truncate         : true,
+                createItemContent: options.isBB ? $.bsBigIconButton : null,
             },
             show: true,
             removeOnClose: true
@@ -65762,7 +65772,8 @@ options
                 id          : '_bsSelectlist'+ selectlistId++,
                 baseClass   : 'select-list',
                 class       : 'form-control dropdown-menu',
-                useTouchSize: true
+                useTouchSize: true,
+                createItemContent: null, //function( itemOptions ) return a $-element
             });
 
         var $result =
@@ -65780,14 +65791,20 @@ options
 
         $result.data('radioGroup', radioGroup);
 
-        $.each( options.list, function( index, itemOptions ){
-            var isItem = (itemOptions.id != undefined ),
+        options.list.forEach( itemOptions => {
+            const isItem = (itemOptions.id != undefined);
+            let $item;
+
+            if (options.createItemContent)
+                $item = options.createItemContent( itemOptions );
+            else
                 $item = $(isItem ? '<a/>' : '<div/>')
                             .addClass( isItem ? 'dropdown-item' : 'dropdown-header' )
                             .toggleClass( 'text-center',   !!options.center )
                             .toggleClass( 'text-truncate', !!options.truncate )
-                            ._bsAddHtml( itemOptions, false, false, true )
-                            .appendTo( $result );
+                            ._bsAddHtml( itemOptions, false, false, true );
+
+            $item.appendTo( $result );
 
             if (isItem)
                 radioGroup.addElement( $item, itemOptions );

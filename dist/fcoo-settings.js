@@ -97,24 +97,23 @@
         defaultValue
         ***********************************************/
         add: function( options ){
-            var _this = this,
-                optionsIsArray = $.isArray(options),
+            var optionsIsArray = $.isArray(options),
                 result = optionsIsArray ? [] : null;
 
             options = optionsIsArray ? options : [options];
-            $.each(options, function(index, settingOptions){
+            options.forEach( settingOptions => {
                 settingOptions = $.extend( {}, { callApply: true }, settingOptions );
                 var setting = new ns.Setting( settingOptions );
-                setting.group = _this;
-                _this.settings[settingOptions.id] = setting;
-                setting.apply( _this.data[setting.options.id], !options.callApply );
-                _this.data[setting.options.id] = setting.getValue();
+                setting.group = this;
+                this.settings[settingOptions.id] = setting;
+                setting.apply( this.data[setting.options.id], !options.callApply );
+                this.data[setting.options.id] = setting.getValue();
 
                 if (optionsIsArray)
                     result.push(setting);
                 else
                     result = setting;
-            });
+            }, this);
             return result;
         },
 
@@ -319,53 +318,57 @@
         /*****************************************************/
         edit: function( id, data, preEdit ){
             //Create the modal
-            if (!this.modalForm){
-                var _this = this,
-                    list  = [];
-                $.each(this.options.accordionList, function(index, accordInfo){
-                    if (_this.modalContent[accordInfo.id] && _this.modalContent[accordInfo.id].length)
-                        list.push({
-                            id: accordInfo.id,
-                            header: accordInfo.header,
-                            content: _this.modalContent[accordInfo.id],
-                            footer : _this.modalFooter[accordInfo.id]
-                        });
+            let list  = [];
+
+            this.options.accordionList.forEach( accordInfo => {
+                let contentList = [],
+                    modalContent = this.modalContent[accordInfo.id] || [];
+
+                modalContent.forEach( content => {
+                    contentList.push(typeof content == 'function' ? content() : content );
                 });
 
+                if (contentList.length)
+                    list.push({
+                        id: accordInfo.id,
+                        header: accordInfo.header,
+                        content: contentList,
+                        footer : this.modalFooter[accordInfo.id]
+                    });
+            }, this);
 
-                //Adjust reset-options
-                if (this.options.reset)
-                    this.options.reset = $.extend({
-                        icon      : ns.icons.reset,
-                        text      : ns.texts.reset,
-                    }, this.options.reset === true ? {} : this.options.reset);
+            //Adjust reset-options
+            if (this.options.reset)
+                this.options.reset = $.extend({
+                    icon      : ns.icons.reset,
+                    text      : ns.texts.reset,
+                }, this.options.reset === true ? {} : this.options.reset);
 
-                this.modalForm = $.bsModalForm(
-                    $.extend(
-                        this.options.modalOptions || {},
-                        {
-                            id        : this.options.storeId,
-                            show      : false,
-                            header    : this.options.modalHeader,
-                            flexWidth : this.options.flexWidth,
+            this.modalForm = $.bsModalForm(
+                $.extend(
+                    this.options.modalOptions || {},
+                    {
+                        id        : this.options.storeId,
+                        show      : false,
+                        remove    : true,
+                        header    : this.options.modalHeader,
+                        flexWidth : this.options.flexWidth,
 
-                            content   : {type: 'accordion', list: list },
+                        content   : {type: 'accordion', list: list },
 
-                            buttons   : this.options.reset && !this.options.simpleMode ? [{
-                                            icon: this.options.reset.icon,
-                                            text: this.options.reset.text,
-                                            onClick: $.proxy(this._resetInForm, this)
-                                        }] : undefined,
+                        buttons   : this.options.reset && !this.options.simpleMode ? [{
+                                        icon: this.options.reset.icon,
+                                        text: this.options.reset.text,
+                                        onClick: $.proxy(this._resetInForm, this)
+                                    }] : undefined,
 
-                            onChanging: $.proxy(this.onChanging, this),
-                            onSubmit  : $.proxy(this.onSubmit,   this),
-                            onCancel  : $.proxy(this.onCancel,   this),
-                            onClose   : $.proxy(this.onClose,    this),
-
-                        }
-                    )
-                );
-            }
+                        onChanging: $.proxy(this.onChanging, this),
+                        onSubmit  : $.proxy(this.onSubmit,   this),
+                        onCancel  : $.proxy(this.onCancel,   this),
+                        onClose   : $.proxy(this.onClose,    this),
+                    }
+                )
+            );
 
             //Get data and save data
             this.originalData = $.extend({}, this.data);

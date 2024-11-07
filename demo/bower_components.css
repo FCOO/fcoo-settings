@@ -13939,12 +13939,16 @@ Also overwrite default bootstrap behaviour
   font-size: var(--bs-btn-smaller-font-size);
 }
 .btn-jb.btn-lg, .btn-group-lg > .btn-jb.btn {
-  --bs-btn-smaller-font-size: 1rem;
   --bs-btn-larger-font-size: 1.25rem;
+  --bs-btn-smaller-font-size: 1rem;
 }
 .btn-jb.btn-sm, .btn-group-sm > .btn-jb.btn, .btn-bar-sm > .btn-jb.btn {
-  --bs-btn-smaller-font-size: 0.75rem;
   --bs-btn-larger-font-size: 1rem;
+  --bs-btn-smaller-font-size: 0.75rem;
+}
+.btn-jb.btn-xs, .btn-group-xs > .btn-jb.btn, .btn-bar-xs > .btn-jb.btn {
+  --bs-btn-larger-font-size: 0.875rem;
+  --bs-btn-smaller-font-size: 0.6875rem;
 }
 
 /************************************************************
@@ -14119,6 +14123,9 @@ BUTTON-SELECT
   content: "";
   background-repeat: no-repeat;
   background-size: 1em;
+}
+.btn-select.selected::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
 }
 
 /************************************************************
@@ -15639,9 +15646,15 @@ Is a modification to Bootstrap modal-class
   width: 325px;
   max-width: 90%;
 }
+.modal.noty-container.noty-extra-width {
+  width: 500px;
+}
+.modal.noty-container.noty-mega-width {
+  width: 800px;
+}
 .modal.noty-container.noty-container-top, .modal.noty-container.noty-container-bottom {
   left: 5%;
-  width: 90%;
+  width: 90% !important;
 }
 .modal.noty-container.noty-container-top {
   top: 0;
